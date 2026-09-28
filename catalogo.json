@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "autodefinido del sistema nervioso",
+    "descripcion": "",
+    "materia": "CCNN",
+    "tipo": "Juego",
+    "icono": "🥇",
+    "tiempo": "10 min",
+    "archivo": "materiales/autodefinido-del-sistema-nervioso.html",
+    "destacado": false,
+    "fecha": "2026-09-28"
+  },
+  {
     "titulo": "coordenadas cartesianas",
     "descripcion": "",
     "materia": "Matemáticas",
