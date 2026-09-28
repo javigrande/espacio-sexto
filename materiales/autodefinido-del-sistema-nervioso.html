@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Autodefinido interactivo · Sistema nervioso</title>
+<style>
+:root{--purple:#6f4aa8;--lav:#eee7f8;--ink:#20222a;--ok:#2e9d57;--bad:#d54848;--sel:#ffe08a}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:linear-gradient(#f7f4fb,#fff);color:var(--ink)}
+header{text-align:center;padding:18px 12px 6px}
+h1{margin:0;color:var(--purple);font-size:clamp(30px,5vw,54px)}
+header p{margin:8px 0 0;font-weight:700;color:#626676}
+.toolbar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+button.action{border:0;border-radius:12px;padding:10px 15px;font-weight:800;cursor:pointer}
+.primary{background:var(--purple);color:#fff} .secondary{background:#ece6f6}
+main{max-width:1500px;margin:auto;padding:14px;display:grid;grid-template-columns:minmax(520px,1.15fr) minmax(340px,.85fr);gap:22px;align-items:start}
+.card{background:#fff;border-radius:22px;box-shadow:0 8px 28px #5b3c8818;padding:18px}
+.grid{display:grid;grid-template-columns:repeat(21,1fr);gap:2px;max-width:860px;margin:auto;background:#2f3037;padding:3px;border-radius:10px}
+.cell,.block{aspect-ratio:1}
+.block{background:#2f3037}
+.cell{position:relative;background:#fffdf7;transition:.15s}
+.cell.selected{background:var(--sel)}
+.cell.ok{background:#e9f8ee} .cell.bad{background:#fff0f0}
+.cell input{width:100%;height:100%;border:0;background:transparent;text-align:center;text-transform:uppercase;font-size:clamp(13px,1.8vw,25px);font-weight:900;outline:none;padding:0}
+.num{position:absolute;left:2px;top:0;font-size:9px;font-weight:800;color:#555;z-index:2;pointer-events:none}
+.clues h2{margin:0 0 10px;color:var(--purple)}
+.clue-list{display:grid;gap:8px;margin-bottom:18px}
+.clue-btn{display:grid;grid-template-columns:36px 1fr;gap:8px;align-items:start;width:100%;text-align:left;border:2px solid #e5def2;background:#fff;border-radius:14px;padding:10px 12px;cursor:pointer;font:inherit}
+.clue-btn:hover{background:#faf7ff}
+.clue-btn.active{border-color:var(--purple);background:#f3edfb}
+.clue-num{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--purple);color:white;font-weight:900}
+.current{margin:0 auto 14px;max-width:860px;background:#f4eefb;border-radius:14px;padding:12px 14px;font-weight:800;min-height:48px}
+.answer-row{display:flex;gap:10px;align-items:center;max-width:860px;margin:12px auto 0}
+#wordInput{flex:1;border:3px solid #cfc5dd;border-radius:12px;padding:11px 13px;font-size:18px;font-weight:800;text-transform:uppercase}
+#wordInput:focus{outline:none;border-color:var(--purple)}
+.status{text-align:center;font-weight:800;margin-top:12px;min-height:26px}
+.help{max-width:860px;margin:10px auto 0;color:#596070;font-size:14px}
+@media(max-width:950px){main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<h1>Autodefinido interactivo</h1>
+<p>Las respuestas del sistema nervioso · versión más sencilla</p>
+<div class="toolbar">
+  <button class="action primary" onclick="corregirTodo()">✅ Corregir</button>
+  <button class="action secondary" onclick="pista()">💡 Pista</button>
+  <button class="action secondary" onclick="reiniciar()">🔄 Reiniciar</button>
+</div>
+</header>
+
+<main>
+<section class="card">
+  <div class="current" id="current">Haz clic en una definición para empezar.</div>
+  <div class="grid"><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="0" data-c="6"><span class="num">1</span><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="1" data-c="6"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="1" data-c="8"><span class="num">2</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="1" data-c="9"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="1" data-c="10"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="1" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="1" data-c="12"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="1" data-c="13"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="1" data-c="14"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="1" data-c="16"><span class="num">3</span><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="2" data-c="6"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="2" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="2" data-c="15"><span class="num">4</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="2" data-c="16"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="2" data-c="17"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="2" data-c="18"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="2" data-c="19"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="2" data-c="20"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="3" data-c="2"><span class="num">5</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="3"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="4"><span class="num">6</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="5"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="6"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="7"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="9"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="10"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="11"><span class="num">7</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="12"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="3" data-c="13"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="3" data-c="16"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="4" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="4" data-c="6"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="4" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="4" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="4" data-c="16"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="5" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="5" data-c="6"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="5" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="5" data-c="10"><span class="num">8</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="5" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="5" data-c="12"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="5" data-c="13"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="5" data-c="14"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="5" data-c="15"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="5" data-c="16"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="5" data-c="17"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="6" data-c="0"><span class="num">9</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="6" data-c="1"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="6" data-c="2"><span class="num">10</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="6" data-c="3"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="6" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="6" data-c="5"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="6" data-c="6"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="6" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="6" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="6" data-c="16"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="7" data-c="2"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="7" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="7" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="7" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="8" data-c="2"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="8" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="8" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="8" data-c="10"><span class="num">11</span><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="8" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="8" data-c="12"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="8" data-c="13"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="8" data-c="14"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="8" data-c="15"><input maxlength="1" autocomplete="off"></div><div class="cell" data-r="8" data-c="16"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="9" data-c="2"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="9" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="9" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="9" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="10" data-c="2"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="10" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="10" data-c="8"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="10" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="11" data-c="2"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="cell" data-r="11" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="11" data-c="11"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="cell" data-r="12" data-c="4"><input maxlength="1" autocomplete="off"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div><div class="block"></div></div>
+
+  <div class="answer-row">
+    <input id="wordInput" type="text" placeholder="Escribe aquí la palabra completa" autocomplete="off">
+    <button class="action primary" onclick="ponerPalabra()">Colocar</button>
+  </div>
+  <div class="status" id="status"></div>
+  <div class="help">
+    Ahora no salta entre palabras: selecciona una definición, escribe la <b>palabra completa</b> y pulsa <b>Colocar</b>.
+    También puedes escribir directamente en las casillas: el cursor avanzará solo dentro de la palabra seleccionada.
+  </div>
+</section>
+
+<section class="card clues">
+  <h2>Horizontales</h2>
+  <div class="clue-list"><button class="clue-btn" data-word="1" onclick="selectWord(1)"><span class="clue-num">2</span><span>Órgano que procesa la información y decide la respuesta en los actos voluntarios.</span></button>
+<button class="clue-btn" data-word="4" onclick="selectWord(4)"><span class="clue-num">4</span><span>Estructura que transmite estímulos o respuestas nerviosas.</span></button>
+<button class="clue-btn" data-word="5" onclick="selectWord(5)"><span class="clue-num">5</span><span>Acto que se realiza sin que intervenga la voluntad.</span></button>
+<button class="clue-btn" data-word="8" onclick="selectWord(8)"><span class="clue-num">8</span><span>Cambio o señal que capta el organismo y que puede provocar una respuesta.</span></button>
+<button class="clue-btn" data-word="9" onclick="selectWord(9)"><span class="clue-num">9</span><span>Órgano efector que se contrae para producir un movimiento.</span></button>
+<button class="clue-btn" data-word="11" onclick="selectWord(11)"><span class="clue-num">11</span><span>Célula nerviosa que transmite el impulso nervioso.</span></button></div>
+  <h2>Verticales</h2>
+  <div class="clue-list"><button class="clue-btn" data-word="0" onclick="selectWord(0)"><span class="clue-num">1</span><span>Acto involuntario que produce una respuesta inmediata ante un estímulo externo.</span></button>
+<button class="clue-btn" data-word="2" onclick="selectWord(2)"><span class="clue-num">2</span><span>Así se realiza un acto voluntario: dándonos cuenta de lo que hacemos.</span></button>
+<button class="clue-btn" data-word="3" onclick="selectWord(3)"><span class="clue-num">3</span><span>Parte del sistema nervioso central que actúa como puente en un acto reflejo.</span></button>
+<button class="clue-btn" data-word="6" onclick="selectWord(6)"><span class="clue-num">6</span><span>Acto que realizamos de forma consciente.</span></button>
+<button class="clue-btn" data-word="7" onclick="selectWord(7)"><span class="clue-num">7</span><span>Reacción del organismo ante un estímulo.</span></button>
+<button class="clue-btn" data-word="10" onclick="selectWord(10)"><span class="clue-num">10</span><span>Ejemplo de respuesta involuntaria que puede segregarse al ver comida apetecible.</span></button></div>
+</section>
+</main>
+
+<script>
+const words=[{"id": 0, "word": "REFLEJO", "clue": "Acto involuntario que produce una respuesta inmediata ante un estímulo externo.", "num": 1, "dir": "V", "cells": [[0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6]], "row": 0, "col": 6}, {"id": 1, "word": "CEREBRO", "clue": "Órgano que procesa la información y decide la respuesta en los actos voluntarios.", "num": 2, "dir": "H", "cells": [[1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14]], "row": 1, "col": 8}, {"id": 2, "word": "CONSCIENTE", "clue": "Así se realiza un acto voluntario: dándonos cuenta de lo que hacemos.", "num": 2, "dir": "V", "cells": [[1, 8], [2, 8], [3, 8], [4, 8], [5, 8], [6, 8], [7, 8], [8, 8], [9, 8], [10, 8]], "row": 1, "col": 8}, {"id": 3, "word": "MEDULA", "clue": "Parte del sistema nervioso central que actúa como puente en un acto reflejo.", "num": 3, "dir": "V", "cells": [[1, 16], [2, 16], [3, 16], [4, 16], [5, 16], [6, 16]], "row": 1, "col": 16}, {"id": 4, "word": "NERVIO", "clue": "Estructura que transmite estímulos o respuestas nerviosas.", "num": 4, "dir": "H", "cells": [[2, 15], [2, 16], [2, 17], [2, 18], [2, 19], [2, 20]], "row": 2, "col": 15}, {"id": 5, "word": "INVOLUNTARIO", "clue": "Acto que se realiza sin que intervenga la voluntad.", "num": 5, "dir": "H", "cells": [[3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 8], [3, 9], [3, 10], [3, 11], [3, 12], [3, 13]], "row": 3, "col": 2}, {"id": 6, "word": "VOLUNTARIO", "clue": "Acto que realizamos de forma consciente.", "num": 6, "dir": "V", "cells": [[3, 4], [4, 4], [5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4], [11, 4], [12, 4]], "row": 3, "col": 4}, {"id": 7, "word": "RESPUESTA", "clue": "Reacción del organismo ante un estímulo.", "num": 7, "dir": "V", "cells": [[3, 11], [4, 11], [5, 11], [6, 11], [7, 11], [8, 11], [9, 11], [10, 11], [11, 11]], "row": 3, "col": 11}, {"id": 8, "word": "ESTIMULO", "clue": "Cambio o señal que capta el organismo y que puede provocar una respuesta.", "num": 8, "dir": "H", "cells": [[5, 10], [5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [5, 16], [5, 17]], "row": 5, "col": 10}, {"id": 9, "word": "MUSCULO", "clue": "Órgano efector que se contrae para producir un movimiento.", "num": 9, "dir": "H", "cells": [[6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 6]], "row": 6, "col": 0}, {"id": 10, "word": "SALIVA", "clue": "Ejemplo de respuesta involuntaria que puede segregarse al ver comida apetecible.", "num": 10, "dir": "V", "cells": [[6, 2], [7, 2], [8, 2], [9, 2], [10, 2], [11, 2]], "row": 6, "col": 2}, {"id": 11, "word": "NEURONA", "clue": "Célula nerviosa que transmite el impulso nervioso.", "num": 11, "dir": "H", "cells": [[8, 10], [8, 11], [8, 12], [8, 13], [8, 14], [8, 15], [8, 16]], "row": 8, "col": 10}];
+const answers={"0,6": "R", "1,6": "E", "1,8": "C", "1,9": "E", "1,10": "R", "1,11": "E", "1,12": "B", "1,13": "R", "1,14": "O", "1,16": "M", "2,6": "F", "2,8": "O", "2,15": "N", "2,16": "E", "2,17": "R", "2,18": "V", "2,19": "I", "2,20": "O", "3,2": "I", "3,3": "N", "3,4": "V", "3,5": "O", "3,6": "L", "3,7": "U", "3,8": "N", "3,9": "T", "3,10": "A", "3,11": "R", "3,12": "I", "3,13": "O", "3,16": "D", "4,4": "O", "4,6": "E", "4,8": "S", "4,11": "E", "4,16": "U", "5,4": "L", "5,6": "J", "5,8": "C", "5,10": "E", "5,11": "S", "5,12": "T", "5,13": "I", "5,14": "M", "5,15": "U", "5,16": "L", "5,17": "O", "6,0": "M", "6,1": "U", "6,2": "S", "6,3": "C", "6,4": "U", "6,5": "L", "6,6": "O", "6,8": "I", "6,11": "P", "6,16": "A", "7,2": "A", "7,4": "N", "7,8": "E", "7,11": "U", "8,2": "L", "8,4": "T", "8,8": "N", "8,10": "N", "8,11": "E", "8,12": "U", "8,13": "R", "8,14": "O", "8,15": "N", "8,16": "A", "9,2": "I", "9,4": "A", "9,8": "T", "9,11": "S", "10,2": "V", "10,4": "R", "10,8": "E", "10,11": "T", "11,2": "A", "11,4": "I", "11,11": "A", "12,4": "O"};
+const membership={"0,6": [0], "1,6": [0], "2,6": [0], "3,6": [0, 5], "4,6": [0], "5,6": [0], "6,6": [0, 9], "1,8": [1, 2], "1,9": [1], "1,10": [1], "1,11": [1], "1,12": [1], "1,13": [1], "1,14": [1], "2,8": [2], "3,8": [2, 5], "4,8": [2], "5,8": [2], "6,8": [2], "7,8": [2], "8,8": [2], "9,8": [2], "10,8": [2], "1,16": [3], "2,16": [3, 4], "3,16": [3], "4,16": [3], "5,16": [3, 8], "6,16": [3], "2,15": [4], "2,17": [4], "2,18": [4], "2,19": [4], "2,20": [4], "3,2": [5], "3,3": [5], "3,4": [5, 6], "3,5": [5], "3,7": [5], "3,9": [5], "3,10": [5], "3,11": [5, 7], "3,12": [5], "3,13": [5], "4,4": [6], "5,4": [6], "6,4": [6, 9], "7,4": [6], "8,4": [6], "9,4": [6], "10,4": [6], "11,4": [6], "12,4": [6], "4,11": [7], "5,11": [7, 8], "6,11": [7], "7,11": [7], "8,11": [7, 11], "9,11": [7], "10,11": [7], "11,11": [7], "5,10": [8], "5,12": [8], "5,13": [8], "5,14": [8], "5,15": [8], "5,17": [8], "6,0": [9], "6,1": [9], "6,2": [9, 10], "6,3": [9], "6,5": [9], "7,2": [10], "8,2": [10], "9,2": [10], "10,2": [10], "11,2": [10], "8,10": [11], "8,12": [11], "8,13": [11], "8,14": [11], "8,15": [11], "8,16": [11]};
+let selected=null;
+
+function norm(s){return (s||'').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'');}
+function cellInput(r,c){return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"] input`);}
+function cellDiv(r,c){return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);}
+
+function selectWord(id){
+  selected=words.find(w=>w.id===id);
+  document.querySelectorAll('.cell').forEach(c=>c.classList.remove('selected'));
+  document.querySelectorAll('.clue-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.clue-btn[data-word="${id}"]`)?.classList.add('active');
+  selected.cells.forEach(([r,c])=>cellDiv(r,c)?.classList.add('selected'));
+  document.getElementById('current').innerHTML=`<b>${selected.num} ${selected.dir==='H'?'Horizontal':'Vertical'}:</b> ${selected.clue}`;
+  const inp=document.getElementById('wordInput');
+  inp.value='';
+  inp.placeholder=`${selected.word.length} letras`;
+  inp.focus();
+}
+
+function ponerPalabra(){
+  if(!selected) return;
+  const txt=norm(document.getElementById('wordInput').value);
+  if(!txt) return;
+  selected.cells.forEach(([r,c],i)=>{
+    const inp=cellInput(r,c);
+    if(inp) inp.value=txt[i]||'';
+  });
+  comprobarSeleccionada();
+}
+
+function comprobarSeleccionada(){
+  if(!selected) return;
+  let ok=true;
+  selected.cells.forEach(([r,c],i)=>{
+    const inp=cellInput(r,c), div=cellDiv(r,c);
+    div.classList.remove('ok','bad');
+    if(norm(inp.value)===norm(selected.word[i])) div.classList.add('ok');
+    else { if(inp.value) div.classList.add('bad'); ok=false; }
+  });
+  const st=document.getElementById('status');
+  st.textContent=ok?'✅ ¡Correcto!':'Revisa las casillas marcadas en rojo.';
+  st.style.color=ok?'#218c4d':'#b45309';
+}
+
+function corregirTodo(){
+  let correctas=0;
+  document.querySelectorAll('.cell input').forEach(inp=>{
+    const cell=inp.parentElement;
+    const key=cell.dataset.r+','+cell.dataset.c;
+    cell.classList.remove('ok','bad');
+    if(norm(inp.value)===norm(answers[key])){cell.classList.add('ok');correctas++;}
+    else if(inp.value) cell.classList.add('bad');
+  });
+  document.getElementById('status').textContent=`${correctas} de ${Object.keys(answers).length} letras correctas.`;
+}
+
+function pista(){
+  if(!selected) return;
+  for(let i=0;i<selected.cells.length;i++){
+    const [r,c]=selected.cells[i];
+    const inp=cellInput(r,c);
+    if(!inp.value){
+      inp.value=selected.word[i];
+      cellDiv(r,c).classList.add('ok');
+      break;
+    }
+  }
+}
+
+function reiniciar(){
+  document.querySelectorAll('.cell input').forEach(i=>i.value='');
+  document.querySelectorAll('.cell').forEach(c=>c.classList.remove('ok','bad','selected'));
+  document.querySelectorAll('.clue-btn').forEach(b=>b.classList.remove('active'));
+  selected=null;
+  document.getElementById('current').textContent='Haz clic en una definición para empezar.';
+  document.getElementById('wordInput').value='';
+  document.getElementById('wordInput').placeholder='Escribe aquí la palabra completa';
+  document.getElementById('status').textContent='';
+}
+
+document.getElementById('wordInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter') ponerPalabra();
+});
+
+// Direct cell typing: moves only inside selected word.
+document.querySelectorAll('.cell input').forEach(inp=>{
+  inp.addEventListener('focus',()=>{
+    const r=+inp.parentElement.dataset.r,c=+inp.parentElement.dataset.c;
+    const ids=membership[r+','+c]||[];
+    if(!selected || !ids.includes(selected.id)) selectWord(ids[0]);
+  });
+  inp.addEventListener('input',()=>{
+    inp.value=norm(inp.value).slice(-1);
+    if(!selected) return;
+    const r=+inp.parentElement.dataset.r,c=+inp.parentElement.dataset.c;
+    const idx=selected.cells.findIndex(x=>x[0]===r && x[1]===c);
+    if(inp.value && idx>=0 && idx<selected.cells.length-1){
+      const [nr,nc]=selected.cells[idx+1];
+      cellInput(nr,nc)?.focus();
+    }
+  });
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Backspace' && !inp.value && selected){
+      const r=+inp.parentElement.dataset.r,c=+inp.parentElement.dataset.c;
+      const idx=selected.cells.findIndex(x=>x[0]===r && x[1]===c);
+      if(idx>0){
+        const [pr,pc]=selected.cells[idx-1];
+        cellInput(pr,pc)?.focus();
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>
