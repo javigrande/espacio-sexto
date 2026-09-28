@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "Coordenadas cartesianas",
+    "descripcion": "Práctica de coordenadas cartesianas",
+    "materia": "Matemáticas",
+    "tipo": "Repaso",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/coordenadas-cartesianas.html",
+    "destacado": false,
+    "fecha": "2026-09-28"
+  },
+  {
     "titulo": "Cálculo relámpago",
     "descripcion": "Entrena el cálculo mental con 10 operaciones rápidas y supera tu puntuación.",
     "materia": "Matemáticas",
