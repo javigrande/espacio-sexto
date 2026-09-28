@@ -1,0 +1,35 @@
+[
+  {
+    "titulo": "Cálculo relámpago",
+    "descripcion": "Entrena el cálculo mental con 10 operaciones rápidas y supera tu puntuación.",
+    "materia": "Matemáticas",
+    "tipo": "Juego",
+    "icono": "⚡",
+    "tiempo": "2-5 min",
+    "archivo": "materiales/calculo-relampago.html",
+    "destacado": true,
+    "fecha": "2026-09-28"
+  },
+  {
+    "titulo": "Sistema nervioso",
+    "descripcion": "Espacio preparado para la próxima actividad interactiva de Ciencias Naturales.",
+    "materia": "CCNN",
+    "tipo": "Actividad",
+    "icono": "🧠",
+    "tiempo": "10 min",
+    "archivo": "materiales/proximamente.html",
+    "destacado": true,
+    "fecha": "2026-09-28"
+  },
+  {
+    "titulo": "Mapa físico",
+    "descripcion": "Próximo reto de localización para practicar accidentes geográficos.",
+    "materia": "CCSS",
+    "tipo": "Repaso",
+    "icono": "🗺️",
+    "tiempo": "10-15 min",
+    "archivo": "materiales/proximamente.html",
+    "destacado": true,
+    "fecha": "2026-09-28"
+  }
+]

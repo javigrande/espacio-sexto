@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6c4cff">
+  <title>Espacio 6.º EP</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-blobs">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">6.º</div>
+        <div>
+          <strong>Espacio 6.º EP</strong>
+          <span>Curso 2026-2027</span>
+        </div>
+      </div>
+      <a class="nav-link" href="#biblioteca">Biblioteca</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <div class="kicker">✨ TU ESPACIO PARA APRENDER</div>
+        <h1>Aprender también<br><span>puede enganchar.</span></h1>
+        <p>Juegos, actividades, retos y resúmenes de clase, preparados para practicar a tu ritmo.</p>
+        <div class="hero-actions">
+          <a class="cta primary" href="#materias">Empezar</a>
+          <a class="cta secondary" href="#biblioteca">Ver novedades</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong id="statTotal">0</strong><span>recursos</span></div>
+          <div><strong id="statJuegos">0</strong><span>juegos</span></div>
+          <div><strong id="statMaterias">0</strong><span>materias</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="screen-card big">
+          <div class="screen-top">
+            <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+          </div>
+          <div class="screen-content">
+            <span class="screen-pill">HOY</span>
+            <h3>¿Qué vamos a trabajar?</h3>
+            <div class="mini-subjects">
+              <div>➗</div><div>📖</div><div>🧠</div><div>🌍</div>
+            </div>
+          </div>
+        </div>
+        <div class="float-card f1">🏆 <b>Reto</b><span>Supera tu marca</span></div>
+        <div class="float-card f2">⚡ <b>Repaso rápido</b><span>5 minutos</span></div>
+      </div>
+    </section>
+
+    <section id="materias" class="wrap section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">MATERIAS</span>
+          <h2>Elige tu misión</h2>
+          <p>Entra directamente en el área que quieres practicar.</p>
+        </div>
+      </div>
+
+      <div class="subject-grid">
+        <button class="subject-card purple" data-filter="Matemáticas">
+          <div class="subject-icon">➗</div>
+          <div class="subject-copy">
+            <b>Matemáticas</b>
+            <span>Cálculo, problemas y lógica</span>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+
+        <button class="subject-card orange" data-filter="Lengua">
+          <div class="subject-icon">📖</div>
+          <div class="subject-copy">
+            <b>Lengua</b>
+            <span>Gramática, ortografía y comprensión</span>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+
+        <button class="subject-card green" data-filter="CCNN">
+          <div class="subject-icon">🧠</div>
+          <div class="subject-copy">
+            <b>Ciencias Naturales</b>
+            <span>Cuerpo humano, materia y energía</span>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+
+        <button class="subject-card blue" data-filter="CCSS">
+          <div class="subject-icon">🌍</div>
+          <div class="subject-copy">
+            <b>Ciencias Sociales</b>
+            <span>Geografía, historia y sociedad</span>
+          </div>
+          <div class="arrow">→</div>
+        </button>
+      </div>
+    </section>
+
+    <section class="wrap section featured-section">
+      <div class="section-head row">
+        <div>
+          <span class="eyebrow">DESTACADOS</span>
+          <h2>Lo que toca ahora</h2>
+        </div>
+      </div>
+      <div id="featured" class="featured-grid"></div>
+    </section>
+
+    <section id="biblioteca" class="wrap section library-section">
+      <div class="section-head row">
+        <div>
+          <span class="eyebrow">BIBLIOTECA</span>
+          <h2>Todos los recursos</h2>
+        </div>
+        <div class="searchbox">
+          <span>⌕</span>
+          <input id="search" type="search" placeholder="Buscar actividad, tema...">
+        </div>
+      </div>
+
+      <div class="filters">
+        <button class="filter active" data-kind="Todos">Todos</button>
+        <button class="filter" data-kind="Juego">🎮 Juegos</button>
+        <button class="filter" data-kind="Actividad">📝 Actividades</button>
+        <button class="filter" data-kind="Resumen">📚 Resúmenes</button>
+        <button class="filter" data-kind="Esquema">🧩 Esquemas</button>
+        <button class="filter" data-kind="Repaso">⚡ Repaso</button>
+      </div>
+
+      <div id="grid" class="resource-grid"></div>
+
+      <div id="empty" class="empty" hidden>
+        <div class="empty-icon">🔎</div>
+        <h3>No encuentro nada con ese filtro</h3>
+        <p>Prueba con otra palabra o vuelve a “Todos”.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <div class="brand-mark mini">6.º</div>
+        <div><strong>Espacio 6.º EP</strong><span>Aprende · Practica · Supera</span></div>
+      </div>
+      <span>Curso 2026-2027</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
