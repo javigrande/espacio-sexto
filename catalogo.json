@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "ROMA: El Código perdido",
+    "descripcion": "Actividad para trabajar los números romanos de una manera divertida",
+    "materia": "Matemáticas",
+    "tipo": "Repaso",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/roma-el-codigo-perdido.html",
+    "destacado": false,
+    "fecha": "2026-09-29"
+  },
+  {
     "titulo": "autodefinido del sistema nervioso",
     "descripcion": "",
     "materia": "CCNN",
