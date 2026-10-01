@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "Mapa de los Climas de España",
+    "descripcion": "Mapa interactivo de los climas de España",
+    "materia": "CCSS",
+    "tipo": "Repaso",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/mapa-de-los-climas-de-espana.html",
+    "destacado": false,
+    "fecha": "2026-10-01"
+  },
+  {
     "titulo": "ROMA: El Código perdido",
     "descripcion": "Actividad para trabajar los números romanos de una manera divertida",
     "materia": "Matemáticas",
