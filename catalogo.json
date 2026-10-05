@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "La clínica de los sentidos",
+    "descripcion": "Selecciona el sentido adecuado para cada situación ¡Adelante!",
+    "materia": "CCNN",
+    "tipo": "Actividad",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/la-clinica-de-los-sentidos.html",
+    "destacado": false,
+    "fecha": "2026-10-05"
+  },
+  {
     "titulo": "Mapa de los Climas de España",
     "descripcion": "Mapa interactivo de los climas de España",
     "materia": "CCSS",
