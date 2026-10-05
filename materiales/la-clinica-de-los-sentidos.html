@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clínica de los sentidos · 6.º Primaria</title>
+<style>
+:root {
+  --ink:#18212b; --blue:#49a6e9; --purple:#7a5cc8; --green:#37a65a;
+  --orange:#f08a24; --pink:#e85b93; --bg:#f5f9ff; --ok:#238a4b; --bad:#cf3f3f;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,#eef7ff,#fff);color:var(--ink)}
+header{text-align:center;padding:18px 14px 8px}
+h1{margin:0;font-size:clamp(32px,5vw,60px);color:var(--purple)}
+header p{margin:7px 0 0;font-weight:800;color:#5c6470}
+.topbar{max-width:1200px;margin:12px auto;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:0 14px}
+.progress{height:16px;background:#e4ebf2;border-radius:999px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));transition:.25s}
+.badges{display:flex;gap:10px;font-weight:900}
+.badge{background:white;border-radius:999px;padding:8px 12px;box-shadow:0 3px 10px #0001}
+main{max-width:1200px;margin:0 auto;padding:14px}
+.card{background:white;border-radius:24px;box-shadow:0 10px 32px #00000012;padding:20px}
+.patient{display:grid;grid-template-columns:100px 1fr;gap:18px;align-items:center}
+.avatar{font-size:72px;text-align:center;background:#f4efff;border-radius:24px;padding:10px}
+.patient h2{margin:0 0 6px;font-size:30px}
+.case-text{font-size:20px;font-weight:750;line-height:1.4}
+.question{margin-top:18px;padding-top:18px;border-top:2px dashed #d9e0e8}
+.question h3{margin:0 0 12px;font-size:24px;color:#39475a}
+.options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.option{border:3px solid #dfe6ee;background:#fff;border-radius:16px;padding:15px;font-size:18px;font-weight:850;cursor:pointer;transition:.15s}
+.option:hover{transform:translateY(-1px);border-color:#9bb8d5}
+.option.selected{border-color:var(--purple);background:#f4efff}
+.option.correct{border-color:var(--ok);background:#eaf8ef}
+.option.wrong{border-color:var(--bad);background:#fff0f0}
+.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:14px;padding:11px 17px;font-size:16px;font-weight:900;cursor:pointer}
+.primary{background:var(--purple);color:white} .secondary{background:#e9eef5}
+.feedback{min-height:60px;margin-top:16px;border-radius:16px;padding:14px;font-weight:800;display:none}
+.feedback.show{display:block} .feedback.ok{background:#eaf8ef;color:#176b36} .feedback.bad{background:#fff0f0;color:#a72e2e}
+.hidden{display:none!important}
+.lab{margin-top:18px}
+.lab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.organ-card{border:3px solid #e0e6ed;border-radius:18px;padding:14px}
+.organ-card h3{margin:0 0 10px;color:var(--purple)}
+.dropzone{min-height:48px;border:2px dashed #aab6c4;border-radius:12px;padding:8px;margin:8px 0;background:#fafcff;font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:#eef4ff;border:2px solid #cbd7e6;border-radius:999px;padding:8px 11px;font-weight:850;cursor:grab}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.summary .mini{background:#f8fbff;border-radius:16px;padding:14px;text-align:center;font-weight:800}
+.final{text-align:center;padding:24px}
+.final .big{font-size:64px}
+@media(max-width:850px){.options{grid-template-columns:1fr}.lab-grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.patient{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏥 Clínica de los sentidos</h1>
+  <p>Diagnostica cada caso usando lo aprendido sobre tacto, gusto y olfato.</p>
+</header>
+
+<div class="topbar">
+  <div class="progress"><div id="bar"></div></div>
+  <div class="badge">⭐ <span id="score">0</span></div>
+  <div class="badge">❤️ <span id="lives">3</span></div>
+</div>
+
+<main>
+<section class="card" id="game">
+  <div class="patient">
+    <div class="avatar" id="emoji">👃</div>
+    <div>
+      <h2 id="patientName">Paciente</h2>
+      <div class="case-text" id="situation"></div>
+    </div>
+  </div>
+
+  <div class="question" id="questionBox">
+    <h3 id="questionTitle">¿Qué sentido interviene?</h3>
+    <div class="options" id="options"></div>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="controls">
+    <button class="secondary" onclick="hint()">💡 Pista</button>
+    <button class="primary hidden" id="nextBtn" onclick="nextStep()">Siguiente ➜</button>
+  </div>
+</section>
+
+<section class="card lab hidden" id="lab">
+  <h2 style="margin-top:0;color:var(--purple)">🧩 Reto extra: construye los órganos</h2>
+  <p><b>Arrastra cada etiqueta al órgano correcto.</b> No necesitas colocarlas en una posición concreta: basta con clasificarlas bien.</p>
+  <div class="chips" id="chips"></div>
+  <div class="lab-grid">
+    <div class="organ-card"><h3>🖐️ Piel</h3><div class="dropzone" data-organ="Piel"></div></div>
+    <div class="organ-card"><h3>👅 Lengua</h3><div class="dropzone" data-organ="Lengua"></div></div>
+    <div class="organ-card"><h3>👃 Nariz</h3><div class="dropzone" data-organ="Nariz"></div></div>
+  </div>
+  <div class="controls">
+    <button class="primary" onclick="checkLab()">Comprobar reto</button>
+  </div>
+  <div class="feedback" id="labFeedback"></div>
+</section>
+
+<section class="card final hidden" id="final">
+  <div class="big">🏆</div>
+  <h2>¡Clínica completada!</h2>
+  <p id="finalText"></p>
+  <div class="summary">
+    <div class="mini">Tacto<br><b>piel</b></div>
+    <div class="mini">Gusto<br><b>lengua</b></div>
+    <div class="mini">Olfato<br><b>nariz</b></div>
+    <div class="mini">Clave<br><b>gusto + olfato</b></div>
+  </div>
+  <div class="controls"><button class="primary" onclick="location.reload()">Jugar otra vez</button></div>
+</section>
+</main>
+
+<script>
+const cases = [{"patient": "Lucía", "emoji": "🧊", "situation": "Toca una botella y nota que está muy fría.", "sense": "Tacto", "organ": "Piel", "receptor": "Receptores del tacto", "stimulus": "Temperatura", "explanation": "El tacto permite captar sensaciones a través de la piel. Sus receptores detectan la temperatura."}, {"patient": "Álvaro", "emoji": "🍋", "situation": "Prueba un limón y nota que está ácido.", "sense": "Gusto", "organ": "Lengua", "receptor": "Receptores del gusto", "stimulus": "Sabor", "explanation": "El gusto se localiza principalmente en la lengua y permite detectar los sabores de los alimentos."}, {"patient": "Noa", "emoji": "🌹", "situation": "Acerca una rosa a la nariz y percibe su olor.", "sense": "Olfato", "organ": "Nariz", "receptor": "Receptores olfativos", "stimulus": "Olor", "explanation": "En la pituitaria se encuentran los receptores olfativos, que perciben los olores."}, {"patient": "Hugo", "emoji": "💍", "situation": "Un anillo le aprieta demasiado el dedo.", "sense": "Tacto", "organ": "Piel", "receptor": "Receptores del tacto", "stimulus": "Presión", "explanation": "Los receptores del tacto detectan la presión sobre la piel."}, {"patient": "Irene", "emoji": "🍰", "situation": "Prueba un pastel y nota que está dulce.", "sense": "Gusto", "organ": "Lengua", "receptor": "Papilas gustativas", "stimulus": "Sabor", "explanation": "Los receptores del gusto forman las papilas gustativas, pequeñas elevaciones de la lengua."}, {"patient": "Mateo", "emoji": "🔥", "situation": "Toca algo demasiado caliente y retira la mano porque le duele.", "sense": "Tacto", "organ": "Piel", "receptor": "Receptores del tacto", "stimulus": "Dolor", "explanation": "Los receptores del tacto están especializados en captar presión, temperatura y dolor."}, {"patient": "Vega", "emoji": "🧂", "situation": "Prueba una pizca de sal y reconoce un sabor salado.", "sense": "Gusto", "organ": "Lengua", "receptor": "Papilas gustativas", "stimulus": "Sabor", "explanation": "El salado es uno de los sabores básicos."}, {"patient": "Leo", "emoji": "☕", "situation": "Prueba una bebida y reconoce un sabor amargo.", "sense": "Gusto", "organ": "Lengua", "receptor": "Papilas gustativas", "stimulus": "Sabor", "explanation": "El amargo es uno de los sabores básicos."}, {"patient": "Sara", "emoji": "🍅", "situation": "Prueba un alimento y reconoce el sabor umami.", "sense": "Gusto", "organ": "Lengua", "receptor": "Papilas gustativas", "stimulus": "Sabor", "explanation": "El umami es uno de los sabores básicos indicados en la página."}, {"patient": "Daniel", "emoji": "👃", "situation": "Lleva un rato en una habitación con un olor intenso y deja de notarlo tanto.", "sense": "Olfato", "organ": "Nariz", "receptor": "Receptores olfativos", "stimulus": "Olor", "explanation": "Los receptores del olfato se saturan con facilidad y podemos dejar de percibir un olor intenso."}, {"patient": "Emma", "emoji": "🤧", "situation": "Está resfriada y dice que la comida le sabe a poco.", "sense": "Olfato", "organ": "Nariz", "receptor": "Receptores olfativos", "stimulus": "Olor", "explanation": "Gusto y olfato actúan conjuntamente. Con un catarro percibimos peor los olores y apreciamos menos los sabores."}, {"patient": "Bruno", "emoji": "📳", "situation": "Nota la vibración de un timbre apoyando la mano sobre una superficie.", "sense": "Tacto", "organ": "Piel", "receptor": "Receptores del tacto", "stimulus": "Presión", "explanation": "Con el tacto también detectamos presiones ligeras, roces, presiones intensas y vibraciones."}];
+const parts = {"Piel": ["Epidermis", "Dermis", "Hipodermis", "Nervio", "Receptores nerviosos"], "Lengua": ["Papilas gustativas", "Nervios gustativos"], "Nariz": ["Fosa nasal", "Orificio nasal", "Pituitaria", "Nervio olfativo"]};
+let order = [...cases].sort(()=>Math.random()-.5).slice(0,8);
+let caseIndex=0, step=0, score=0, lives=3, selected=null;
+const steps = [
+  {key:"sense", q:"¿Qué sentido interviene?", opts:["Tacto","Gusto","Olfato"]},
+  {key:"organ", q:"¿Cuál es el órgano principal?", opts:["Piel","Lengua","Nariz"]},
+  {key:"receptor", q:"¿Qué receptor o estructura está relacionado?", opts:["Receptores del tacto","Papilas gustativas","Receptores del gusto","Receptores olfativos","Pituitaria"]},
+  {key:"stimulus", q:"¿Qué tipo de estímulo está percibiendo?", opts:["Presión","Temperatura","Dolor","Sabor","Olor"]}
+];
+
+function current(){return order[caseIndex]}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function updateTop(){
+  document.getElementById("score").textContent=score;
+  document.getElementById("lives").textContent=lives;
+  document.getElementById("bar").style.width=((caseIndex/order.length)*100)+"%";
+}
+function render(){
+  selected=null;
+  const c=current(), s=steps[step];
+  document.getElementById("emoji").textContent=c.emoji;
+  document.getElementById("patientName").textContent=c.patient;
+  document.getElementById("situation").textContent=c.situation;
+  document.getElementById("questionTitle").textContent=s.q;
+  document.getElementById("feedback").className="feedback";
+  document.getElementById("nextBtn").classList.add("hidden");
+  let opts = shuffle(s.opts);
+  if(!opts.includes(c[s.key])) opts[Math.floor(Math.random()*opts.length)] = c[s.key];
+  const box=document.getElementById("options"); box.innerHTML="";
+  opts.forEach(o=>{
+    const b=document.createElement("button");
+    b.className="option"; b.textContent=o;
+    b.onclick=()=>choose(b,o);
+    box.appendChild(b);
+  });
+  updateTop();
+}
+function choose(btn,val){
+  if(selected!==null) return;
+  selected=val;
+  const c=current(), s=steps[step], correct=c[s.key];
+  [...document.querySelectorAll(".option")].forEach(b=>{
+    if(b.textContent===correct) b.classList.add("correct");
+  });
+  const fb=document.getElementById("feedback");
+  if(val===correct){
+    btn.classList.add("correct"); score+=10;
+    fb.className="feedback show ok";
+    fb.textContent="✅ Correcto. "+c.explanation;
+  } else {
+    btn.classList.add("wrong"); lives--;
+    fb.className="feedback show bad";
+    fb.textContent="❌ No exactamente. La respuesta correcta es “"+correct+"”. "+c.explanation;
+  }
+  document.getElementById("nextBtn").classList.remove("hidden");
+  updateTop();
+}
+function nextStep(){
+  step++;
+  if(step>=steps.length){
+    step=0; caseIndex++;
+    if(lives<=0 || caseIndex>=order.length) return startLab();
+  }
+  render();
+}
+function hint(){
+  const c=current(), s=steps[step];
+  const fb=document.getElementById("feedback");
+  fb.className="feedback show";
+  const hints={
+    sense:"Piensa si percibe presión/temperatura/dolor, sabores u olores.",
+    organ:"Relaciona tacto-piel, gusto-lengua y olfato-nariz.",
+    receptor:"Recuerda: papilas en la lengua; receptores olfativos en la pituitaria.",
+    stimulus:"El tacto detecta presión, temperatura y dolor; gusto sabores; olfato olores."
+  };
+  fb.textContent="💡 "+hints[s.key];
+}
+function startLab(){
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("lab").classList.remove("hidden");
+  const chips=document.getElementById("chips"); chips.innerHTML="";
+  let labels=[];
+  Object.entries(parts).forEach(([org,arr])=>arr.forEach(x=>labels.push({label:x,organ:org})));
+  shuffle(labels).forEach((x,i)=>{
+    const el=document.createElement("div");
+    el.className="chip"; el.textContent=x.label; el.draggable=true;
+    el.dataset.organ=x.organ; el.id="chip"+i;
+    el.ondragstart=e=>e.dataTransfer.setData("text/plain",el.id);
+    chips.appendChild(el);
+  });
+  document.querySelectorAll(".dropzone").forEach(z=>{
+    z.ondragover=e=>e.preventDefault();
+    z.ondrop=e=>{e.preventDefault(); const id=e.dataTransfer.getData("text/plain"); z.appendChild(document.getElementById(id));};
+  });
+}
+function checkLab(){
+  let total=0, ok=0;
+  document.querySelectorAll(".dropzone .chip").forEach(ch=>{
+    total++;
+    if(ch.dataset.organ===ch.parentElement.dataset.organ){ok++; ch.style.background="#eaf8ef"}
+    else ch.style.background="#fff0f0";
+  });
+  const all = Object.values(parts).flat().length;
+  const fb=document.getElementById("labFeedback");
+  if(total<all){
+    fb.className="feedback show bad"; fb.textContent="Aún quedan etiquetas sin colocar.";
+    return;
+  }
+  if(ok===all){
+    score+=30;
+    fb.className="feedback show ok"; fb.textContent="🎉 ¡Perfecto! Todos los elementos están bien clasificados.";
+    setTimeout(showFinal,700);
+  } else {
+    fb.className="feedback show bad"; fb.textContent="Revisa las etiquetas en rojo.";
+  }
+}
+function showFinal(){
+  document.getElementById("lab").classList.add("hidden");
+  document.getElementById("final").classList.remove("hidden");
+  document.getElementById("bar").style.width="100%";
+  document.getElementById("finalText").textContent="Has conseguido "+score+" puntos. Has trabajado tacto, gusto, olfato, receptores y partes de sus órganos.";
+  document.getElementById("score").textContent=score;
+}
+render();
+</script>
+</body>
+</html>
