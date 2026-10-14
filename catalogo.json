@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "Autodefinido del la vista",
+    "descripcion": "Repasa los conceptos relacionados con el sentido de la vista",
+    "materia": "CCNN",
+    "tipo": "Actividad",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/autodefinido-del-la-vista.html",
+    "destacado": false,
+    "fecha": "2026-10-14"
+  },
+  {
     "titulo": "La clínica de los sentidos",
     "descripcion": "Selecciona el sentido adecuado para cada situación ¡Adelante!",
     "materia": "CCNN",
