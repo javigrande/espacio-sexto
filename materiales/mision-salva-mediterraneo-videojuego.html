@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Misión: Salva el Mediterráneo</title>
+<style>
+*{box-sizing:border-box} :root{--navy:#112b47;--green:#32a852;--gold:#ffbe28;--paper:#fffdf6}
+body{margin:0;font-family:Trebuchet MS,system-ui,sans-serif;color:#17283a;background:#0c6fa5;overflow-x:hidden}
+button{font:inherit}.game{min-height:100vh;background:linear-gradient(#36b6ef 0 20%,#9ed7ee 20% 42%,#d8bd70 42% 100%)}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+.topbar{height:62px;background:linear-gradient(#163b61,#0d2743);color:white;display:flex;align-items:center;gap:12px;padding:7px 16px;border-bottom:4px solid rgba(255,255,255,.6);position:sticky;top:0;z-index:20}
+.logo{font-weight:1000;font-size:clamp(18px,3vw,28px);text-shadow:0 3px 0 #071729}.spacer{flex:1}
+.stat{display:flex;align-items:center;gap:5px;background:#071d34;border:2px solid #416785;border-radius:20px;padding:6px 11px;font-weight:900}.home{width:42px;height:42px;border:0;border-radius:50%;background:#071d34;color:#fff;font-size:22px;cursor:pointer}
+.hero{min-height:calc(100vh - 62px);display:grid;grid-template-columns:.85fr 1.15fr;align-items:center;padding:5vw;gap:25px;background:
+radial-gradient(circle at 75% 20%,#fff7 0 3%,transparent 3.3%),
+linear-gradient(#31b7f2 0 45%,#178dc3 45% 58%,#dfbb66 58%)}
+.explorer{font-size:min(32vw,320px);text-align:center;filter:drop-shadow(0 15px 8px #0004)}
+.titlebox{text-align:center}.bigtitle{font-size:clamp(44px,8vw,92px);line-height:.84;margin:0;color:#fff;text-shadow:0 5px 0 #19324a,0 9px 0 #0a1824;font-weight:1000}
+.bigtitle span{color:#ffb72b}.wood{display:inline-block;background:linear-gradient(#b87532,#8b4c20);border:4px solid #5c3017;border-radius:12px;padding:12px 24px;margin:25px auto;color:#fff4cf;font-weight:900;font-size:clamp(16px,2vw,24px);box-shadow:0 7px 0 #5a321a}
+.primary{border:0;border-radius:28px;padding:15px 32px;background:linear-gradient(#58d64e,#14922c);color:#fff;font-size:clamp(20px,3vw,32px);font-weight:1000;text-shadow:0 2px #075a18;box-shadow:inset 0 3px #a8f49e,0 7px 0 #086b1d;cursor:pointer}
+.primary:active{transform:translateY(4px);box-shadow:inset 0 2px #a8f49e,0 3px 0 #086b1d}
+.map{padding:22px;min-height:calc(100vh - 62px);background:linear-gradient(#55c8f0 0 33%,#0d87bd 33% 44%,#d6bd72 44%);position:relative}
+.map h1{text-align:center;color:white;text-shadow:0 4px #123653;font-size:clamp(34px,6vw,64px);margin:10px}.island{max-width:1100px;margin:15px auto;background:#c7a85e;border:8px solid #e7d28c;border-radius:48% 42% 46% 38%;padding:50px 35px;box-shadow:0 18px 0 #096a95;position:relative}
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.node{border:0;border-radius:22px;padding:16px 10px;background:#fff;color:#17324d;font-weight:1000;box-shadow:0 7px 0 #8d743e;cursor:pointer}.node .num{display:block;margin:-42px auto 8px;width:56px;height:56px;line-height:48px;border:4px solid white;border-radius:50%;background:#24a147;color:white;font-size:26px}.node.locked{filter:grayscale(.8);opacity:.65}.node:nth-child(2) .num{background:#d66a31}.node:nth-child(3) .num{background:#e8a526}.node:nth-child(4) .num{background:#7652c5}
+.level{min-height:calc(100vh - 62px);padding:18px;background:linear-gradient(#8ed8f0 0 30%,#d9c179 30% 100%)}
+.levelHead{max-width:1150px;margin:auto;display:flex;align-items:center;gap:12px;color:white;background:#133a5b;border-radius:20px 20px 0 0;padding:11px 16px}.badge{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#27a84e;border:4px solid #fff;font-size:25px;font-weight:1000}
+.levelHead h2{margin:0;font-size:clamp(21px,4vw,34px)}
+.panel{max-width:1150px;margin:auto;background:#ffffffed;border:5px solid white;border-radius:0 0 22px 22px;box-shadow:0 8px 0 #7e925d;overflow:hidden}
+.instruction{margin:14px;background:white;border:2px solid #d9e0e5;border-radius:14px;padding:12px 16px;font-weight:900}
+.landscape{min-height:235px;padding:18px;background:linear-gradient(#69c8ef 0 50%,#8fb15d 50%);display:flex;align-items:end;justify-content:center;gap:18px;position:relative;overflow:hidden}
+.landscape:before{content:"⛰️  ⛰️   ⛰️";position:absolute;left:0;right:0;bottom:34%;font-size:100px;opacity:.55;text-align:center}
+.cards{position:relative;z-index:2;display:grid;grid-template-columns:repeat(5,minmax(90px,1fr));gap:10px;width:100%;max-width:950px}
+.card{background:#fff;border:4px solid #fff;border-radius:14px;padding:8px;text-align:center;box-shadow:0 5px 0 #7b8a76;cursor:pointer;min-height:125px;font-weight:900}.card .pic{font-size:56px;display:block}.card.selected{border-color:#32b85a;transform:translateY(-4px);box-shadow:0 8px 0 #16833a}.card.wrong{border-color:#e05252;background:#ffe6e6}
+.bottom{padding:14px;display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap}.feedback{flex:1;min-width:250px;max-width:650px;background:#fff7d9;border:2px solid #e6c863;border-radius:14px;padding:12px;font-weight:850}.feedback.good{background:#ddf6df;border-color:#61b96b}.feedback.bad{background:#ffe1dd;border-color:#dd6c63}
+.answergrid{display:grid;grid-template-columns:1.5fr .8fr;gap:14px;padding:14px}.photo{min-height:340px;border-radius:18px;background:linear-gradient(#65c7ef 0 40%,#a38b55 40%);display:grid;place-items:end center;font-size:110px;padding:30px;overflow:hidden}.answers{display:grid;gap:10px}.answer{border:2px solid #ddd;border-radius:14px;background:#fff;padding:14px;font-weight:900;cursor:pointer;text-align:left}.answer.selected{background:#31a94e;color:white;border-color:#1a8234}
+.waterbox{padding:16px;background:#fff}.waterline{display:flex;align-items:center;gap:12px;font-size:28px}.waterline input{width:100%;accent-color:#1599d1}.dryland{min-height:250px;border-radius:18px;background:linear-gradient(#5fc5ef 0 38%,#c79246 38%);display:flex;justify-content:center;align-items:end;gap:35px;font-size:80px;padding:22px}
+.human{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px}.choice{background:#fff;border:4px solid #e5e5e5;border-radius:18px;padding:8px;cursor:pointer;font-weight:900}.choice .scene{font-size:70px;min-height:170px;display:grid;place-items:center;background:#eaf4df;border-radius:12px}.choice.selected{border-color:#30ae50}.finish{min-height:calc(100vh - 62px);display:grid;place-items:center;padding:20px;background:linear-gradient(#3ebce8,#1679a5)}.finishBox{text-align:center;background:#fff;border:7px solid #ffcc42;border-radius:30px;padding:35px;max-width:650px;box-shadow:0 12px 0 #a56d19}.trophy{font-size:100px}.rank{font-size:34px;font-weight:1000;color:#198b3d}
+@media(max-width:750px){.hero{grid-template-columns:1fr}.explorer{font-size:130px}.path{grid-template-columns:1fr 1fr;gap:55px 12px}.cards{grid-template-columns:repeat(2,1fr)}.answergrid{grid-template-columns:1fr}.human{grid-template-columns:1fr}.topbar{padding:6px}.stat{font-size:12px;padding:5px 7px}.logo{font-size:15px}.island{padding:55px 18px}.photo{min-height:220px}}
+</style>
+</head>
+<body><div class="game">
+<div class="topbar"><div class="logo">🌿 SALVA EL MEDITERRÁNEO</div><div class="spacer"></div><div class="stat">❤️ <b id="lives">3</b></div><div class="stat">⭐ <b id="score">0</b></div><div class="stat">🔥 <b id="streak">0</b></div><button class="home" id="home">⌂</button></div>
+
+<section class="screen active" id="start"><div class="hero"><div class="explorer">🧭</div><div class="titlebox"><h1 class="bigtitle">MISIÓN<br><span>SALVA EL</span><br>MEDITERRÁNEO</h1><div class="wood">Descubre su vegetación y protege sus paisajes</div><br><button class="primary" data-go="map">▶ COMENZAR</button></div></div></section>
+
+<section class="screen" id="map"><div class="map"><h1>MAPA DE LA AVENTURA</h1><p style="text-align:center;color:white;font-weight:900">Supera las 4 misiones para convertirte en experto del Mediterráneo</p><div class="island"><div class="path">
+<button class="node" data-level="1"><span class="num">1</span>🌳<br>El bosque mediterráneo</button>
+<button class="node locked" data-level="2"><span class="num">2</span>🌿<br>Garriga o maquia</button>
+<button class="node locked" data-level="3"><span class="num">3</span>☀️<br>Zonas más áridas</button>
+<button class="node locked" data-level="4"><span class="num">4</span>🏗️<br>La acción humana</button>
+</div></div></div></section>
+
+<section class="screen" id="level1"><div class="level"><div class="levelHead"><span class="badge">1</span><h2>El bosque mediterráneo</h2></div><div class="panel"><div class="instruction">Selecciona las plantas que forman parte del <b>bosque mediterráneo</b>. Hay algunas que no pertenecen.</div><div class="landscape"><div class="cards" id="plants"></div></div><div class="bottom"><div class="feedback" id="fb1">💡 Selecciona todas las correctas y pulsa comprobar.</div><button class="primary" id="check1">COMPROBAR</button></div></div></div></section>
+
+<section class="screen" id="level2"><div class="level"><div class="levelHead"><span class="badge" style="background:#d66a31">2</span><h2>Garriga o maquia</h2></div><div class="panel"><div class="instruction">El bosque mediterráneo se ha degradado. Ahora solo quedan arbustos. ¿En qué se ha convertido este paisaje?</div><div class="answergrid"><div class="photo">🌿 🌿 🌿</div><div class="answers" id="answers2"></div></div><div class="bottom"><div class="feedback" id="fb2">💡 Observa qué ha ocurrido con los árboles.</div><button class="primary" id="next2" style="display:none">SIGUIENTE ➜</button></div></div></div></section>
+
+<section class="screen" id="level3"><div class="level"><div class="levelHead"><span class="badge" style="background:#e8a526">3</span><h2>Zonas más áridas: palmito y esparto</h2></div><div class="panel"><div class="waterbox"><div class="instruction">Desliza para reducir la cantidad de agua y observa cómo cambia la vegetación.</div><div class="waterline"><span>💧</span><input id="water" type="range" min="1" max="4" value="4"><span id="drops">💧💧💧💧</span></div><div class="dryland" id="dryland">🌳 🌲 🌿 🌳</div></div><div class="instruction">Selecciona las <b>dos plantas</b> que abundan en las zonas más áridas del sureste.</div><div class="cards" id="drycards" style="padding:0 14px 14px;margin:auto"></div><div class="bottom"><div class="feedback" id="fb3">💡 Reduce el agua y selecciona dos plantas.</div><button class="primary" id="check3">COMPROBAR</button></div></div></div></section>
+
+<section class="screen" id="level4"><div class="level"><div class="levelHead"><span class="badge" style="background:#7652c5">4</span><h2>La acción humana</h2></div><div class="panel"><div class="instruction">Marca en cuáles se ha sustituido la <b>vegetación natural</b> por cultivos o construcciones.</div><div class="human">
+<button class="choice" data-v="natural"><div class="scene">🌳🌲🌿</div>☐ Paisaje natural</button>
+<button class="choice" data-v="cultivos"><div class="scene">🌾🌾🌾</div>☐ Sustituida por cultivos</button>
+<button class="choice" data-v="construcciones"><div class="scene">🏘️🏢🏘️</div>☐ Sustituida por construcciones</button>
+</div><div class="bottom"><div class="feedback" id="fb4">💡 Puede haber más de una respuesta correcta.</div><button class="primary" id="check4">FINALIZAR</button></div></div></div></section>
+
+<section class="screen" id="finish"><div class="finish"><div class="finishBox"><div class="trophy">🏆</div><h1>¡MISIÓN COMPLETADA!</h1><div class="rank" id="rank"></div><p id="summary" style="font-size:20px;font-weight:800"></p><button class="primary" id="again">JUGAR OTRA VEZ</button></div></div></section>
+</div>
+<script>
+(()=>{let score=0,lives=3,streak=0,unlocked=1;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+function hud(){$("#score").textContent=score;$("#lives").textContent=lives;$("#streak").textContent=streak}
+function show(id){$$(".screen").forEach(x=>x.classList.remove("active"));$("#"+id).classList.add("active");scrollTo(0,0)}
+function reward(){score+=100+streak*20;streak++;hud()} function miss(){lives=Math.max(0,lives-1);streak=0;hud()}
+function unlock(n){unlocked=Math.max(unlocked,n);$$(".node").forEach((b,i)=>b.classList.toggle("locked",i+1>unlocked))}
+$$("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go));$("#home").onclick=()=>show("map");
+$$(".node").forEach(b=>b.onclick=()=>{let n=+b.dataset.level;if(n<=unlocked)show("level"+n)});
+const pdata=[["Encina","🌳",1],["Alcornoque","🌳",1],["Pino","🌲",1],["Jara","🌺",1],["Retama","🌼",1],["Roble","🌳",0],["Palmito","🌴",0],["Esparto","🌾",0],["Eucalipto","🌲",0]];
+pdata.forEach(([n,e])=>{let b=document.createElement("button");b.className="card";b.dataset.n=n;b.innerHTML=`<span class="pic">${e}</span>${n}`;b.onclick=()=>b.classList.toggle("selected");$("#plants").appendChild(b)});
+$("#check1").onclick=()=>{let s=new Set($$("#plants .selected").map(b=>b.dataset.n)),good=["Encina","Alcornoque","Pino","Jara","Retama"];if(s.size===5&&good.every(x=>s.has(x))){reward();$("#fb1").className="feedback good";$("#fb1").textContent="⭐ ¡Perfecto! Has reconstruido el bosque mediterráneo.";unlock(2);setTimeout(()=>show("map"),900)}else{miss();$("#fb1").className="feedback bad";$("#fb1").textContent="❌ Revisa la selección. Debes encontrar cinco especies del texto."}};
+["Bosque mediterráneo","Garriga o maquia","Palmito y esparto","Pradera"].forEach(n=>{let b=document.createElement("button");b.className="answer";b.textContent=n;b.onclick=()=>{if(n==="Garriga o maquia"){reward();b.classList.add("selected");$("#fb2").className="feedback good";$("#fb2").textContent="💡 Correcto. Al degradarse el bosque desaparecen los árboles y quedan arbustos: garriga o maquia.";$("#next2").style.display="block";unlock(3)}else{miss();$("#fb2").className="feedback bad";$("#fb2").textContent="❌ No es esa. Fíjate en que ya no quedan árboles."}};$("#answers2").appendChild(b)});
+$("#next2").onclick=()=>show("map");
+$("#water").oninput=e=>{let v=+e.target.value;$("#drops").textContent="💧".repeat(v);$("#dryland").textContent=v===4?"🌳 🌲 🌿 🌳":v===3?"🌳 🌿 🌲":v===2?"🌿 🌾 🌴":"🌾 🌴 ☀️"};
+[["Encina","🌳"],["Jara","🌺"],["Palmito","🌴"],["Retama","🌼"],["Esparto","🌾"],["Pino","🌲"]].forEach(([n,e])=>{let b=document.createElement("button");b.className="card";b.dataset.n=n;b.innerHTML=`<span class="pic">${e}</span>${n}`;b.onclick=()=>b.classList.toggle("selected");$("#drycards").appendChild(b)});
+$("#check3").onclick=()=>{let s=new Set($$("#drycards .selected").map(b=>b.dataset.n));if(+$("#water").value<=2&&s.size===2&&s.has("Palmito")&&s.has("Esparto")){reward();$("#fb3").className="feedback good";$("#fb3").textContent="⭐ ¡Correcto! Palmito y esparto necesitan poca agua.";unlock(4);setTimeout(()=>show("map"),900)}else{miss();$("#fb3").className="feedback bad";$("#fb3").textContent=+$("#water").value>2?"💧 Reduce más el agua antes de responder.":"❌ Busca las dos plantas propias de las zonas más áridas del sureste."}};
+$$(".choice").forEach(b=>b.onclick=()=>b.classList.toggle("selected"));
+$("#check4").onclick=()=>{let s=new Set($$(".choice.selected").map(b=>b.dataset.v));if(s.size===2&&s.has("cultivos")&&s.has("construcciones")){reward();$("#fb4").className="feedback good";$("#fb4").textContent="⭐ ¡Correcto! La vegetación natural puede ser sustituida por cultivos o construcciones.";setTimeout(()=>{show("finish");let r=score>=440?"🌟 MAESTRO DEL MEDITERRÁNEO":score>=350?"🔬 CIENTÍFICO MEDITERRÁNEO":"🔎 EXPLORADOR MEDITERRÁNEO";$("#rank").textContent=r;$("#summary").textContent=`${score} puntos · ${lives} vidas restantes`},850)}else{miss();$("#fb4").className="feedback bad";$("#fb4").textContent="❌ Revisa: ¿en qué paisajes ha desaparecido la vegetación natural?"}};
+$("#again").onclick=()=>location.reload();hud()})();
+</script>
+</body></html>
