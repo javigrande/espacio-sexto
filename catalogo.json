@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "Misión salva mediterráneo videojuego",
+    "descripcion": "Repasa la vegetación del clima mediterráneo con esta actividad interactiva",
+    "materia": "CCSS",
+    "tipo": "Actividad",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/mision-salva-mediterraneo-videojuego.html",
+    "destacado": false,
+    "fecha": "2026-10-14"
+  },
+  {
     "titulo": "Autodefinido del la vista",
     "descripcion": "Repasa los conceptos relacionados con el sentido de la vista",
     "materia": "CCNN",
