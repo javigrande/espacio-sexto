@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "CCNN6 Repaso 16 Actividades 2026",
+    "descripcion": "Repaso Unidad 1 CCNN",
+    "materia": "CCNN",
+    "tipo": "Repaso",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/ccnn6-repaso-16-actividades-2026.html",
+    "destacado": true,
+    "fecha": "2026-11-03"
+  },
+  {
     "titulo": "Repaso CCNN",
     "descripcion": "Repaso de los contenidos y actividades de la Unidad 1 de CCNN",
     "materia": "CCNN",
