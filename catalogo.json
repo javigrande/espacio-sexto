@@ -1,16 +1,5 @@
 [
   {
-    "titulo": "Repaso CCNN",
-    "descripcion": "Repaso de los contenidos y actividades de la Unidad 1 de CCNN",
-    "materia": "CCNN",
-    "tipo": "Repaso",
-    "icono": "🎯",
-    "tiempo": "10 min",
-    "archivo": "materiales/repaso-ccnn.html",
-    "destacado": true,
-    "fecha": "2026-11-03"
-  },
-  {
     "titulo": "Desafío climático: Repaso",
     "descripcion": "Repaso de los contenidos y actividades de la Unidad 1 de CCSS",
     "materia": "CCSS",
