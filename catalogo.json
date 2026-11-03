@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "Repaso De CCSS Unidad 1",
+    "descripcion": "Actividades t retos para repasar la Unidad 1 de CCSS",
+    "materia": "CCSS",
+    "tipo": "Repaso",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/repaso-de-ccss-unidad-1.html",
+    "destacado": true,
+    "fecha": "2026-11-03"
+  },
+  {
     "titulo": "CCNN6 Repaso 16 Actividades 2026",
     "descripcion": "Repaso Unidad 1 CCNN",
     "materia": "CCNN",
