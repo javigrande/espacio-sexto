@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "Desafío climático: Repaso",
+    "descripcion": "Repaso de los contenidos y actividades de la Unidad 1 de CCSS",
+    "materia": "CCSS",
+    "tipo": "Actividad",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/desafio-climatico-repaso.html",
+    "destacado": true,
+    "fecha": "2026-11-03"
+  },
+  {
     "titulo": "Misión salva mediterráneo videojuego",
     "descripcion": "Repasa la vegetación del clima mediterráneo con esta actividad interactiva",
     "materia": "CCSS",
