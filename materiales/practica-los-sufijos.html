@@ -14,7 +14,7 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-sys
 <body>
 <div class="app">
   <div class="topbar">
-    <div class="brand"><div class="logo">SL</div><div><strong>SUFIX LAB</strong><span>Hackea palabras</span></div></div>
+    <div class="brand"><div class="logo">SL</div><div><strong>SUFIX LAB</strong><span>Hackea palabras · v2</span></div></div>
     <div class="progress-wrap"><div class="progress-info"><span>Progreso</span><span id="progressText">0%</span></div><div class="progress"><div id="progressBar"></div></div></div>
     <div class="score">⭐ <span id="scoreTop">0</span> pts</div>
   </div>
@@ -43,14 +43,19 @@ let current=0,score=0,completed={detector:false,factory:false,adjectives:false,v
 const detectorItems=[{w:'parpadear',a:'verbo'},{w:'confirmación',a:'sustantivo'},{w:'ligereza',a:'sustantivo'},{w:'fortificar',a:'verbo'},{w:'ojear',a:'verbo'},{w:'traducible',a:'adjetivo'},{w:'valenciana',a:'adjetivo'},{w:'intensificar',a:'verbo'},{w:'ideal',a:'adjetivo'},{w:'solemnidad',a:'sustantivo'}];
 const bases=['broma','malo','confirmar','grande','moderno','bello','animar'],suffixes=['-ción','-dad','-eza','-ismo','-ista'];
 const validBuilds={
-  'broma|-ista':'bromista',
-  'malo|-dad':'maldad',
-  'confirmar|-ción':'confirmación',
-  'grande|-eza':'grandeza',
-  'moderno|-ismo':'modernismo',
-  'bello|-eza':'belleza',
-  'animar|-ción':'animación'
+  broma:{'-ista':'bromista'},
+  malo:{'-dad':'maldad'},
+  confirmar:{'-ción':'confirmación'},
+  grande:{'-eza':'grandeza'},
+  moderno:{'-ismo':'modernismo'},
+  bello:{'-eza':'belleza'},
+  animar:{'-ción':'animación'}
 };
+function getBuiltWord(base,suffix){
+  const b=(base||'').trim().toLowerCase();
+  const s=(suffix||'').trim().toLowerCase();
+  return validBuilds[b]?.[s] || null;
+}
 let factoryFound=new Set();
 let selectedBase=null,selectedSuffix=null;
 function init(){const dg=document.getElementById('detectorGrid');dg.innerHTML='';detectorItems.forEach((item,i)=>{const d=document.createElement('div');d.className='word-card';d.innerHTML=`<strong>${item.w}</strong><div class="choice-row"><button class="choice" onclick="pickDetector(${i},'sustantivo',this)">Sustantivo</button><button class="choice" onclick="pickDetector(${i},'adjetivo',this)">Adjetivo</button><button class="choice" onclick="pickDetector(${i},'verbo',this)">Verbo</button></div>`;dg.appendChild(d)});const bb=document.getElementById('baseBank');bb.innerHTML='';bases.forEach(x=>{const b=document.createElement('button');b.className='token';b.textContent=x;b.onclick=()=>{selectedBase=x;document.querySelectorAll('#baseBank .token').forEach(t=>t.classList.remove('active'));b.classList.add('active');updateBuiltPreview()};bb.appendChild(b)});const sb=document.getElementById('suffixBank');sb.innerHTML='';suffixes.forEach(x=>{const b=document.createElement('button');b.className='token';b.textContent=x;b.onclick=()=>{selectedSuffix=x;document.querySelectorAll('#suffixBank .token').forEach(t=>t.classList.remove('active'));b.classList.add('active');updateBuiltPreview()};sb.appendChild(b)})}
@@ -58,7 +63,11 @@ function go(n){current=n;document.querySelectorAll('.screen').forEach(s=>s.class
 function updateProgress(){const map={0:0,1:15,2:35,3:60,4:80},pct=map[current]||0;progressBar.style.width=pct+'%';progressText.textContent=pct+'%';scoreTop.textContent=score}function addScore(n){score+=n;scoreTop.textContent=score}
 function pickDetector(i,val,btn){detectorItems[i].pick=val;btn.parentElement.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected')}
 function checkDetector(){let correct=0;detectorItems.forEach(x=>{if(x.pick===x.a)correct++});if(!completed.detector){addScore(correct*5);completed.detector=true}detectorFeedback.className='feedback '+(correct>=8?'ok':'bad');detectorFeedback.textContent=`Has acertado ${correct} de ${detectorItems.length}. ${correct>=8?'¡Detector superado!':'Revisa las palabras y vuelve a intentarlo.'}`;if(correct>=8)setTimeout(()=>go(2),900)}
-function updateBuiltPreview(){builtWord.textContent=selectedBase&&selectedSuffix?selectedBase+' + '+selectedSuffix:'Selecciona una base y un sufijo'}
+function updateBuiltPreview(){
+  if(!selectedBase||!selectedSuffix){builtWord.textContent='Selecciona una base y un sufijo';return}
+  const result=getBuiltWord(selectedBase,selectedSuffix);
+  builtWord.textContent=result ? selectedBase+' → '+result : selectedBase+' + '+selectedSuffix;
+}
 function renderFactoryCollection(){
   const box=document.getElementById('factoryCollection');
   box.innerHTML='';
@@ -69,17 +78,40 @@ function renderFactoryCollection(){
 }
 function buildWord(){
   const f=document.getElementById('factoryFeedback');
-  if(!selectedBase||!selectedSuffix){f.className='feedback bad';f.textContent='Selecciona primero una palabra base y un sufijo.';return}
-  const key=`${selectedBase}|${selectedSuffix}`;
-  if(validBuilds[key]){
-    const word=validBuilds[key];
-    builtWord.textContent='✨ '+word;
-    if(factoryFound.has(word)){f.className='feedback ok';f.textContent='Esa palabra ya la habías descubierto. Busca otra combinación.'}
-    else{factoryFound.add(word);addScore(4);f.className='feedback ok';f.textContent='¡Correcto! '+selectedBase+' + '+selectedSuffix+' → '+word+'.';renderFactoryCollection()}
+  if(!selectedBase||!selectedSuffix){
+    f.className='feedback bad';
+    f.textContent='Selecciona primero una palabra base y un sufijo.';
+    return;
+  }
+  const word=getBuiltWord(selectedBase,selectedSuffix);
+  if(word){
+    builtWord.textContent='✨ '+selectedBase+' → '+word;
+    if(factoryFound.has(word)){
+      f.className='feedback ok';
+      f.textContent='Esa palabra ya la habías descubierto. Busca otra combinación.';
+    }else{
+      factoryFound.add(word);
+      addScore(4);
+      f.className='feedback ok';
+      f.textContent='¡Correcto! Al añadir '+selectedSuffix+' a «'+selectedBase+'» formamos «'+word+'».';
+      renderFactoryCollection();
+      // Bloquea visualmente la base ya resuelta para guiar al alumno
+      document.querySelectorAll('#baseBank .token').forEach(t=>{
+        if(t.textContent===selectedBase){t.style.opacity='.45';t.title='Ya resuelta: '+word;}
+      });
+    }
   }else{
     builtWord.textContent=selectedBase+' + '+selectedSuffix;
     f.className='feedback bad';
-    const hint={broma:'Prueba con un sufijo que forma nombres de persona o actividad.',malo:'Piensa en el sustantivo que expresa la cualidad de ser malo.',confirmar:'Busca el sustantivo de la acción de confirmar.',grande:'Busca el nombre de la cualidad de ser grande.',moderno:'Piensa en una corriente o tendencia relacionada con lo moderno.',bello:'Busca el sustantivo que nombra la cualidad de ser bello.',animar:'Busca el sustantivo que nombra la acción de animar.'}[selectedBase]||'Prueba otra combinación.';
+    const hint={
+      broma:'Busca el sufijo que forma nombres de persona: broma → bromista.',
+      malo:'La vocal final desaparece: malo → maldad.',
+      confirmar:'Busca el sustantivo que expresa la acción: confirmar → confirmación.',
+      grande:'Busca el nombre de la cualidad: grande → grandeza.',
+      moderno:'Busca el nombre de una corriente o tendencia: moderno → modernismo.',
+      bello:'La forma resultante es bello → belleza.',
+      animar:'Busca el sustantivo de la acción: animar → animación.'
+    }[selectedBase]||'Prueba otra combinación.';
     f.textContent='Todavía no. '+hint;
   }
 }
