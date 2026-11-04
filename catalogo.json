@@ -1,16 +1,5 @@
 [
   {
-    "titulo": "PRACTICA LOS SUFIJOS",
-    "descripcion": "Actividad para practicar los sufijos",
-    "materia": "Lengua",
-    "tipo": "Actividad",
-    "icono": "🎯",
-    "tiempo": "10 min",
-    "archivo": "materiales/practica-los-sufijos.html",
-    "destacado": false,
-    "fecha": "2026-11-04"
-  },
-  {
     "titulo": "Repaso De CCSS Unidad 1",
     "descripcion": "Actividades t retos para repasar la Unidad 1 de CCSS",
     "materia": "CCSS",
