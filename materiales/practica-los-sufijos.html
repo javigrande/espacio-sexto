@@ -29,7 +29,7 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-sys
 
   <section id="stage1" class="screen"><div class="panel"><div class="panel-head"><div><span class="stage">MISIÓN 1 · DETECTOR</span><h2>¿Qué clase de palabra forma cada sufijo?</h2><p>Clasifica cada palabra según el tipo de palabra que forma el sufijo.</p></div><div>🔎</div></div><div id="detectorGrid" class="word-grid"></div><div class="footer-actions"><button class="btn btn-secondary" onclick="go(0)">← Inicio</button><button class="btn btn-primary" onclick="checkDetector()">Comprobar misión</button></div><div id="detectorFeedback" class="feedback"></div></div></section>
 
-  <section id="stage2" class="screen"><div class="panel"><span class="stage">MISIÓN 2 · FÁBRICA</span><h2>Construye sustantivos</h2><p>Selecciona una palabra base y un sufijo. Después pulsa “Fabricar”.</p><div class="factory"><div class="bank"><h3>Palabras base</h3><div id="baseBank" class="token-wrap"></div></div><div class="arrow-big">➜</div><div class="bank"><h3>Sufijos</h3><div id="suffixBank" class="token-wrap"></div></div></div><div class="build-result"><div class="small-note">Palabra creada</div><strong id="builtWord">Selecciona una base y un sufijo</strong><div id="factoryFeedback" class="feedback"></div><button class="btn btn-primary" onclick="buildWord()">🏭 Fabricar</button></div><div class="footer-actions"><button class="btn btn-secondary" onclick="go(1)">← Anterior</button><button class="btn btn-primary" onclick="go(3)">Siguiente →</button></div></div></section>
+  <section id="stage2" class="screen"><div class="panel"><span class="stage">MISIÓN 2 · FÁBRICA</span><h2>Construye los 7 sustantivos</h2><p>Combina cada palabra base con un sufijo adecuado. Hay una solución objetivo para cada palabra. Algunas transformaciones cambian ligeramente la base: <b>broma → bromista</b> o <b>malo → maldad</b>.</p><div class="factory"><div class="bank"><h3>Palabras base</h3><div id="baseBank" class="token-wrap"></div></div><div class="arrow-big">➜</div><div class="bank"><h3>Sufijos disponibles</h3><div id="suffixBank" class="token-wrap"></div></div></div><div class="build-result"><div class="small-note">Mesa de ensamblaje</div><strong id="builtWord">Selecciona una base y un sufijo</strong><div id="factoryFeedback" class="feedback"></div><button class="btn btn-primary" onclick="buildWord()">🏭 Fabricar palabra</button></div><div style="margin-top:18px;background:#fffafc;border:1px solid #f0e2eb;border-radius:20px;padding:16px"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px"><b>Palabras descubiertas</b><span id="factoryCount" class="stage">0 / 7</span></div><div id="factoryCollection" class="token-wrap"></div></div><div class="footer-actions"><button class="btn btn-secondary" onclick="go(1)">← Anterior</button><button id="factoryNext" class="btn btn-primary" onclick="go(3)" disabled style="opacity:.45;cursor:not-allowed">Completa las 7 para continuar →</button></div></div></section>
 
   <section id="stage3" class="screen"><div class="panel"><span class="stage">MISIÓN 3 · ADJETIVOS</span><h2>Escribe el adjetivo correcto</h2><p>Completa cada definición. Después identifica mentalmente qué sufijo has usado.</p><div class="input-grid"><div class="input-card"><label>Que hace mucho ruido.</label><input id="adj1" placeholder="Escribe aquí"></div><div class="input-card"><label>Natural de Valencia.</label><input id="adj2" placeholder="Escribe aquí"></div><div class="input-card"><label>Que se puede edificar.</label><input id="adj3" placeholder="Escribe aquí"></div><div class="input-card"><label>Propio de la primavera.</label><input id="adj4" placeholder="Escribe aquí"></div></div><div id="adjFeedback" class="feedback"></div><div class="footer-actions"><button class="btn btn-secondary" onclick="go(2)">← Anterior</button><button class="btn btn-primary" onclick="checkAdjectives()">Comprobar misión</button></div></div></section>
 
@@ -42,7 +42,16 @@ html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-sys
 let current=0,score=0,completed={detector:false,factory:false,adjectives:false,verbs:false};
 const detectorItems=[{w:'parpadear',a:'verbo'},{w:'confirmación',a:'sustantivo'},{w:'ligereza',a:'sustantivo'},{w:'fortificar',a:'verbo'},{w:'ojear',a:'verbo'},{w:'traducible',a:'adjetivo'},{w:'valenciana',a:'adjetivo'},{w:'intensificar',a:'verbo'},{w:'ideal',a:'adjetivo'},{w:'solemnidad',a:'sustantivo'}];
 const bases=['broma','malo','confirmar','grande','moderno','bello','animar'],suffixes=['-ción','-dad','-eza','-ismo','-ista'];
-const validBuilds={'confirmar|-ción':'confirmación','grande|-eza':'grandeza','bello|-eza':'belleza','malo|-dad':'maldad'};
+const validBuilds={
+  'broma|-ista':'bromista',
+  'malo|-dad':'maldad',
+  'confirmar|-ción':'confirmación',
+  'grande|-eza':'grandeza',
+  'moderno|-ismo':'modernismo',
+  'bello|-eza':'belleza',
+  'animar|-ción':'animación'
+};
+let factoryFound=new Set();
 let selectedBase=null,selectedSuffix=null;
 function init(){const dg=document.getElementById('detectorGrid');dg.innerHTML='';detectorItems.forEach((item,i)=>{const d=document.createElement('div');d.className='word-card';d.innerHTML=`<strong>${item.w}</strong><div class="choice-row"><button class="choice" onclick="pickDetector(${i},'sustantivo',this)">Sustantivo</button><button class="choice" onclick="pickDetector(${i},'adjetivo',this)">Adjetivo</button><button class="choice" onclick="pickDetector(${i},'verbo',this)">Verbo</button></div>`;dg.appendChild(d)});const bb=document.getElementById('baseBank');bb.innerHTML='';bases.forEach(x=>{const b=document.createElement('button');b.className='token';b.textContent=x;b.onclick=()=>{selectedBase=x;document.querySelectorAll('#baseBank .token').forEach(t=>t.classList.remove('active'));b.classList.add('active');updateBuiltPreview()};bb.appendChild(b)});const sb=document.getElementById('suffixBank');sb.innerHTML='';suffixes.forEach(x=>{const b=document.createElement('button');b.className='token';b.textContent=x;b.onclick=()=>{selectedSuffix=x;document.querySelectorAll('#suffixBank .token').forEach(t=>t.classList.remove('active'));b.classList.add('active');updateBuiltPreview()};sb.appendChild(b)})}
 function go(n){current=n;document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));(['home','stage1','stage2','stage3','stage4'][n]||'home')&&document.getElementById(['home','stage1','stage2','stage3','stage4'][n]).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});updateProgress()}
@@ -50,13 +59,36 @@ function updateProgress(){const map={0:0,1:15,2:35,3:60,4:80},pct=map[current]||
 function pickDetector(i,val,btn){detectorItems[i].pick=val;btn.parentElement.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected')}
 function checkDetector(){let correct=0;detectorItems.forEach(x=>{if(x.pick===x.a)correct++});if(!completed.detector){addScore(correct*5);completed.detector=true}detectorFeedback.className='feedback '+(correct>=8?'ok':'bad');detectorFeedback.textContent=`Has acertado ${correct} de ${detectorItems.length}. ${correct>=8?'¡Detector superado!':'Revisa las palabras y vuelve a intentarlo.'}`;if(correct>=8)setTimeout(()=>go(2),900)}
 function updateBuiltPreview(){builtWord.textContent=selectedBase&&selectedSuffix?selectedBase+' + '+selectedSuffix:'Selecciona una base y un sufijo'}
-function buildWord(){const key=`${selectedBase}|${selectedSuffix}`;if(validBuilds[key]){builtWord.textContent='✨ '+validBuilds[key];factoryFeedback.className='feedback ok';factoryFeedback.textContent='¡Perfecto! Esa combinación forma una palabra correcta.';if(!completed.factory){addScore(20);completed.factory=true}}else{factoryFeedback.className='feedback bad';factoryFeedback.textContent='Esa combinación no funciona bien. Prueba otra.'}}
+function renderFactoryCollection(){
+  const box=document.getElementById('factoryCollection');
+  box.innerHTML='';
+  [...factoryFound].forEach(w=>{const t=document.createElement('span');t.className='token active';t.textContent='✓ '+w;box.appendChild(t)});
+  document.getElementById('factoryCount').textContent=factoryFound.size+' / 7';
+  const next=document.getElementById('factoryNext');
+  if(factoryFound.size===7){next.disabled=false;next.style.opacity='1';next.style.cursor='pointer';next.textContent='Misión completada · Siguiente →';completed.factory=true}else{next.disabled=true;next.style.opacity='.45';next.style.cursor='not-allowed';next.textContent='Completa las 7 para continuar →'}
+}
+function buildWord(){
+  const f=document.getElementById('factoryFeedback');
+  if(!selectedBase||!selectedSuffix){f.className='feedback bad';f.textContent='Selecciona primero una palabra base y un sufijo.';return}
+  const key=`${selectedBase}|${selectedSuffix}`;
+  if(validBuilds[key]){
+    const word=validBuilds[key];
+    builtWord.textContent='✨ '+word;
+    if(factoryFound.has(word)){f.className='feedback ok';f.textContent='Esa palabra ya la habías descubierto. Busca otra combinación.'}
+    else{factoryFound.add(word);addScore(4);f.className='feedback ok';f.textContent='¡Correcto! '+selectedBase+' + '+selectedSuffix+' → '+word+'.';renderFactoryCollection()}
+  }else{
+    builtWord.textContent=selectedBase+' + '+selectedSuffix;
+    f.className='feedback bad';
+    const hint={broma:'Prueba con un sufijo que forma nombres de persona o actividad.',malo:'Piensa en el sustantivo que expresa la cualidad de ser malo.',confirmar:'Busca el sustantivo de la acción de confirmar.',grande:'Busca el nombre de la cualidad de ser grande.',moderno:'Piensa en una corriente o tendencia relacionada con lo moderno.',bello:'Busca el sustantivo que nombra la cualidad de ser bello.',animar:'Busca el sustantivo que nombra la acción de animar.'}[selectedBase]||'Prueba otra combinación.';
+    f.textContent='Todavía no. '+hint;
+  }
+}
 function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
 function checkAdjectives(){const ans=['ruidoso','valenciano','edificable','primaveral'];let c=0;['adj1','adj2','adj3','adj4'].forEach((id,i)=>{if(norm(document.getElementById(id).value)===norm(ans[i]))c++});if(!completed.adjectives){addScore(c*7);completed.adjectives=true}adjFeedback.className='feedback '+(c===4?'ok':'bad');adjFeedback.textContent=`Has acertado ${c} de 4. ${c===4?'¡Misión adjetiva completada!':'Revisa: ruidoso, valenciano, edificable y primaveral.'}`;if(c===4)setTimeout(()=>go(4),900)}
 function checkVerbs(){const valid=[['florecer','florar'],['piratear'],['ramificar'],['hospitalizar']];let c=0;['v1','v2','v3','v4'].forEach((id,i)=>{const v=norm(document.getElementById(id).value);if(valid[i].map(norm).includes(v))c++});if(!completed.verbs){addScore(c*8);completed.verbs=true}verbFeedback.className='feedback '+(c===4?'ok':'bad');verbFeedback.textContent=`Has acertado ${c} de 4. ${c===4?'¡Transformador completado!':'Revisa las formas verbales y vuelve a intentarlo.'}`;if(c===4)setTimeout(showFinal,900)}
 function showFinal(){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));final.classList.add('active');finalScore.textContent=score;progressBar.style.width='100%';progressText.textContent='100%';window.scrollTo({top:0,behavior:'smooth'})}
-function restart(){score=0;completed={detector:false,factory:false,adjectives:false,verbs:false};detectorItems.forEach(x=>delete x.pick);selectedBase=null;selectedSuffix=null;['adj1','adj2','adj3','adj4','v1','v2','v3','v4'].forEach(id=>document.getElementById(id).value='');document.querySelectorAll('.feedback').forEach(x=>{x.textContent='';x.className='feedback'});init();go(0);updateProgress()}
-init();updateProgress();
+function restart(){score=0;completed={detector:false,factory:false,adjectives:false,verbs:false};detectorItems.forEach(x=>delete x.pick);selectedBase=null;selectedSuffix=null;factoryFound=new Set();['adj1','adj2','adj3','adj4','v1','v2','v3','v4'].forEach(id=>document.getElementById(id).value='');document.querySelectorAll('.feedback').forEach(x=>{x.textContent='';x.className='feedback'});init();renderFactoryCollection();go(0);updateProgress()}
+init();renderFactoryCollection();updateProgress();
 </script>
 </body>
 </html>
