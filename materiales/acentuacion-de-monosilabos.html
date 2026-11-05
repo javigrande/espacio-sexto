@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TILDE QUEST · Operación Monosílabos</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0d1020;color:#f7f8ff}
+.app{max-width:1200px;margin:auto;padding:20px}.hud{position:sticky;top:10px;z-index:10;display:flex;justify-content:space-between;gap:12px;align-items:center;background:#171b32dd;border:1px solid #ffffff14;border-radius:20px;padding:14px 16px}
+.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#7c5cff,#ff4fa3);font-weight:900}
+.brand{display:flex;gap:10px;align-items:center}.brand small{display:block;color:#9ea7c4}
+.score{display:flex;gap:8px}.chip{padding:9px 12px;border-radius:12px;background:#202640;font-weight:900}
+.progress{height:9px;background:#0b0f1d;border-radius:999px;overflow:hidden;margin-top:8px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,#32d6ff,#7c5cff,#ff4fa3)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:60px 0}.hero h1{font-size:clamp(3rem,7vw,6rem);line-height:.92;margin:12px 0}.hero h1 span{background:linear-gradient(90deg,#7de8ff,#8f6cff,#ff69b4);-webkit-background-clip:text;color:transparent}.hero p{color:#9ea7c4;font-size:1.15rem;line-height:1.6}
+.btn{border:0;border-radius:15px;padding:13px 18px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,#7c5cff,#ff4fa3);color:white}.secondary{background:#171d35;color:white;border:1px solid #ffffff14}
+.visual{min-height:330px;border-radius:28px;background:linear-gradient(145deg,#171b32,#202640);border:1px solid #ffffff14;display:grid;place-items:center;box-shadow:0 24px 70px #0008}.core{width:150px;height:150px;border-radius:34px;display:grid;place-items:center;background:linear-gradient(135deg,#6c4cff,#ff4fa3);font-size:2.8rem;font-weight:900;box-shadow:0 0 60px #7c5cff66}
+.screen{display:none}.screen.active{display:block}.panel{background:linear-gradient(145deg,#14192f,#1b213a);border:1px solid #ffffff14;border-radius:26px;padding:24px;box-shadow:0 24px 70px #0008}.stage{display:inline-block;padding:7px 10px;border-radius:999px;background:#20284a;color:#8cecff;font-size:.75rem;font-weight:900}.panel h2{font-size:clamp(1.8rem,4vw,2.7rem);margin:10px 0}.panel p{color:#9ea7c4}
+.question{background:#10152a;border:1px solid #ffffff14;border-radius:20px;padding:20px;margin-top:18px}.qtext{font-size:1.35rem;font-weight:900}.options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}.option{background:#1a2038;color:white;border:1px solid #ffffff14;border-radius:14px;padding:13px;text-align:left;font-weight:800}.option.correct{background:#133529;border-color:#2bc887}.option.wrong{background:#3a1922;border-color:#ff6b7a}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:#11162a;border:1px solid #ffffff14;border-radius:17px;padding:15px}.card strong{display:block;margin-bottom:10px}.selects{display:flex;gap:7px;flex-wrap:wrap}.selects button{background:#1c223c;color:white;border:1px solid #ffffff14;border-radius:999px;padding:8px 10px}.selects button.sel{background:#6d55e8}
+.feedback{min-height:28px;margin-top:12px;font-weight:800}.ok{color:#68efb3}.bad{color:#ff8190}.footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:20px}
+.final{text-align:center;padding:35px;background:linear-gradient(145deg,#171b32,#231a38);border-radius:28px}.rank{width:110px;height:110px;border-radius:28px;margin:auto;display:grid;place-items:center;background:linear-gradient(145deg,#6d4aff,#ff4fa3);font-size:3rem;font-weight:900}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.stat{background:#11162a;border-radius:16px;padding:15px}.stat strong{display:block;font-size:1.5rem}.stat span{color:#9ea7c4;font-size:.8rem}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.visual{display:none}.options,.grid,.stats{grid-template-columns:1fr}.hud{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hud">
+  <div class="brand"><div class="logo">TQ</div><div><b>TILDE QUEST</b><small>Operación Monosílabos</small></div></div>
+  <div style="flex:1;max-width:420px"><div style="display:flex;justify-content:space-between;font-size:.8rem;color:#9ea7c4"><span>Progreso</span><span id="progText">0%</span></div><div class="progress"><div id="prog"></div></div></div>
+  <div class="score"><div class="chip">⭐ <span id="xp">0</span> XP</div><div class="chip">🔥 x<span id="combo">0</span></div></div>
+</div>
+
+<section id="home" class="screen active">
+  <div class="hero">
+    <div><div style="color:#7de8ff;font-weight:900;letter-spacing:.12em;font-size:.78rem">⚡ ENTRENAMIENTO LINGÜÍSTICO</div><h1>Una tilde.<br><span>Dos significados.</span></h1><p>Supera seis misiones para dominar la tilde diacrítica en monosílabos. Precisión, rapidez y racha cuentan.</p><button class="btn primary" onclick="start()">🚀 Iniciar operación</button></div>
+    <div class="visual"><div class="core">É / EL</div></div>
+  </div>
+</section>
+
+<section id="m1" class="screen"><div class="panel"><span class="stage">MISIÓN 1 · RADAR</span><h2>Detecta la forma correcta</h2><p>Elige la opción que completa correctamente la oración.</p><div id="radarBox" class="question"></div></div></section>
+
+<section id="m2" class="screen"><div class="panel"><span class="stage">MISIÓN 2 · EMPAREJA</span><h2>¿Qué función tiene cada palabra?</h2><div id="matchGrid" class="grid"></div><div id="f2" class="feedback"></div><div class="footer"><button class="btn primary" onclick="checkMatch()">Comprobar misión</button></div></div></section>
+
+<section id="m3" class="screen"><div class="panel"><span class="stage">MISIÓN 3 · CONTEXTO</span><h2>Completa la oración</h2><div id="sentGrid" class="grid"></div><div id="f3" class="feedback"></div><div class="footer"><button class="btn primary" onclick="checkSent()">Comprobar misión</button></div></div></section>
+
+<section id="m4" class="screen"><div class="panel"><span class="stage">MISIÓN 4 · EDITOR</span><h2>Repara los errores</h2><div class="grid">
+<div class="card"><strong>Tu me dijiste que si querías venir.</strong><input id="fix1" placeholder="Escribe: Tú / sí" style="width:100%;padding:10px;border-radius:10px;border:0"></div>
+<div class="card"><strong>El dijo que el regalo era para mi.</strong><input id="fix2" placeholder="Escribe: Él / mí" style="width:100%;padding:10px;border-radius:10px;border:0"></div>
+<div class="card"><strong>Espero que me de tiempo a tomar te.</strong><input id="fix3" placeholder="Escribe: dé / té" style="width:100%;padding:10px;border-radius:10px;border:0"></div>
+</div><div id="f4" class="feedback"></div><div class="footer"><button class="btn primary" onclick="checkFix()">Reparar</button></div></div></section>
+
+<section id="m5" class="screen"><div class="panel"><span class="stage">MISIÓN 5 · DIÁLOGO</span><h2>Completa la conversación</h2><div class="grid">
+<div class="card"><strong>¿Qué quieres que ___ ponga?</strong><div class="selects"><button onclick="pickD(0,'te',this)">te</button><button onclick="pickD(0,'té',this)">té</button></div></div>
+<div class="card"><strong>Yo prefiero tomar ___ con leche.</strong><div class="selects"><button onclick="pickD(1,'te',this)">te</button><button onclick="pickD(1,'té',this)">té</button></div></div>
+<div class="card"><strong>¿Vendrá Ana con ___?</strong><div class="selects"><button onclick="pickD(2,'el',this)">el</button><button onclick="pickD(2,'él',this)">él</button></div></div>
+<div class="card"><strong>___, creo que vendrá.</strong><div class="selects"><button onclick="pickD(3,'Si',this)">Si</button><button onclick="pickD(3,'Sí',this)">Sí</button></div></div>
+</div><div id="f5" class="feedback"></div><div class="footer"><button class="btn primary" onclick="checkDialog()">Comprobar misión</button></div></div></section>
+
+<section id="m6" class="screen"><div class="panel"><span class="stage">MISIÓN 6 · BOSS FINAL</span><h2>La caza de la tilde</h2><div id="bossBox" class="question"></div></div></section>
+
+<section id="final" class="screen"><div class="final"><div class="rank" id="rank">A</div><h2>PLAYER PERFORMANCE REPORT</h2><p id="msg">Has completado TILDE QUEST.</p><div class="stats">
+<div class="stat"><strong id="fxp">0</strong><span>XP total</span></div>
+<div class="stat"><strong id="facc">0%</strong><span>Precisión</span></div>
+<div class="stat"><strong id="fcombo">0</strong><span>Mejor combo</span></div>
+<div class="stat"><strong id="fnote">0,0</strong><span>Nota /10</span></div>
+</div><button class="btn primary" onclick="start()">🔄 Jugar otra vez</button></div></section>
+</div>
+
+<script>
+let X=0,C=0,BC=0,OK=0,ANS=0,stage=0,ri=0,bi=0,mp={},sp={},dp={};
+const radar=[
+["___ reloj se ha estropeado.",["El","Él"],"El"],["___ es mi abuelo.",["El","Él"],"Él"],
+["A ___ no me gusta el helado.",["mi","mí"],"mí"],["Hoy es ___ cumpleaños.",["mi","mí"],"mi"],
+["___ has llegado algo tarde.",["Tu","Tú"],"Tú"],["___ álbum de fotos está aquí.",["Tu","Tú"],"Tu"],
+["Ayer ___ llamé tres veces.",["te","té"],"te"],["Tomaré ___ con pastas.",["te","té"],"té"]];
+const match=[["él","Pronombre"],["el","Artículo"],["mí","Pronombre"],["mi","Posesivo"],["té","Sustantivo"],["te","Pronombre"],["sí","Adverbio / pronombre"],["si","Conjunción"],["dé","Verbo dar"],["de","Preposición"]];
+const mopts=["Pronombre","Artículo","Posesivo","Sustantivo","Adverbio / pronombre","Conjunción","Verbo dar","Preposición"];
+const sent=[
+["Ayer celebramos el aniversario de ___ colegio.",["mi","mí"],"mi"],["El profesor me felicitó especialmente a ___ por el trabajo.",["mi","mí"],"mí"],
+["Le dije que yo ___ iba a ir al partido.",["si","sí"],"sí"],["___ te das prisa, podrás coger el autobús.",["Si","Sí"],"Si"],
+["Mi abuela me ha hecho una tarta ___ cumpleaños.",["de","dé"],"de"],["Espero que ella me ___ la razón.",["de","dé"],"dé"]];
+const boss=[
+["Marina dijo que ___ vendría mañana.",["si","sí","mi","mí"],"sí"],["Espero que Juan me ___ una respuesta.",["de","dé","te","té"],"dé"],
+["___ hermano llegará con retraso.",["Tu","Tú","El","Él"],"Tu"],["La palabra «té» es...",["un pronombre","un sustantivo","una conjunción","una preposición"],"un sustantivo"],
+["¿Qué opción es correcta?",["El llegó con él.","Él llegó con el.","El llegó con el.","Él llegó con él."],"Él llegó con él."],
+["¿Qué palabra funciona como conjunción?",["sí","si","mí","dé"],"si"]];
+
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function hud(){xp.textContent=X;combo.textContent=C;let p=Math.round(stage/6*100);prog.style.width=p+'%';progText.textContent=p+'%'}
+function reward(ok){ANS++;if(ok){OK++;C++;BC=Math.max(BC,C);X+=70+Math.min(C*5,30)}else C=0;hud()}
+function start(){X=C=BC=OK=ANS=0;stage=1;ri=bi=0;mp={};sp={};dp={};hud();renderRadar();renderMatch();renderSent();show('m1')}
+function renderRadar(){if(ri>=radar.length){stage=2;hud();show('m2');return}let [q,opts,a]=radar[ri];radarBox.innerHTML=`<div class="qtext">${q}</div><div class="options">${opts.map(o=>`<button class="option">${o}</button>`).join('')}</div><div id="rf" class="feedback"></div>`;radarBox.querySelectorAll('.option').forEach(b=>b.onclick=()=>{let ok=b.textContent===a;reward(ok);radarBox.querySelectorAll('.option').forEach(x=>{x.disabled=true;if(x.textContent===a)x.classList.add('correct')});if(!ok)b.classList.add('wrong');rf.className='feedback '+(ok?'ok':'bad');rf.textContent=ok?'Respuesta correcta':'La respuesta correcta era '+a;ri++;setTimeout(renderRadar,650)})}
+function renderMatch(){matchGrid.innerHTML='';match.forEach((x,i)=>{let d=document.createElement('div');d.className='card';d.innerHTML=`<strong>${x[0]}</strong><div class="selects">${mopts.map(o=>`<button data-i="${i}" data-v="${o}">${o}</button>`).join('')}</div>`;matchGrid.appendChild(d)});matchGrid.querySelectorAll('button').forEach(b=>b.onclick=()=>{mp[b.dataset.i]=b.dataset.v;b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')})}
+function checkMatch(){let c=0;match.forEach((x,i)=>{let ok=mp[i]===x[1];if(ok)c++;reward(ok)});f2.className='feedback '+(c>=8?'ok':'bad');f2.textContent=`${c}/${match.length} correctas.`;if(c>=8){stage=3;hud();setTimeout(()=>show('m3'),500)}}
+function renderSent(){sentGrid.innerHTML='';sent.forEach((x,i)=>{let d=document.createElement('div');d.className='card';d.innerHTML=`<strong>${x[0]}</strong><div class="selects">${x[1].map(o=>`<button data-i="${i}" data-v="${o}">${o}</button>`).join('')}</div>`;sentGrid.appendChild(d)});sentGrid.querySelectorAll('button').forEach(b=>b.onclick=()=>{sp[b.dataset.i]=b.dataset.v;b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')})}
+function checkSent(){let c=0;sent.forEach((x,i)=>{let ok=sp[i]===x[2];if(ok)c++;reward(ok)});f3.className='feedback '+(c>=5?'ok':'bad');f3.textContent=`${c}/${sent.length} correctas.`;if(c>=5){stage=4;hud();setTimeout(()=>show('m4'),500)}}
+function n(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function checkFix(){let vals=[n(fix1.value),n(fix2.value),n(fix3.value)], req=[['tu','si'],['el','mi'],['de','te']],c=0;vals.forEach((v,i)=>{let ok=req[i].every(z=>v.includes(z));if(ok)c++;reward(ok)});f4.className='feedback '+(c===3?'ok':'bad');f4.textContent=c===3?'Editor superado':'Revisa las tres correcciones';if(c===3){stage=5;hud();setTimeout(()=>show('m5'),500)}}
+function pickD(i,v,b){dp[i]=v;b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}
+function checkDialog(){let ans=['te','té','él','Sí'],c=0;ans.forEach((a,i)=>{let ok=dp[i]===a;if(ok)c++;reward(ok)});f5.className='feedback '+(c===4?'ok':'bad');f5.textContent=`${c}/4 correctas.`;if(c===4){stage=6;hud();renderBoss();setTimeout(()=>show('m6'),500)}}
+function renderBoss(){if(bi>=boss.length){finish();return}let [q,opts,a]=boss[bi];bossBox.innerHTML=`<div class="qtext">${q}</div><div class="options">${opts.map(o=>`<button class="option">${o}</button>`).join('')}</div>`;bossBox.querySelectorAll('.option').forEach(b=>b.onclick=()=>{let ok=b.textContent===a;reward(ok);bossBox.querySelectorAll('.option').forEach(x=>{x.disabled=true;if(x.textContent===a)x.classList.add('correct')});if(!ok)b.classList.add('wrong');bi++;setTimeout(renderBoss,650)})}
+function finish(){let acc=ANS?Math.round(OK/ANS*100):0,rank='D';if(acc>=95)rank='S+';else if(acc>=90)rank='S';else if(acc>=80)rank='A';else if(acc>=70)rank='B';else if(acc>=60)rank='C';document.getElementById('rank').textContent=rank;fxp.textContent=X;facc.textContent=acc+'%';fcombo.textContent=BC;fnote.textContent=(acc/10).toFixed(1).replace('.',',');msg.textContent=acc>=90?'Dominio excelente de la tilde diacrítica.':acc>=70?'Buen dominio. Aún puedes mejorar algunos contrastes.':'Conviene repetir el entrenamiento.';prog.style.width='100%';progText.textContent='100%';show('final')}
+</script>
+</body>
+</html>
