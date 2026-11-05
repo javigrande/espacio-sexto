@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Publicador privado · Espacio 6.º</title>
+<style>
+body{font-family:system-ui;background:#eef2f8;margin:0;color:#1f2937}
+.wrap{max-width:850px;margin:auto;padding:25px}
+.card{background:white;padding:22px;border-radius:20px;margin-bottom:16px;box-shadow:0 16px 45px #0001}
+input,select,textarea{width:100%;padding:11px;margin:5px 0 10px;border:1px solid #ddd;border-radius:10px;box-sizing:border-box;font:inherit}
+button{background:#4f46e5;color:white;border:0;padding:12px 16px;border-radius:12px;font-weight:900;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.note{background:#fff7d6;padding:12px;border-radius:12px}
+.status{margin-top:12px;padding:12px;border-radius:10px;white-space:pre-wrap}
+.ok{background:#e8f8ee;color:#136c35}
+.err{background:#feecec;color:#9f1c1c}
+.info{background:#eef2ff;color:#4242a7}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:650px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="card">
+    <h1>🔒 Publicador privado</h1>
+    <p>Publicador integrado de Espacio 6.º. Publica directamente en GitHub a través del Worker seguro.</p>
+<p class="note"><b>El token de GitHub no se guarda en esta página.</b> Se almacena como secreto del Worker.</p>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+      <div>
+        <h2 style="margin:0">🔐 Acceso docente</h2>
+        <p style="margin:6px 0 0;color:#64748b">Usa la misma clave que el panel de resultados.</p>
+      </div>
+      <a href="resultados.html" style="text-decoration:none;font-weight:800;color:#4f46e5">← Resultados</a>
+    </div>
+
+    <label>Clave del profesor</label>
+    <input id="teacherKey" type="password" placeholder="Tu TEACHER_KEY">
+
+    <label style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+      <input id="rememberKey" type="checkbox" style="width:auto;margin:0"> Recordar clave en este navegador
+    </label>
+
+    <button id="test">Probar conexión</button>
+    <div id="testStatus"></div>
+  </div>
+
+  <div class="card">
+    <label>Archivo HTML</label>
+    <input id="file" type="file" accept=".html,text/html">
+
+    <label>Título</label>
+    <input id="titulo" placeholder="Ej.: Coordenadas cartesianas">
+
+    <div class="row">
+      <div>
+        <label>Materia</label>
+        <select id="materia">
+          <option>Matemáticas</option><option>Lengua</option><option>CCNN</option>
+          <option>CCSS</option><option>Valores</option><option>General</option>
+        </select>
+      </div>
+      <div>
+        <label>Tipo</label>
+        <select id="tipo">
+          <option>Actividad</option><option>Juego</option><option>Resumen</option>
+          <option>Esquema</option><option>Repaso</option><option>Evaluación</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div><label>Icono</label><input id="icono" value="🎯"></div>
+      <div><label>Duración</label><input id="tiempo" value="10 min"></div>
+    </div>
+
+    <label>Descripción</label>
+    <textarea id="descripcion" placeholder="Descripción breve"></textarea>
+
+    <label style="display:flex;gap:8px;align-items:center">
+      <input id="destacado" type="checkbox" style="width:auto;margin:0"> Destacado
+    </label>
+
+    <br>
+    <button id="publish">🚀 Publicar actividad</button>
+    <div id="status"></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>
+        <h2 style="margin:0">📚 Mis actividades</h2>
+        <p style="margin:6px 0 0;color:#64748b">Gestiona lo ya publicado.</p>
+      </div>
+      <button id="loadActivities" type="button">Actualizar lista</button>
+    </div>
+    <input id="activitySearch" placeholder="Buscar por título, materia o tipo..." style="margin-top:12px">
+    <div id="activityList" style="margin-top:10px"></div>
+  </div>
+
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const WORKER_URL="https://espacio-sexto-resultados.javigr77.workers.dev";
+let htmlText="";
+let catalogCache=[];
+
+function show(id,msg,type="info"){
+  const el=$(id);
+  el.className="status "+type;
+  el.textContent=msg;
+}
+
+function teacherKey(){
+  return $("teacherKey").value.trim();
+}
+
+function saveRememberedKey(){
+  if($("rememberKey").checked){
+    localStorage.setItem("espacio6_teacher_key", teacherKey());
+  }else{
+    localStorage.removeItem("espacio6_teacher_key");
+  }
+}
+
+window.addEventListener("DOMContentLoaded",()=>{
+  const saved=localStorage.getItem("espacio6_teacher_key");
+  if(saved){
+    $("teacherKey").value=saved;
+    $("rememberKey").checked=true;
+  }
+});
+
+$("file").onchange=async e=>{
+  const f=e.target.files[0];
+  if(!f)return;
+  htmlText=await f.text();
+  if(!$("titulo").value){
+    $("titulo").value=f.name.replace(/\.html?$/i,"").replace(/[-_]+/g," ");
+  }
+};
+
+function slug(s){
+  return (s||"actividad").toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"") || "actividad";
+}
+
+async function api(path, options={}){
+  const key=teacherKey();
+  if(!key) throw new Error("Falta la clave del profesor.");
+  saveRememberedKey();
+
+  const r=await fetch(WORKER_URL+path,{
+    ...options,
+    headers:{
+      "Content-Type":"application/json",
+      "X-Teacher-Key":key,
+      ...(options.headers||{})
+    }
+  });
+
+  let data=null;
+  try{ data=await r.json(); }catch(e){}
+  if(!r.ok) throw new Error(data?.error || `Error ${r.status}`);
+  return data;
+}
+
+$("test").onclick=async()=>{
+  try{
+    const data=await api("/api/publisher/health");
+    show("testStatus","✓ Conexión correcta con el publicador seguro.\nRepositorio: "+data.repo,"ok");
+  }catch(e){
+    show("testStatus","Error: "+e.message,"err");
+  }
+};
+
+$("publish").onclick=async()=>{
+  const btn=$("publish");
+  try{
+    if(!htmlText) throw new Error("Selecciona un HTML.");
+    if(!$("titulo").value.trim()) throw new Error("Escribe un título.");
+
+    btn.disabled=true;
+    show("status","Publicando actividad…","info");
+
+    const item={
+      titulo:$("titulo").value.trim(),
+      descripcion:$("descripcion").value.trim(),
+      materia:$("materia").value,
+      tipo:$("tipo").value,
+      icono:$("icono").value.trim()||"🎯",
+      tiempo:$("tiempo").value.trim()||"10 min",
+      destacado:$("destacado").checked,
+      fecha:new Date().toISOString().slice(0,10)
+    };
+
+    const data=await api("/api/publisher/publish",{
+      method:"POST",
+      body:JSON.stringify({
+        slug:slug(item.titulo),
+        html:htmlText,
+        item
+      })
+    });
+
+    show("status",
+      "✓ Publicado correctamente.\n\nArchivo: "+data.path+
+      "\nEl catálogo también se ha actualizado.",
+      "ok"
+    );
+
+    await loadActivities();
+  }catch(e){
+    show("status","Error: "+e.message,"err");
+  }finally{
+    btn.disabled=false;
+  }
+};
+
+async function loadActivities(){
+  try{
+    const data=await api("/api/publisher/catalog");
+    catalogCache=data.catalog||[];
+    renderActivities();
+  }catch(e){
+    $("activityList").innerHTML='<div class="status err">Error: '+escapeHtml(e.message)+'</div>';
+  }
+}
+
+$("loadActivities").onclick=loadActivities;
+$("activitySearch").oninput=renderActivities;
+
+function renderActivities(){
+  const q=$("activitySearch").value.trim().toLowerCase();
+  const items=catalogCache.filter(x=>{
+    const text=`${x.titulo||""} ${x.materia||""} ${x.tipo||""}`.toLowerCase();
+    return !q || text.includes(q);
+  });
+
+  if(!items.length){
+    $("activityList").innerHTML='<p style="color:#64748b">No hay actividades.</p>';
+    return;
+  }
+
+  $("activityList").innerHTML=items.map((x,i)=>`
+    <div style="border:1px solid #e5e7eb;border-radius:14px;padding:12px;margin:8px 0;background:#fafafa">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:900">${escapeHtml(x.icono||"🎯")} ${escapeHtml(x.titulo||"Sin título")}</div>
+          <div style="font-size:.85rem;color:#64748b">${escapeHtml(x.materia||"")} · ${escapeHtml(x.tipo||"")} · ${escapeHtml(x.archivo||"")}</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" onclick="toggleFeatured(${i})" style="background:#0f766e">${x.destacado?"Quitar destacado":"Destacar"}</button>
+          <button type="button" onclick="removeActivity(${i})" style="background:#b91c1c">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function toggleFeatured(i){
+  const item=catalogCache[i];
+  try{
+    await api("/api/publisher/update-item",{
+      method:"POST",
+      body:JSON.stringify({archivo:item.archivo, changes:{destacado:!item.destacado}})
+    });
+    await loadActivities();
+  }catch(e){ alert("No se pudo actualizar: "+e.message); }
+}
+
+async function removeActivity(i){
+  const item=catalogCache[i];
+  if(!confirm(`¿Eliminar "${item.titulo}" del catálogo y borrar su HTML?`)) return;
+  try{
+    await api("/api/publisher/delete",{
+      method:"POST",
+      body:JSON.stringify({archivo:item.archivo})
+    });
+    await loadActivities();
+  }catch(e){ alert("No se pudo eliminar: "+e.message); }
+}
+
+function escapeHtml(v){
+  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+</script>
+</body>
+</html>
