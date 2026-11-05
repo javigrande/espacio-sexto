@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel docente · Espacio 6.º</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f4f7fb;--card:#fff;--ink:#1f2937;--muted:#6b7280;--line:#e6ebf2;
+  --blue:#335dff;--purple:#7b61ff;--green:#18a66a;--amber:#d78a00;--red:#d94c62;
+}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#eef3ff 0%,#f7f9fc 220px,#f4f7fb 100%);color:var(--ink)}
+.wrap{max-width:1280px;margin:auto;padding:24px}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.brand small{display:inline-block;color:#5b6b8a;font-weight:900;letter-spacing:.12em}
+.brand h1{font-size:clamp(2rem,4vw,3.4rem);margin:8px 0 5px;letter-spacing:-.04em}
+.brand p{margin:0;color:var(--muted)}
+.top-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:13px;padding:11px 14px;font-weight:900;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--purple));color:white}
+.btn-light{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.card{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 50px rgba(55,72,100,.09)}
+.login{max-width:520px;margin:70px auto;padding:26px}
+.login h2{margin-top:0;font-size:1.8rem}
+.field{display:grid;gap:7px;margin-bottom:13px}
+label{font-weight:850;font-size:.9rem}
+input,select{width:100%;padding:11px 12px;border:1px solid #d8dfeb;border-radius:11px;background:#fff;font:inherit;outline:none}
+input:focus,select:focus{border-color:#8ea0ff;box-shadow:0 0 0 4px rgba(51,93,255,.08)}
+.hidden{display:none!important}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:18px 0}
+.stat{padding:18px}
+.stat span{font-size:.78rem;color:var(--muted);font-weight:800}
+.stat strong{display:block;font-size:1.85rem;margin-top:4px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;padding:14px;margin-bottom:14px}
+.table-card{overflow:hidden}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:980px}
+th,td{padding:12px 11px;border-bottom:1px solid #edf1f6;text-align:left;font-size:.9rem}
+th{font-size:.76rem;text-transform:uppercase;letter-spacing:.04em;color:#7a8497;background:#fafbfe;position:sticky;top:0}
+tr:hover td{background:#fbfcff}
+.name{font-weight:900}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#667085;font-size:.8rem}
+.pill{display:inline-flex;padding:5px 8px;border-radius:999px;font-weight:900;font-size:.77rem}
+.good{background:#e8f8f0;color:#11754b}
+.mid{background:#fff3db;color:#9a6400}
+.low{background:#ffe9ed;color:#b9364d}
+.activity{background:#eef2ff;color:#4f46e5}
+.status{background:#eef7ff;color:#27639b}
+.detail-btn{border:1px solid #dfe5ef;background:white;border-radius:9px;padding:7px 9px;cursor:pointer;font-weight:800}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(20,27,45,.48);display:grid;place-items:center;padding:20px;z-index:50}
+.modal-card{width:min(900px,100%);max-height:85vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 30px 80px #0005}
+.modal-head{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.modal-body{padding:20px}
+.close{border:0;background:#f2f4f7;border-radius:10px;width:38px;height:38px;font-size:1.1rem;cursor:pointer}
+.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.detail-box{background:#f7f9fc;border-radius:14px;padding:13px}
+.detail-box span{display:block;font-size:.75rem;color:var(--muted)} .detail-box strong{font-size:1.25rem}
+.event{padding:11px 0;border-bottom:1px solid #edf1f6}
+.event small{color:#7b8496}
+.note{color:#6f7787;font-size:.85rem}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.detail-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.wrap{padding:14px}.stats{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="loginView" class="card login">
+  <small style="font-weight:900;color:#5b6b8a;letter-spacing:.12em">ESPACIO 6.º</small>
+  <h2>Panel docente de resultados</h2>
+  <p class="note">Introduce la clave privada que configuraste al crear el Worker.</p>
+  <div class="field">
+    <label>Clave del profesor</label>
+    <input id="teacherKey" type="password" placeholder="Tu clave privada">
+  </div>
+  <button class="btn btn-primary" onclick="connect()">Entrar al panel</button>
+  <div id="loginMsg" class="note" style="margin-top:12px"></div>
+</section>
+
+<section id="panelView" class="hidden">
+  <div class="header">
+    <div class="brand">
+      <small>ESPACIO 6.º · ANALYTICS</small>
+      <h1>Resultados del alumnado</h1>
+      <p>Actividad, nota, precisión, XP e intentos registrados.</p>
+    </div>
+    <div class="top-actions"><button class="btn btn-light" onclick="location.href='../index.html'">← Espacio 6.º</button>
+      <button class="btn btn-light" onclick="loadResults()">↻ Actualizar</button>
+      <button class="btn btn-primary" onclick="exportCSV()">⬇ Exportar CSV</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="card stat"><span>INTENTOS</span><strong id="sAttempts">0</strong></div>
+    <div class="card stat"><span>ALUMNOS</span><strong id="sStudents">0</strong></div>
+    <div class="card stat"><span>NOTA MEDIA</span><strong id="sAvg">0,0</strong></div>
+    <div class="card stat"><span>PRECISIÓN MEDIA</span><strong id="sAcc">0%</strong></div>
+    <div class="card stat"><span>FINALIZADOS</span><strong id="sFinished">0</strong></div>
+  </div>
+
+  <div class="card filters">
+    <input id="search" placeholder="Buscar alumno, código o actividad..." oninput="render()">
+    <select id="groupFilter" onchange="render()">
+      <option value="">Todos los grupos</option>
+      <option value="6.º A">6.º A</option>
+      <option value="6.º B">6.º B</option>
+    </select>
+    <select id="activityFilter" onchange="render()">
+      <option value="">Todas las actividades</option>
+    </select>
+    <button class="btn btn-light" onclick="clearFilters()">Limpiar</button>
+  </div>
+
+  <div class="card table-card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Alumno</th><th>Grupo</th><th>Actividad</th><th>Nota</th>
+            <th>Precisión</th><th>XP</th><th>Combo</th><th>Fecha</th><th>Estado</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div id="empty" class="empty hidden">No hay resultados con estos filtros.</div>
+  </div>
+</section>
+
+<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div><b id="modalTitle">Detalle</b><div id="modalSub" class="note"></div></div>
+      <button class="close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid">
+        <div class="detail-box"><span>Nota</span><strong id="dNote">—</strong></div>
+        <div class="detail-box"><span>Precisión</span><strong id="dAcc">—</strong></div>
+        <div class="detail-box"><span>XP</span><strong id="dXp">—</strong></div>
+        <div class="detail-box"><span>Mejor combo</span><strong id="dCombo">—</strong></div>
+      </div>
+      <h3>Detalle del intento</h3>
+      <div id="eventList" class="note">Este Worker actual devuelve el resumen de cada intento. Si quieres ver respuesta por respuesta, añadiremos el endpoint de detalle en la siguiente versión.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const WORKER_URL="https://espacio-sexto-resultados.javigr77.workers.dev";
+const STUDENTS={"6B-K7P4": "Antón Resa, Mateo", "6B-M2R8": "Arribas Herranz, Neila", "6B-T9C3": "Barquín López, María", "6B-P5X1": "Benito Camarero, Eric", "6B-H8N6": "Caballero García, Julia", "6B-V3L7": "Calderón Ambrosio, Sofía", "6B-R6Q2": "Calzada Ruiz, Mireia", "6B-D4W9": "Casares Fresno, Carla", "6B-N7F5": "Cob Valenciano, Héctor", "6B-B9K2": "Gimeno López, Daniela", "6B-X4M8": "González Martínez, Sara", "6B-C6T1": "Güemes Cámara, Mario", "6B-J8V3": "Izquierdo Fernández, Rodrigo", "6B-F2R7": "Jiménez Alonso, Noa", "6B-Q5H9": "Jorge Alonso, Alba", "6B-L3X6": "Losantos García, Valeria", "6B-S7D4": "Merino Serrano, Vega", "6B-G9P1": "Moreno Cortés, Raúl", "6B-W2N8": "Nava Durán, Miguel Ángel", "6B-E6K5": "Olalla Revilla, Mateo", "6B-U4C7": "Pascual Quintanilla, Himilce", "6B-A8Q3": "Ruiz Barriuso, Jimena", "6B-Z5R2": "Sainz López, Saúl", "6B-Y7M4": "Santamaría García, Martín", "6B-I3V9": "Vicario González, Enrique"};
+let KEY="";
+let ALL=[];
+
+function nameFor(code){ return STUDENTS[code] || code || "—"; }
+
+async function connect(){
+  KEY=document.getElementById("teacherKey").value.trim();
+  const msg=document.getElementById("loginMsg");
+  if(!KEY){msg.textContent="Introduce la clave del profesor.";return}
+  msg.textContent="Conectando...";
+  try{
+    const r=await fetch(WORKER_URL+"/api/results",{headers:{"X-Teacher-Key":KEY}});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||"No autorizado");
+    ALL=d.results||[];
+    loginView.classList.add("hidden");
+    panelView.classList.remove("hidden");
+    buildActivityFilter();
+    render();
+  }catch(e){
+    msg.textContent="No se pudo entrar: "+(e.message||e);
+  }
+}
+
+async function loadResults(){
+  try{
+    const r=await fetch(WORKER_URL+"/api/results",{headers:{"X-Teacher-Key":KEY}});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||"Error");
+    ALL=d.results||[];
+    buildActivityFilter();
+    render();
+  }catch(e){ alert("No se pudieron actualizar los resultados."); }
+}
+
+function buildActivityFilter(){
+  const sel=document.getElementById("activityFilter");
+  const current=sel.value;
+  const acts=[...new Set(ALL.map(x=>x.activity_title||x.activity_id).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todas las actividades</option>'+acts.map(a=>`<option>${escapeHtml(a)}</option>`).join("");
+  if(acts.includes(current))sel.value=current;
+}
+
+function filtered(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  const g=document.getElementById("groupFilter").value;
+  const a=document.getElementById("activityFilter").value;
+  return ALL.filter(x=>{
+    const nm=nameFor(x.student_code);
+    const act=x.activity_title||x.activity_id||"";
+    return (!g||x.group_name===g) &&
+           (!a||act===a) &&
+           (!q||(`${nm} ${x.student_code||""} ${act}`).toLowerCase().includes(q));
+  });
+}
+
+function render(){
+  const rows=filtered();
+  tbody.innerHTML=rows.map(x=>{
+    const n=Number(x.score10||0), acc=Number(x.accuracy||0);
+    const cls=n>=8?"good":n>=5?"mid":"low";
+    const dt=formatDate(x.finished_at||x.created_at);
+    return `<tr>
+      <td><div class="name">${escapeHtml(nameFor(x.student_code))}</div><div class="code">${escapeHtml(x.student_code||"")}</div></td>
+      <td>${escapeHtml(x.group_name||"—")}</td>
+      <td><span class="pill activity">${escapeHtml(x.activity_title||x.activity_id||"—")}</span></td>
+      <td><span class="pill ${cls}">${n.toFixed(1).replace(".",",")}</span></td>
+      <td>${acc.toFixed(0)}%</td>
+      <td>${x.xp||0}</td>
+      <td>${x.combo_best||0}</td>
+      <td>${dt}</td>
+      <td><span class="pill status">${x.finished?"Finalizado":"En curso"}</span></td>
+      <td><button class="detail-btn" onclick='openDetail(${JSON.stringify(x).replace(/'/g,"&#39;")})'>Ver</button></td>
+    </tr>`;
+  }).join("");
+
+  empty.classList.toggle("hidden",rows.length>0);
+
+  const unique=new Set(rows.map(x=>x.student_code).filter(Boolean)).size;
+  const avg=rows.length?rows.reduce((s,x)=>s+Number(x.score10||0),0)/rows.length:0;
+  const acc=rows.length?rows.reduce((s,x)=>s+Number(x.accuracy||0),0)/rows.length:0;
+  sAttempts.textContent=rows.length;
+  sStudents.textContent=unique;
+  sAvg.textContent=avg.toFixed(1).replace(".",",");
+  sAcc.textContent=Math.round(acc)+"%";
+  sFinished.textContent=rows.filter(x=>x.finished).length;
+}
+
+function clearFilters(){
+  search.value="";groupFilter.value="";activityFilter.value="";render();
+}
+
+function formatDate(v){
+  if(!v)return "—";
+  const d=new Date(v);
+  if(Number.isNaN(d.getTime()))return v;
+  return d.toLocaleString("es-ES",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
+}
+
+function openDetail(x){
+  modalTitle.textContent=nameFor(x.student_code);
+  modalSub.textContent=(x.activity_title||x.activity_id||"") + " · " + (x.group_name||"");
+  dNote.textContent=Number(x.score10||0).toFixed(1).replace(".",",");
+  dAcc.textContent=Math.round(Number(x.accuracy||0))+"%";
+  dXp.textContent=x.xp||0;
+  dCombo.textContent=x.combo_best||0;
+  modal.classList.remove("hidden");
+}
+
+function closeModal(){modal.classList.add("hidden")}
+
+function exportCSV(){
+  const rows=filtered();
+  const data=[["Alumno","Código","Grupo","Actividad","Nota","Precisión","XP","Combo","Fecha","Estado"]];
+  rows.forEach(x=>data.push([
+    nameFor(x.student_code),x.student_code||"",x.group_name||"",
+    x.activity_title||x.activity_id||"",Number(x.score10||0).toFixed(2),
+    Number(x.accuracy||0),x.xp||0,x.combo_best||0,
+    x.finished_at||x.created_at||"",x.finished?"Finalizado":"En curso"
+  ]));
+  const csv=data.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download="resultados_espacio6.csv";a.click();
+  URL.revokeObjectURL(url);
+}
+
+function escapeHtml(v){
+  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+</script>
+</body>
+</html>

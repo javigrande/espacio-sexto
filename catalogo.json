@@ -11,6 +11,17 @@
     "fecha": "2026-11-05"
   },
   {
+    "titulo": "TILDE QUEST · Evaluación",
+    "descripcion": "Evaluación gamificada sobre la tilde diacrítica en monosílabos. Registra el desempeño y la puntuación del alumno.",
+    "materia": "Lengua",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "tiempo": "15-20 min",
+    "archivo": "materiales/tildes-en-monosilabos-evaluacion.html",
+    "destacado": true,
+    "fecha": "2026-11-05"
+  },
+  {
     "titulo": "ACENTUACIÓN DE MONOSÍLABOS",
     "descripcion": "Actividad de refuerzo para la acentuación de monosílabos.",
     "materia": "Lengua",
