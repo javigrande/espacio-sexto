@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "TILDES EN MONOSÍLABOS",
+    "descripcion": "Juego de evaluación de tu conocimiento de las tildes en monosílabos",
+    "materia": "Lengua",
+    "tipo": "Repaso",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/tildes-en-monosilabos.html",
+    "destacado": false,
+    "fecha": "2026-11-05"
+  },
+  {
     "titulo": "ACENTUACIÓN DE MONOSÍLABOS",
     "descripcion": "Actividad de refuerzo para la acentuación de monosílabos.",
     "materia": "Lengua",
