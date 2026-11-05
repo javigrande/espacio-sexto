@@ -162,5 +162,44 @@
   </footer>
 
   <script src="app.js"></script>
+
+<a href="profesor/resultados.html" class="teacher-access" title="Acceso docente">👨‍🏫 Profesor</a>
+<style>
+.teacher-access{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:50;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:10px 13px;
+  border-radius:999px;
+  text-decoration:none;
+  font:800 .82rem/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:#475569;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(15,23,42,.10);
+  box-shadow:0 10px 28px rgba(15,23,42,.12);
+  backdrop-filter:blur(10px);
+  transition:.18s ease;
+  opacity:.84;
+}
+.teacher-access:hover{
+  transform:translateY(-2px);
+  opacity:1;
+  color:#5b43d6;
+  border-color:rgba(91,67,214,.24);
+}
+@media(max-width:640px){
+  .teacher-access{
+    right:12px;
+    bottom:76px;
+    font-size:.76rem;
+    padding:9px 11px;
+  }
+}
+</style>
+
 </body>
 </html>
