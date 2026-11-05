@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "ACENTUACIÓN DE MONOSÍLABOS",
+    "descripcion": "Actividad de refuerzo para la acentuación de monosílabos.",
+    "materia": "Lengua",
+    "tipo": "Actividad",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "archivo": "materiales/acentuacion-de-monosilabos.html",
+    "destacado": false,
+    "fecha": "2026-11-05"
+  },
+  {
     "titulo": "PRACTICA LOS SUFIJOS",
     "descripcion": "Practica los sufijos",
     "materia": "Lengua",
