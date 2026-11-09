@@ -57,8 +57,8 @@ button:disabled{opacity:.6;cursor:wait}
       <input id="rememberKey" type="checkbox" style="width:auto;margin:0"> Recordar clave en este navegador
     </label>
 
-    <button id="test">Probar conexión</button>
-    <div id="testStatus"></div>
+    <button id="test">Probar conexión</button> <button id="diagnose" type="button" style="background:#0f766e">Diagnóstico GitHub</button>
+    <div id="testStatus"></div><div id="diagnosticStatus"></div>
   </div>
 
   
@@ -277,6 +277,19 @@ $("test").onclick=async()=>{
     show("testStatus","✓ Conexión correcta con el publicador seguro.\nRepositorio: "+data.repo,"ok");
   }catch(e){
     show("testStatus","Error: "+e.message,"err");
+  }
+};
+
+
+$("diagnose").onclick=async()=>{
+  try{
+    show("diagnosticStatus","Ejecutando diagnóstico…","info");
+    const data=await api("/api/publisher/diagnose");
+    const lines=(data.steps||[]).map(s=>`${s.ok?"✓":"✗"} ${s.step}${s.detail?": "+s.detail:""}`);
+    if(data.conclusion) lines.push("\nConclusión: "+data.conclusion);
+    show("diagnosticStatus",lines.join("\n"),data.ok?"ok":"err");
+  }catch(e){
+    show("diagnosticStatus","Error de diagnóstico:\n"+e.message,"err");
   }
 };
 
