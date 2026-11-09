@@ -1,5 +1,16 @@
 [
   {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-09",
+    "titulo": "Laboratorio Potencias · Evaluación",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "archivo": "materiales/laboratorio-potencias-espacio6-test-ok/evaluacion.html",
+    "destacado": false
+  },
+  {
     "titulo": "TILDES EN MONOSÍLABOS",
     "descripcion": "Juego de evaluación de tu conocimiento de las tildes en monosílabos",
     "materia": "Lengua",
