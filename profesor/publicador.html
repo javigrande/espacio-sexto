@@ -18,6 +18,19 @@ button:disabled{opacity:.6;cursor:wait}
 .info{background:#eef2ff;color:#4242a7}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:650px){.row{grid-template-columns:1fr}}
+
+.tabs{display:flex;gap:8px;margin:12px 0 18px;flex-wrap:wrap}
+.tabbtn{background:#e8ecf8;color:#334155}
+.tabbtn.active{background:#4f46e5;color:white}
+.mode{display:none}.mode.active{display:block}
+.dropzone{border:2px dashed #c7d2fe;background:#f8faff;padding:22px;border-radius:16px;text-align:center;margin:8px 0 14px}
+.filelist{max-height:220px;overflow:auto;background:#f8fafc;border-radius:12px;padding:10px;font-family:ui-monospace,monospace;font-size:.82rem}
+.detected{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.detect-card{border:1px solid #e2e8f0;border-radius:14px;padding:12px;background:#fff}
+.goodtag{display:inline-block;background:#dcfce7;color:#166534;padding:4px 8px;border-radius:999px;font-size:.76rem;font-weight:900}
+.warn-tag{display:inline-block;background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:999px;font-size:.76rem;font-weight:900}
+@media(max-width:650px){.detected{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -48,46 +61,132 @@ button:disabled{opacity:.6;cursor:wait}
     <div id="testStatus"></div>
   </div>
 
+  
   <div class="card">
-    <label>Archivo HTML</label>
-    <input id="file" type="file" accept=".html,text/html">
+    <h2 style="margin-top:0">🚀 Publicar contenido</h2>
+    <div class="tabs">
+      <button class="tabbtn active" id="tabSingle" type="button">HTML individual</button>
+      <button class="tabbtn" id="tabZip" type="button">Paquete ZIP</button>
+    </div>
 
-    <label>Título</label>
-    <input id="titulo" placeholder="Ej.: Coordenadas cartesianas">
+    <div id="modeSingle" class="mode active">
+      <label>Archivo HTML</label>
+      <input id="file" type="file" accept=".html,text/html">
 
-    <div class="row">
-      <div>
-        <label>Materia</label>
-        <select id="materia">
-          <option>Matemáticas</option><option>Lengua</option><option>CCNN</option>
-          <option>CCSS</option><option>Valores</option><option>General</option>
-        </select>
+      <label>Título</label>
+      <input id="titulo" placeholder="Ej.: Coordenadas cartesianas">
+
+      <div class="row">
+        <div>
+          <label>Materia</label>
+          <select id="materia">
+            <option>Matemáticas</option><option>Lengua</option><option>CCNN</option>
+            <option>CCSS</option><option>Valores</option><option>General</option>
+          </select>
+        </div>
+        <div>
+          <label>Tipo</label>
+          <select id="tipo">
+            <option>Actividad</option><option>Juego</option><option>Resumen</option>
+            <option>Esquema</option><option>Repaso</option><option>Evaluación</option>
+          </select>
+        </div>
       </div>
-      <div>
-        <label>Tipo</label>
-        <select id="tipo">
-          <option>Actividad</option><option>Juego</option><option>Resumen</option>
-          <option>Esquema</option><option>Repaso</option><option>Evaluación</option>
-        </select>
+
+      <div class="row">
+        <div><label>Icono</label><input id="icono" value="🎯"></div>
+        <div><label>Duración</label><input id="tiempo" value="10 min"></div>
+      </div>
+
+      <label>Descripción</label>
+      <textarea id="descripcion" placeholder="Descripción breve"></textarea>
+
+      <label style="display:flex;gap:8px;align-items:center">
+        <input id="destacado" type="checkbox" style="width:auto;margin:0"> Destacado
+      </label>
+
+      <br>
+      <button id="publish">🚀 Publicar HTML</button>
+    </div>
+
+    <div id="modeZip" class="mode">
+      <div class="dropzone">
+        <div style="font-size:2.2rem">📦</div>
+        <b>Paquete ZIP de actividad</b>
+        <p style="color:#64748b;margin:6px 0 12px">Puede contener HTML, JavaScript, CSS, JSON e imágenes.</p>
+        <input id="zipFile" type="file" accept=".zip,application/zip">
+      </div>
+
+      <div id="zipInfo" style="display:none">
+        <div class="row">
+          <div>
+            <label>Nombre de la actividad</label>
+            <input id="zipTitle" placeholder="Ej.: Laboratorio de Potencias">
+          </div>
+          <div>
+            <label>Carpeta en materiales</label>
+            <input id="zipSlug" placeholder="laboratorio-potencias">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Materia</label>
+            <select id="zipMateria">
+              <option>Matemáticas</option><option>Lengua</option><option>CCNN</option>
+              <option>CCSS</option><option>Valores</option><option>General</option>
+            </select>
+          </div>
+          <div>
+            <label>Duración</label>
+            <input id="zipTiempo" value="15 min">
+          </div>
+        </div>
+
+        <label>Descripción</label>
+        <textarea id="zipDescripcion" placeholder="Descripción breve de la actividad"></textarea>
+
+        <div class="detected">
+          <div class="detect-card">
+            <label style="display:flex;gap:8px;align-items:center">
+              <input id="zipPractice" type="checkbox" style="width:auto;margin:0" checked>
+              <b>Crear entrada de práctica</b>
+            </label>
+            <div id="practiceDetected" class="warn-tag">Buscando index.html…</div>
+            <label>Título en la web</label>
+            <input id="practiceTitle" placeholder="Laboratorio de Potencias · Práctica">
+            <label>Icono</label>
+            <input id="practiceIcon" value="🧪">
+          </div>
+
+          <div class="detect-card">
+            <label style="display:flex;gap:8px;align-items:center">
+              <input id="zipEvaluation" type="checkbox" style="width:auto;margin:0" checked>
+              <b>Crear entrada de evaluación</b>
+            </label>
+            <div id="evaluationDetected" class="warn-tag">Buscando evaluacion.html…</div>
+            <label>Título en la web</label>
+            <input id="evaluationTitle" placeholder="Laboratorio de Potencias · Evaluación">
+            <label>Icono</label>
+            <input id="evaluationIcon" value="🎯">
+          </div>
+        </div>
+
+        <label style="display:flex;gap:8px;align-items:center;margin-top:12px">
+          <input id="zipDestacado" type="checkbox" style="width:auto;margin:0"> Destacar la evaluación
+        </label>
+
+        <h3>Archivos detectados</h3>
+        <div id="zipFileList" class="filelist"></div>
+
+        <br>
+        <button id="publishZip" type="button">📦 Publicar paquete completo</button>
       </div>
     </div>
 
-    <div class="row">
-      <div><label>Icono</label><input id="icono" value="🎯"></div>
-      <div><label>Duración</label><input id="tiempo" value="10 min"></div>
-    </div>
-
-    <label>Descripción</label>
-    <textarea id="descripcion" placeholder="Descripción breve"></textarea>
-
-    <label style="display:flex;gap:8px;align-items:center">
-      <input id="destacado" type="checkbox" style="width:auto;margin:0"> Destacado
-    </label>
-
-    <br>
-    <button id="publish">🚀 Publicar actividad</button>
     <div id="status"></div>
   </div>
+
 
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
@@ -103,6 +202,7 @@ button:disabled{opacity:.6;cursor:wait}
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const WORKER_URL="https://espacio-sexto-resultados.javigr77.workers.dev";
@@ -232,6 +332,156 @@ async function loadActivities(){
     $("activityList").innerHTML='<div class="status err">Error: '+escapeHtml(e.message)+'</div>';
   }
 }
+
+
+// ---------- PUBLICACIÓN DE PAQUETES ZIP ----------
+let zipFiles=[];
+let zipRoot="";
+let zipHasPractice=false;
+let zipHasEvaluation=false;
+
+function setMode(mode){
+  const single=mode==="single";
+  $("modeSingle").classList.toggle("active",single);
+  $("modeZip").classList.toggle("active",!single);
+  $("tabSingle").classList.toggle("active",single);
+  $("tabZip").classList.toggle("active",!single);
+}
+$("tabSingle").onclick=()=>setMode("single");
+$("tabZip").onclick=()=>setMode("zip");
+
+$("zipFile").onchange=async e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+
+  if(typeof JSZip==="undefined"){
+    show("status","No se pudo cargar el lector ZIP. Comprueba la conexión a Internet.","err");
+    return;
+  }
+
+  try{
+    show("status","Analizando paquete ZIP…","info");
+    const zip=await JSZip.loadAsync(file);
+    const rawNames=Object.keys(zip.files).filter(n=>!zip.files[n].dir && !n.includes("__MACOSX"));
+    if(!rawNames.length) throw new Error("El ZIP está vacío.");
+
+    const firstParts=rawNames.map(n=>n.split("/")[0]);
+    const sameRoot=firstParts.every(x=>x===firstParts[0]) && rawNames.some(n=>n.includes("/"));
+    zipRoot=sameRoot ? firstParts[0]+"/" : "";
+
+    zipFiles=[];
+    for(const name of rawNames){
+      let rel=zipRoot && name.startsWith(zipRoot) ? name.slice(zipRoot.length) : name;
+      if(!rel || rel.startsWith(".") || rel.includes("../")) continue;
+
+      const entry=zip.files[name];
+      const bytes=await entry.async("uint8array");
+      let bin="";
+      const chunk=0x8000;
+      for(let i=0;i<bytes.length;i+=chunk){
+        bin+=String.fromCharCode(...bytes.subarray(i,i+chunk));
+      }
+      zipFiles.push({path:rel,base64:btoa(bin),size:bytes.length});
+    }
+
+    zipHasPractice=zipFiles.some(f=>f.path.toLowerCase()==="index.html");
+    zipHasEvaluation=zipFiles.some(f=>["evaluacion.html","evaluación.html"].includes(f.path.toLowerCase()));
+
+    const baseName=file.name.replace(/\.zip$/i,"")
+      .replace(/[-_]+/g," ")
+      .replace(/\b\w/g,c=>c.toUpperCase());
+
+    $("zipTitle").value=baseName;
+    $("zipSlug").value=slug(baseName);
+    $("practiceTitle").value=baseName+" · Práctica";
+    $("evaluationTitle").value=baseName+" · Evaluación";
+
+    $("practiceDetected").className=zipHasPractice?"goodtag":"warn-tag";
+    $("practiceDetected").textContent=zipHasPractice?"✓ index.html detectado":"⚠ No hay index.html";
+    $("evaluationDetected").className=zipHasEvaluation?"goodtag":"warn-tag";
+    $("evaluationDetected").textContent=zipHasEvaluation?"✓ evaluacion.html detectado":"⚠ No hay evaluacion.html";
+    $("zipPractice").checked=zipHasPractice;
+    $("zipEvaluation").checked=zipHasEvaluation;
+
+    $("zipFileList").innerHTML=zipFiles.map(f=>
+      `${escapeHtml(f.path)} <span style="color:#94a3b8">(${Math.ceil(f.size/1024)} KB)</span>`
+    ).join("<br>");
+
+    $("zipInfo").style.display="block";
+    show("status",`✓ ZIP válido: ${zipFiles.length} archivos detectados.`,"ok");
+  }catch(e){
+    zipFiles=[];
+    $("zipInfo").style.display="none";
+    show("status","Error leyendo ZIP: "+e.message,"err");
+  }
+};
+
+$("publishZip").onclick=async()=>{
+  const btn=$("publishZip");
+  try{
+    if(!zipFiles.length) throw new Error("Selecciona primero un ZIP.");
+    const folder=slug($("zipSlug").value||$("zipTitle").value);
+    if(!folder) throw new Error("Falta el nombre de carpeta.");
+
+    const entries=[];
+    const common={
+      descripcion:$("zipDescripcion").value.trim(),
+      materia:$("zipMateria").value,
+      tiempo:$("zipTiempo").value.trim()||"15 min",
+      fecha:new Date().toISOString().slice(0,10)
+    };
+
+    if($("zipPractice").checked){
+      if(!zipHasPractice) throw new Error("Has marcado práctica, pero el ZIP no contiene index.html.");
+      entries.push({
+        ...common,
+        titulo:$("practiceTitle").value.trim()||$("zipTitle").value.trim()+" · Práctica",
+        tipo:"Repaso",
+        icono:$("practiceIcon").value.trim()||"🧪",
+        archivo:`materiales/${folder}/index.html`,
+        destacado:false
+      });
+    }
+
+    if($("zipEvaluation").checked){
+      if(!zipHasEvaluation) throw new Error("Has marcado evaluación, pero el ZIP no contiene evaluacion.html.");
+      entries.push({
+        ...common,
+        titulo:$("evaluationTitle").value.trim()||$("zipTitle").value.trim()+" · Evaluación",
+        tipo:"Evaluación",
+        icono:$("evaluationIcon").value.trim()||"🎯",
+        archivo:`materiales/${folder}/evaluacion.html`,
+        destacado:$("zipDestacado").checked
+      });
+    }
+
+    if(!entries.length) throw new Error("Selecciona al menos una entrada para el catálogo.");
+
+    btn.disabled=true;
+    show("status",`Subiendo ${zipFiles.length} archivos del paquete…`,"info");
+
+    const data=await api("/api/publisher/publish-package",{
+      method:"POST",
+      body:JSON.stringify({
+        folder,
+        files:zipFiles,
+        catalogEntries:entries
+      })
+    });
+
+    show("status",
+      `✓ Paquete publicado correctamente.\n\nCarpeta: materiales/${folder}/\nArchivos: ${data.filesPublished}\nEntradas añadidas al catálogo: ${data.catalogEntries}`,
+      "ok"
+    );
+
+    await loadActivities();
+  }catch(e){
+    show("status","Error: "+e.message,"err");
+  }finally{
+    btn.disabled=false;
+  }
+};
+
 
 $("loadActivities").onclick=loadActivities;
 $("activitySearch").oninput=renderActivities;
