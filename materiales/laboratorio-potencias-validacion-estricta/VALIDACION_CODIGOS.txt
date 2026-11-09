@@ -1,0 +1,11 @@
+VALIDACIÓN OFICIAL · ESPACIO 6.º
+
+En modo evaluación:
+- Solo puede comenzar quien tenga un código incluido en alumnos-validos.js.
+- Se normalizan mayúsculas, espacios y distintos tipos de guion.
+- Se comprueba que el grupo coincide con el código.
+- TEST-001 funciona como código interno de prueba, pero no se muestra en pantalla.
+- Cuando estén disponibles los códigos de 6.º A, hay que añadirlos a alumnos-validos.js.
+
+Para futuras evaluaciones de Espacio 6.º conviene reutilizar alumnos-validos.js y llamar a:
+ESPACIO6_validateStudent(codigo, grupo)

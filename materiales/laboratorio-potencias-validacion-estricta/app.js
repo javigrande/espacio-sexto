@@ -1,0 +1,35 @@
+const WORKER_URL="https://espacio-sexto-resultados.javigr77.workers.dev/api/attempts";
+
+const ACTIVITY_ID="laboratorio-potencias-01";
+const ACTIVITY_TITLE="Laboratorio de potencias: cuadrados, cubos y triangulares";
+const $=s=>document.querySelector(s);const mode=document.body.dataset.mode;
+let questions=[],idx=0,correct=0,answered=0,xp=0,combo=0,comboBest=0,startedAtIso=null,events=[],studentCode="",group="",locked=false;
+async function loadQuestions(){try{const r=await fetch("questions.json",{cache:"no-store"});if(!r.ok)throw new Error();questions=await r.json();init()}catch(e){$("#loading").textContent="Error al cargar la actividad. Comprueba que questions.json está en la misma carpeta."}}
+function init(){$("#loading").classList.add("hidden");if(mode==="evaluation"){$("#identityCard").classList.remove("hidden");$("#startBtn").addEventListener("click",startEvaluation)}else{$("#practiceIntro").classList.remove("hidden");$("#practiceStart").addEventListener("click",startQuiz)}$("#nextBtn").addEventListener("click",nextQuestion);$("#restartBtn").addEventListener("click",restart)}
+function startEvaluation(){
+  const g=$("#group").value;
+  const result=window.ESPACIO6_validateStudent($("#studentCode").value,g);
+  const msg=$("#identityMsg");
+  msg.textContent="";
+
+  if(!result.ok){
+    msg.textContent=result.error;
+    return;
+  }
+
+  studentCode=result.code;
+  group=result.group;
+  $("#studentCode").value=studentCode;
+  $("#identityCard").classList.add("hidden");
+  startQuiz();
+}
+
+function startQuiz(){startedAtIso=new Date().toISOString();$("#quizArea").classList.remove("hidden");renderQuestion()}
+function renderQuestion(){locked=false;const q=questions[idx];$("#mission").textContent=q.mission;$("#question").textContent=q.q;$("#counter").textContent=`${idx+1}/${questions.length}`;$("#xp").textContent=`${xp} XP`;$("#combo").textContent=`Combo ${combo}`;$("#progress").style.width=`${idx/questions.length*100}%`;$("#feedback").className="feedback hidden";$("#nextBtn").classList.add("hidden");const box=$("#answers");box.innerHTML="";q.opts.forEach((opt,i)=>{const b=document.createElement("button");b.type="button";b.className="answer-btn";b.textContent=opt;b.addEventListener("click",()=>choose(i,b));box.appendChild(b)})}
+function choose(i,btn){if(locked)return;locked=true;answered++;const q=questions[idx],ok=i===q.a;if(ok){correct++;combo++;comboBest=Math.max(comboBest,combo);xp+=50+Math.min(combo*10,50)}else combo=0;events.push({type:"answer",mission:q.mission,question:q.q,answer:q.opts[i],expected:q.opts[q.a],correct:ok,xp,combo});const buttons=[...document.querySelectorAll(".answer-btn")];if(mode==="practice"){buttons[q.a].classList.add("correct");if(!ok)btn.classList.add("wrong");const fb=$("#feedback");fb.textContent=(ok?"✓ Correcto. ":"✗ No es correcto. ")+q.exp;fb.className=`feedback ${ok?"ok":"bad"}`}else{btn.classList.add("selected");const fb=$("#feedback");fb.textContent="Respuesta registrada.";fb.className="feedback neutral"}$("#xp").textContent=`${xp} XP`;$("#combo").textContent=`Combo ${combo}`;$("#nextBtn").textContent=idx===questions.length-1?"Finalizar":"Siguiente";$("#nextBtn").classList.remove("hidden")}
+function nextQuestion(){if(!locked)return;if(idx<questions.length-1){idx++;renderQuestion()}else finish()}
+function rankFor(a){return a>=95?"S+":a>=90?"S":a>=80?"A":a>=70?"B":a>=60?"C":"D"}
+async function finish(){const finishedAtIso=new Date().toISOString(),accuracy=answered?Math.round(correct/answered*100):0,score10=Math.round(accuracy)/10,stage=5;$("#quizArea").classList.add("hidden");$("#resultArea").classList.remove("hidden");$("#rank").textContent=rankFor(accuracy);$("#mCorrect").textContent=`${correct}/${answered}`;$("#mAccuracy").textContent=`${accuracy}%`;$("#mScore").textContent=score10.toFixed(1);$("#mXp").textContent=xp;$("#mCombo").textContent=comboBest;$("#progress").style.width="100%";if(mode==="evaluation"){const payload={activityId:ACTIVITY_ID,activityTitle:ACTIVITY_TITLE,studentCode,group,startedAtIso,finishedAtIso,finished:true,xp,comboBest,correct,answered,accuracy,score10,stage,events};$("#sendStatus").classList.remove("hidden");$("#sendStatus").textContent="Guardando resultado…";await sendPayload(payload)}else $("#practiceNote").classList.remove("hidden")}
+async function sendPayload(payload){try{const r=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});if(!r.ok)throw new Error(`HTTP ${r.status}`);$("#sendStatus").textContent="✓ Resultado guardado correctamente.";$("#sendStatus").className="feedback ok";$("#retryBtn").classList.add("hidden")}catch(e){$("#sendStatus").textContent="No se ha podido guardar el resultado. No cierres esta página y avisa al profesor.";$("#sendStatus").className="feedback bad";$("#retryBtn").classList.remove("hidden");$("#retryBtn").onclick=()=>{ $("#retryBtn").classList.add("hidden");$("#sendStatus").textContent="Reintentando…";sendPayload(payload)}}}
+function restart(){idx=0;correct=0;answered=0;xp=0;combo=0;comboBest=0;events=[];locked=false;$("#resultArea").classList.add("hidden");if(mode==="practice")startQuiz();else{$("#identityCard").classList.remove("hidden");$("#studentCode").value="";$("#group").value=""}}
+loadQuestions();
