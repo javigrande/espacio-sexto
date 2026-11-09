@@ -1,0 +1,22 @@
+[
+{"mission":"Misión 1 · Descifra la potencia","q":"¿Cómo se lee 7²?","opts":["Siete por dos","Siete al cuadrado","Dos elevado a siete","Siete al cubo"],"a":1,"exp":"El exponente 2 se lee «al cuadrado»."},
+{"mission":"Misión 1 · Descifra la potencia","q":"¿Cómo se lee 4³?","opts":["Cuatro al cubo","Cuatro al cuadrado","Tres por cuatro","Doce"],"a":0,"exp":"El exponente 3 se lee «al cubo»."},
+{"mission":"Misión 1 · Descifra la potencia","q":"¿Qué multiplicación representa 6²?","opts":["6×2","2×2×2×2×2×2","6×6","6×6×6"],"a":2,"exp":"6² = 6×6."},
+{"mission":"Misión 1 · Descifra la potencia","q":"¿Qué multiplicación representa 3³?","opts":["3×3","3×3×3","3×6","9×3×3"],"a":1,"exp":"3³ = 3×3×3."},
+{"mission":"Misión 2 · Constructor de cuadrados","q":"Un cuadrado tiene 5 elementos en cada lado. ¿Cuántos elementos forman el cuadrado completo?","opts":["10","20","25","125"],"a":2,"exp":"5×5 = 5² = 25."},
+{"mission":"Misión 2 · Constructor de cuadrados","q":"¿Cuál de estos números es un cuadrado perfecto?","opts":["18","24","36","45"],"a":2,"exp":"36 = 6²."},
+{"mission":"Misión 2 · Constructor de cuadrados","q":"8² es igual a…","opts":["16","32","64","512"],"a":2,"exp":"8×8 = 64."},
+{"mission":"Misión 2 · Constructor de cuadrados","q":"¿Qué potencia representa un cuadrado de 12 elementos por lado?","opts":["12²","12³","2¹²","24²"],"a":0,"exp":"12×12 = 12²."},
+{"mission":"Misión 3 · Constructor de cubos","q":"Un cubo tiene 4 cubitos en cada arista. ¿Cuántos cubitos contiene?","opts":["16","32","64","128"],"a":2,"exp":"4×4×4 = 4³ = 64."},
+{"mission":"Misión 3 · Constructor de cubos","q":"¿Cuál de estos números es un cubo perfecto?","opts":["18","27","36","45"],"a":1,"exp":"27 = 3³."},
+{"mission":"Misión 3 · Constructor de cubos","q":"5³ es igual a…","opts":["15","25","75","125"],"a":3,"exp":"5×5×5 = 125."},
+{"mission":"Misión 3 · Constructor de cubos","q":"¿Qué potencia representa un cubo con 7 cubitos en cada arista?","opts":["7²","7³","3⁷","21²"],"a":1,"exp":"7×7×7 = 7³."},
+{"mission":"Misión 4 · Detectives de patrones","q":"Completa la serie de cuadrados: 1, 4, 9, 16, 25, …","opts":["30","32","36","49"],"a":2,"exp":"Sigue 6² = 36."},
+{"mission":"Misión 4 · Detectives de patrones","q":"Completa la serie de cubos: 1, 8, 27, 64, …","opts":["81","100","125","144"],"a":2,"exp":"Sigue 5³ = 125."},
+{"mission":"Misión 4 · Detectives de patrones","q":"¿Cuánto aumenta de 6² a 7²?","opts":["7","11","12","13"],"a":3,"exp":"49−36 = 13."},
+{"mission":"Misión 4 · Detectives de patrones","q":"Entre dos cuadrados consecutivos, 4² y 5², la diferencia es…","opts":["5","7","9","11"],"a":2,"exp":"25−16 = 9."},
+{"mission":"Misión 5 · Desafío triangular","q":"Completa la serie de números triangulares: 1, 3, 6, 10, 15, …","opts":["18","20","21","25"],"a":2,"exp":"15+6 = 21."},
+{"mission":"Misión 5 · Desafío triangular","q":"¿Cuál de estos es un número triangular?","opts":["8","10","14","16"],"a":1,"exp":"10 = 1+2+3+4."},
+{"mission":"Misión 5 · Desafío triangular","q":"La suma de dos números triangulares consecutivos, 6 y 10, es…","opts":["14","15","16","18"],"a":2,"exp":"6+10 = 16 = 4²."},
+{"mission":"Misión 5 · Desafío triangular","q":"¿Qué afirmación describe el patrón mostrado en la unidad?","opts":["Dos triangulares consecutivos suman siempre un cuadrado","Todo cuadrado es triangular","Todo cubo es cuadrado","Los triangulares solo pueden ser impares"],"a":0,"exp":"Dos números triangulares consecutivos suman un número cuadrado."}
+]
