@@ -1,0 +1,152 @@
+[
+  {
+    "q": "¿Qué acontecimiento constituye el tema principal del audio?",
+    "o": [
+      "La inauguración de un colegio nuevo",
+      "El 50.º aniversario de un colegio",
+      "La jubilación de un profesor",
+      "Un concurso entre colegios"
+    ],
+    "a": 1
+  },
+  {
+    "q": "¿Qué relación tiene Vicente con el colegio?",
+    "o": [
+      "Fue alumno y después profesor",
+      "Es el director actual",
+      "Es el conserje",
+      "Es un periodista invitado"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Cómo se muestra Vicente al hablar de la celebración?",
+    "o": [
+      "Aburrido",
+      "Indiferente",
+      "Emocionado",
+      "Enfadado"
+    ],
+    "a": 2
+  },
+  {
+    "q": "¿Qué actividad relacionada con imágenes se ha preparado?",
+    "o": [
+      "Un concurso de dibujos",
+      "Una exposición fotográfica",
+      "Una proyección de cine",
+      "Un taller de pintura"
+    ],
+    "a": 1
+  },
+  {
+    "q": "¿Cuál de estas actividades también forma parte del aniversario?",
+    "o": [
+      "Un concurso literario",
+      "Una carrera popular",
+      "Un campeonato de ajedrez",
+      "Una excursión a otra ciudad"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué tipo de encuentros se mencionan dentro del programa?",
+    "o": [
+      "Charlas",
+      "Debates televisivos",
+      "Clases particulares",
+      "Entrevistas de trabajo"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué celebración festiva aparece entre las actividades?",
+    "o": [
+      "Una verbena",
+      "Una procesión",
+      "Una cabalgata",
+      "Una romería"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué combinación corresponde al espectáculo anunciado?",
+    "o": [
+      "Música, baile, magia y monólogos",
+      "Teatro, fútbol, circo y cine",
+      "Poesía, pintura, cocina y danza",
+      "Magia, atletismo, dibujo y canto"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Quién es Benito?",
+    "o": [
+      "Un antiguo director",
+      "El conserje",
+      "Un alumno actual",
+      "El presentador de radio"
+    ],
+    "a": 1
+  },
+  {
+    "q": "¿Qué está haciendo Benito relacionado con el aniversario?",
+    "o": [
+      "Preparando las clases",
+      "Contactando con antiguos alumnos",
+      "Vendiendo entradas",
+      "Organizando un viaje"
+    ],
+    "a": 1
+  },
+  {
+    "q": "¿Qué se descubre al final sobre la locutora?",
+    "o": [
+      "Que también estudió en ese colegio",
+      "Que es familiar de Vicente",
+      "Que trabaja como profesora allí",
+      "Que fue la directora del centro"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Cuál es la finalidad principal de la intervención radiofónica?",
+    "o": [
+      "Dar instrucciones para un examen",
+      "Informar sobre el aniversario y sus actividades",
+      "Contar una historia de ficción",
+      "Anunciar el cierre del colegio"
+    ],
+    "a": 1
+  },
+  {
+    "q": "¿Por qué tiene especial importancia el aniversario para Vicente?",
+    "o": [
+      "Porque nunca había estado en el colegio",
+      "Porque mantiene una relación personal con el centro",
+      "Porque ha ganado un premio",
+      "Porque va a cambiar de ciudad"
+    ],
+    "a": 1
+  },
+  {
+    "q": "¿Qué idea resume mejor el conjunto de actividades?",
+    "o": [
+      "Solo habrá actos académicos",
+      "Habrá propuestas culturales y festivas variadas",
+      "La celebración durará únicamente una mañana",
+      "Participarán solo los profesores"
+    ],
+    "a": 1
+  },
+  {
+    "q": "¿Qué elemento ayuda a entender que el aniversario reúne a distintas generaciones?",
+    "o": [
+      "Se contacta con antiguos alumnos y participa gente vinculada al centro",
+      "Solo hablan alumnos actuales",
+      "No se invita a nadie de fuera",
+      "Todas las actividades son deportivas"
+    ],
+    "a": 0
+  }
+]

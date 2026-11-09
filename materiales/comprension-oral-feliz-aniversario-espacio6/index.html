@@ -1,0 +1,28 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comprensión oral · Feliz aniversario</title><link rel="stylesheet" href="styles.css"></head>
+<body data-mode="practice"><div class="wrap">
+<div class="hero"><div class="kicker">ESPACIO 6.º · LENGUA · COMPRENSIÓN ORAL</div><h1>Feliz aniversario</h1>
+<p>Escucha con atención y responde 15 preguntas sobre la información del audio.</p>
+<div class="tags"><span class="tag">15 preguntas</span><span class="tag">Nota /10</span><span class="tag" id="listenLimit"></span><span class="tag">Criterio 2.1</span></div></div>
+
+<div class="card hidden" id="identity">
+<h2>Modo evaluación</h2><p>Introduce tu código personal y tu grupo. No escribas tu nombre.</p>
+<div class="row"><label>Código personal<input id="studentCode" placeholder="Ej.: 6B-K7P4"></label>
+<label>Grupo<select id="group"><option value="">Selecciona...</option><option>6.º A</option><option>6.º B</option></select></label></div>
+<div id="identityMsg" class="message bad"></div><br><button onclick="startEvaluation()">Comenzar evaluación</button></div>
+
+<div class="card hidden" id="quiz">
+<div class="audioBox"><button id="playBtn" onclick="playAudio()">▶ Escuchar audio</button><span class="listenCount">Escuchas: <span id="plays">0</span></span>
+<audio id="audio" src="feliz-aniversario.mp3" preload="metadata"></audio></div>
+<hr style="border:none;border-top:1px solid #e5eaf2;margin:18px 0">
+<div class="qhead"><b>Pregunta <span id="qnum">1</span> de <span id="total">15</span></b></div>
+<div class="progress"><div id="bar"></div></div>
+<h2 id="question"></h2><div id="options" class="options"></div><div id="feedback"></div>
+<br><button id="nextBtn" onclick="nextQuestion()" disabled>Siguiente</button></div>
+
+<div class="card hidden" id="results"><h2>Resultado</h2><div class="stats">
+<div class="stat">Aciertos<br><b id="rCorrect">0/15</b></div><div class="stat">Precisión<br><b id="rAcc">0%</b></div>
+<div class="stat">Nota<br><b id="rScore">0,0</b></div><div class="stat">Escuchas<br><b id="rPlays">0</b></div></div>
+<div id="saveState" class="message"></div></div>
+<div class="footer">Espacio 6.º · Comprensión oral</div></div>
+<script src="alumnos-validos.js"></script><script src="app.js"></script></body></html>
