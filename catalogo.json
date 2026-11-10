@@ -4,6 +4,28 @@
     "materia": "Matemáticas",
     "tiempo": "15 min",
     "fecha": "2026-11-10",
+    "titulo": "El aparato locomotor",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "archivo": "materiales/locomotor-lab-innovador-espacio6/evaluacion.html",
+    "destacado": false
+  },
+  {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-10",
+    "titulo": "Locomotor Lab Innovador Espacio6 · Práctica",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/locomotor-lab-innovador-espacio6/index.html",
+    "destacado": false
+  },
+  {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-10",
     "titulo": "Locomotor Arena",
     "tipo": "Repaso",
     "icono": "🧪",

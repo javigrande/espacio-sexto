@@ -1,0 +1,299 @@
+[
+  {
+    "type": "drag",
+    "mission": "Clasifica",
+    "title": "Arrastra cada elemento a HUESO o MÚSCULO",
+    "targets": [
+      "Hueso",
+      "Músculo"
+    ],
+    "items": [
+      [
+        "tibia",
+        "Hueso"
+      ],
+      [
+        "bíceps",
+        "Músculo"
+      ],
+      [
+        "fémur",
+        "Hueso"
+      ],
+      [
+        "gemelo",
+        "Músculo"
+      ],
+      [
+        "esternón",
+        "Hueso"
+      ],
+      [
+        "deltoides",
+        "Músculo"
+      ]
+    ]
+  },
+  {
+    "type": "match",
+    "mission": "Une",
+    "title": "Relaciona estructura y función",
+    "pairs": [
+      [
+        "Tendón",
+        "Une músculo y hueso"
+      ],
+      [
+        "Ligamento",
+        "Une y estabiliza huesos"
+      ],
+      [
+        "Músculo",
+        "Se contrae y produce movimiento"
+      ],
+      [
+        "Articulación",
+        "Unión entre huesos"
+      ]
+    ]
+  },
+  {
+    "type": "fill",
+    "mission": "Rellena",
+    "title": "Completa la frase",
+    "text": "El sistema locomotor está formado por el sistema ____ y el sistema ____.",
+    "answers": [
+      "esquelético",
+      "muscular"
+    ]
+  },
+  {
+    "type": "multi",
+    "mission": "Selecciona",
+    "title": "Selecciona todos los huesos largos",
+    "options": [
+      "tibia",
+      "fémur",
+      "vértebra",
+      "escápula"
+    ],
+    "correct": [
+      0,
+      1
+    ]
+  },
+  {
+    "type": "drag",
+    "mission": "Clasifica",
+    "title": "Clasifica los huesos según su forma",
+    "targets": [
+      "Largo",
+      "Corto",
+      "Plano"
+    ],
+    "items": [
+      [
+        "tibia",
+        "Largo"
+      ],
+      [
+        "peroné",
+        "Largo"
+      ],
+      [
+        "vértebra",
+        "Corto"
+      ],
+      [
+        "escápula",
+        "Plano"
+      ]
+    ]
+  },
+  {
+    "type": "match",
+    "mission": "Une",
+    "title": "Une cada hueso con su zona",
+    "pairs": [
+      [
+        "Húmero",
+        "Brazo"
+      ],
+      [
+        "Fémur",
+        "Muslo"
+      ],
+      [
+        "Rótula",
+        "Rodilla"
+      ],
+      [
+        "Esternón",
+        "Centro del pecho"
+      ]
+    ]
+  },
+  {
+    "type": "fill",
+    "mission": "Rellena",
+    "title": "Completa",
+    "text": "La columna vertebral está formada por ____.",
+    "answers": [
+      "vértebras"
+    ]
+  },
+  {
+    "type": "single",
+    "mission": "Selecciona",
+    "title": "¿Qué articulación permite movimiento, como la rodilla?",
+    "options": [
+      "Móvil",
+      "Semimóvil",
+      "Fija",
+      "Cartilaginosa"
+    ],
+    "correct": 0
+  },
+  {
+    "type": "drag",
+    "mission": "Clasifica",
+    "title": "Clasifica las articulaciones",
+    "targets": [
+      "Móvil",
+      "Semimóvil",
+      "Fija"
+    ],
+    "items": [
+      [
+        "rodilla",
+        "Móvil"
+      ],
+      [
+        "vértebras",
+        "Semimóvil"
+      ],
+      [
+        "suturas del cráneo",
+        "Fija"
+      ]
+    ]
+  },
+  {
+    "type": "match",
+    "mission": "Une",
+    "title": "Relaciona músculo y localización",
+    "pairs": [
+      [
+        "Bíceps",
+        "Parte anterior del brazo"
+      ],
+      [
+        "Tríceps",
+        "Parte posterior del brazo"
+      ],
+      [
+        "Gemelo",
+        "Pantorrilla"
+      ],
+      [
+        "Cuádriceps",
+        "Parte anterior del muslo"
+      ]
+    ]
+  },
+  {
+    "type": "drag",
+    "mission": "Clasifica",
+    "title": "Clasifica músculos por zona corporal",
+    "targets": [
+      "Cabeza",
+      "Tronco",
+      "Pierna"
+    ],
+    "items": [
+      [
+        "frontal",
+        "Cabeza"
+      ],
+      [
+        "temporal",
+        "Cabeza"
+      ],
+      [
+        "pectoral",
+        "Tronco"
+      ],
+      [
+        "abdominal",
+        "Tronco"
+      ],
+      [
+        "gemelo",
+        "Pierna"
+      ],
+      [
+        "cuádriceps",
+        "Pierna"
+      ]
+    ]
+  },
+  {
+    "type": "fill",
+    "mission": "Rellena",
+    "title": "Completa",
+    "text": "El tendón de ____ une los músculos de la pantorrilla con los huesos del pie.",
+    "answers": [
+      "Aquiles"
+    ]
+  },
+  {
+    "type": "single",
+    "mission": "Selecciona",
+    "title": "¿Qué es la tendinitis?",
+    "options": [
+      "Inflamación de un tendón",
+      "Rotura de un hueso",
+      "Inflamación de un músculo",
+      "Luxación"
+    ],
+    "correct": 0
+  },
+  {
+    "type": "multi",
+    "mission": "Selecciona",
+    "title": "¿Qué ayuda a prevenir lesiones?",
+    "options": [
+      "Estiramientos",
+      "Deporte regular adecuado",
+      "Esfuerzos máximos sin calentar",
+      "Evitar todo movimiento"
+    ],
+    "correct": [
+      0,
+      1
+    ]
+  },
+  {
+    "type": "match",
+    "mission": "Final",
+    "title": "Relaciona ejemplo y categoría",
+    "pairs": [
+      [
+        "Hueso largo",
+        "tibia"
+      ],
+      [
+        "Hueso corto",
+        "vértebra"
+      ],
+      [
+        "Hueso plano",
+        "escápula"
+      ],
+      [
+        "Músculo del brazo",
+        "bíceps"
+      ]
+    ]
+  }
+]
