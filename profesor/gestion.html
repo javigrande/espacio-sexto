@@ -119,7 +119,44 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
   </div>
 
   <div id="students" class="panel">
-    <div class="card section"><h2>Alumnado</h2><p class="muted">Los 25 códigos oficiales de 6.º B ya quedan asociados al grupo. 6.º A podrá incorporarse cuando tengamos su listado.</p>
+    <div class="grid">
+      <div class="card section">
+        <h2>Alta / edición individual</h2>
+        <input id="studentOriginalCode" type="hidden">
+        <div class="formgrid">
+          <div class="wide"><label>Nombre y apellidos</label><input id="studentName" placeholder="Apellidos, Nombre"></div>
+          <div><label>Código</label><input id="studentCode" placeholder="6A-K4P7"></div>
+          <div><label>Grupo</label><select id="studentGroup"></select></div>
+        </div>
+        <br><div class="actions">
+          <button class="primary" onclick="saveStudent()">Guardar alumno</button>
+          <button class="light" onclick="clearStudentForm()">Limpiar</button>
+        </div>
+        <p class="muted">El código debe coincidir con el grupo. TEST-001 queda reservado para pruebas.</p>
+      </div>
+
+      <div class="card section">
+        <h2>Importación masiva</h2>
+        <label>Grupo de destino</label><select id="bulkGroup"></select><br><br>
+        <label>Pegar lista</label>
+        <textarea id="bulkText" style="width:100%;min-height:180px;padding:12px;border:1px solid #d6deea;border-radius:11px;font:inherit" placeholder="Nombre;Código&#10;Ana Pérez;6A-K4P7&#10;Lucas Martín;6A-R8M2"></textarea>
+        <p class="muted">Admite <b>Nombre;Código</b> o <b>Nombre;Código;Grupo</b>.</p>
+        <div class="actions">
+          <button class="primary" onclick="previewBulk()">Revisar lista</button>
+          <button class="light" onclick="document.getElementById('csvFile').click()">Importar CSV</button>
+          <button class="light" onclick="downloadStudentTemplate()">⬇ Plantilla CSV</button>
+          <input id="csvFile" type="file" accept=".csv,text/csv" class="hidden" onchange="loadCSV(event)">
+        </div>
+        <div id="bulkPreview" class="status"></div>
+        <button id="bulkImportBtn" class="primary hidden" onclick="importBulk()">Importar alumnos</button>
+      </div>
+    </div>
+
+    <div class="card section" style="margin-top:16px">
+      <div class="top" style="margin-bottom:10px">
+        <div><h2 style="margin:0">Alumnado del curso</h2><p class="muted" style="margin:.25rem 0 0">Busca, edita o elimina alumnos.</p></div>
+        <input id="studentSearch" style="max-width:360px" placeholder="Buscar alumno o código..." oninput="renderStudents()">
+      </div>
       <div id="studentsList" class="list"></div>
     </div>
   </div>
@@ -151,6 +188,8 @@ function renderAll(){
   $("groupYear").innerHTML=S.years.map(x=>`<option value="${x.id}">${esc(x.label)}</option>`).join("");
   $("asTeacher").innerHTML=S.teachers.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
   $("asGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
+  $("studentGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
+  $("bulkGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
   const subopts=S.subjects.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
   $("asSubject").innerHTML=subopts;$("actSubject").innerHTML='<option value="">Sin materia</option>'+subopts;
   $("accessActivity").innerHTML=S.activities.filter(x=>x.active).map(x=>`<option value="${esc(x.activity_id)}">${esc(x.title)}</option>`).join("");
@@ -160,7 +199,7 @@ function renderAll(){
   $("teachersList").innerHTML=S.teachers.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${x.active?"Activo":"Desactivado"} · clave privada</small></div><button class="light" onclick='resetTeacher(${JSON.stringify(x.id)},${JSON.stringify(x.name)})'>Cambiar clave</button></div>`).join("");
   $("assignmentsList").innerHTML=S.assignments.map(x=>`<div class="item"><div><b>${esc(x.teacher_name)}</b> <span class="pill">${esc(x.group_name)}</span> <span class="pill">${esc(x.subject_name)}</span></div><button class="danger" onclick='deleteAssignment(${JSON.stringify(x.id)})'>Quitar</button></div>`).join("");
   $("activitiesList").innerHTML=S.activities.map(x=>`<div class="item"><div><b>${esc(x.title)}</b><br><small>${esc(x.activity_id)}${x.subject_name?" · "+esc(x.subject_name):""}</small></div></div>`).join("");
-  $("studentsList").innerHTML=S.students.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${esc(x.code)} · ${esc(x.group_name||"Sin grupo")}</small></div></div>`).join("");
+  renderStudents();
   renderAccess();
 }
 function renderAccess(){
@@ -185,6 +224,92 @@ async function saveAccess(){try{
   await api("/api/admin/academic/activity-access",{method:"POST",body:JSON.stringify({activityId,groupIds,teacherIds})});
   await loadState();ok("Permisos actualizados.");
 }catch(e){bad(e)}}
+
+let BULK_ROWS=[];
+
+function normalizeCode(v){
+  return String(v||"").trim().toUpperCase()
+    .replace(/[\u2010\u2011\u2012\u2013\u2014\u2212]/g,"-")
+    .replace(/\s+/g,"");
+}
+function renderStudents(){
+  const q=($("studentSearch")?.value||"").trim().toLowerCase();
+  const rows=S.students.filter(x=>!q||(`${x.name} ${x.code} ${x.group_name||""}`).toLowerCase().includes(q));
+  $("studentsList").innerHTML=rows.map(x=>`<div class="item">
+    <div><b>${esc(x.name)}</b><br><small>${esc(x.code)} · ${esc(x.group_name||"Sin grupo")}</small></div>
+    <div class="actions"><button class="light" onclick='editStudent(${JSON.stringify(x.code)})'>Editar</button>
+    <button class="danger" onclick='deleteStudent(${JSON.stringify(x.code)},${JSON.stringify(x.name)})'>Eliminar</button></div>
+  </div>`).join("")||'<div class="muted">No hay alumnos.</div>';
+}
+function clearStudentForm(){studentOriginalCode.value="";studentName.value="";studentCode.value=""}
+function editStudent(code){
+  const s=S.students.find(x=>x.code===code); if(!s)return;
+  studentOriginalCode.value=s.code;studentName.value=s.name;studentCode.value=s.code;studentGroup.value=s.group_id||"";
+}
+async function saveStudent(){
+  try{
+    await api("/api/admin/academic/student",{method:"POST",body:JSON.stringify({
+      originalCode:studentOriginalCode.value||null,name:studentName.value.trim(),
+      code:normalizeCode(studentCode.value),groupId:studentGroup.value
+    })});
+    clearStudentForm();await loadState();ok("Alumno guardado.");
+  }catch(e){bad(e)}
+}
+async function deleteStudent(code,name){
+  if(!confirm(`¿Eliminar a ${name}?`))return;
+  try{await api("/api/admin/academic/student?code="+encodeURIComponent(code),{method:"DELETE"});await loadState();ok("Alumno eliminado.")}catch(e){bad(e)}
+}
+function parseBulkText(text,defaultGroupId){
+  const groupByName=new Map(S.groups.map(g=>[String(g.name).trim().toLowerCase(),g.id]));
+  const lines=String(text||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const rows=[],errors=[],seen=new Set();
+  lines.forEach((line,idx)=>{
+    const parts=line.split(/[;\t]/).map(x=>x.trim());
+    if(idx===0&&/nombre/i.test(parts[0]||"")&&/c[oó]digo/i.test(parts[1]||""))return;
+    if(parts.length<2){errors.push(`Línea ${idx+1}: faltan columnas`);return}
+    const name=parts[0],code=normalizeCode(parts[1]);
+    let groupId=defaultGroupId;
+    if(parts[2]){
+      const raw=parts[2].trim();
+      groupId=(S.groups.find(g=>g.id===raw)?.id)||groupByName.get(raw.toLowerCase())||"";
+    }
+    if(!name){errors.push(`Línea ${idx+1}: falta nombre`);return}
+    if(!/^6[AB]-[A-Z0-9]{4,8}$/.test(code)){errors.push(`Línea ${idx+1}: código no válido (${code||"vacío"})`);return}
+    if(seen.has(code)){errors.push(`Código duplicado: ${code}`);return}
+    seen.add(code);
+    const group=S.groups.find(g=>g.id===groupId);
+    if(!group){errors.push(`Línea ${idx+1}: grupo no reconocido`);return}
+    if(code.startsWith("6A-")&&group.name!=="6.º A"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
+    if(code.startsWith("6B-")&&group.name!=="6.º B"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
+    rows.push({name,code,groupId,groupName:group.name});
+  });
+  return {rows,errors};
+}
+function previewBulk(){
+  const p=parseBulkText(bulkText.value,bulkGroup.value);
+  BULK_ROWS=p.errors.length?[]:p.rows;
+  if(p.errors.length){bulkPreview.className="status bad";bulkPreview.textContent=p.errors.join("\n");bulkImportBtn.classList.add("hidden");return}
+  bulkPreview.className="status ok";bulkPreview.textContent=`✓ ${p.rows.length} alumnos preparados:\n`+p.rows.map(r=>`${r.name} · ${r.code} · ${r.groupName}`).join("\n");
+  bulkImportBtn.classList.remove("hidden");
+}
+async function importBulk(){
+  if(!BULK_ROWS.length)return;
+  try{
+    const d=await api("/api/admin/academic/students-import",{method:"POST",body:JSON.stringify({students:BULK_ROWS})});
+    bulkText.value="";bulkPreview.textContent="";bulkImportBtn.classList.add("hidden");BULK_ROWS=[];
+    await loadState();ok(`${d.imported} alumnos importados.`);
+  }catch(e){bad(e)}
+}
+function loadCSV(ev){
+  const f=ev.target.files?.[0];if(!f)return;
+  const rd=new FileReader();rd.onload=()=>{bulkText.value=String(rd.result||"");previewBulk()};rd.readAsText(f,"utf-8");ev.target.value="";
+}
+function downloadStudentTemplate(){
+  const csv="Nombre;Código;Grupo\nAna Pérez;6A-K4P7;6.º A\nLucas Martín;6A-R8M2;6.º A\n";
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="plantilla_alumnado_espacio6.csv";a.click();URL.revokeObjectURL(a.href);
+}
+
 function ok(t){$("status").className="status ok";$("status").textContent="✓ "+t}
 function bad(e){$("status").className="status bad";$("status").textContent="Error: "+(e.message||e)}
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
