@@ -70,7 +70,7 @@ tr:hover td{background:#fbfcff}
 <section id="loginView" class="card login">
   <small style="font-weight:900;color:#5b6b8a;letter-spacing:.12em">ESPACIO 6.º</small>
   <h2>Panel docente de resultados</h2>
-  <p class="note">Introduce la clave privada que configuraste al crear el Worker.</p>
+  <p class="note">Introduce tu clave docente. El administrador ve todo; cada profesor invitado solo ve sus grupos y actividades.</p>
   <div class="field">
     <label>Clave del profesor</label>
     <input id="teacherKey" type="password" placeholder="Tu clave privada">
@@ -85,9 +85,9 @@ tr:hover td{background:#fbfcff}
     <div class="brand">
       <small>ESPACIO 6.º · ANALYTICS</small>
       <h1>Resultados del alumnado</h1>
-      <p>Actividad, nota, precisión, XP e intentos registrados.</p>
+      <p id="who">Actividad, nota, precisión, XP e intentos registrados.</p>
     </div>
-    <div class="top-actions"><button class="btn btn-light" onclick="location.href='publicador.html'">🚀 Publicar actividad</button><button class="btn btn-light" onclick="location.href='../index.html'">← Espacio 6.º</button>
+    <div class="top-actions"><button id="manageBtn" class="btn btn-light hidden" onclick="location.href='gestion.html'">🏫 Gestión</button><button id="publishBtn" class="btn btn-light hidden" onclick="location.href='publicador.html'">🚀 Publicar actividad</button><button class="btn btn-light" onclick="location.href='../index.html'">← Espacio 6.º</button>
       <button class="btn btn-light" onclick="loadResults()">↻ Actualizar</button>
       <button class="btn btn-primary" onclick="exportCSV()">⬇ Exportar CSV</button>
     </div>
@@ -155,9 +155,9 @@ tr:hover td{background:#fbfcff}
 const WORKER_URL="https://espacio-sexto-resultados.javigr77.workers.dev";
 const STUDENTS={"6B-K7P4": "Antón Resa, Mateo", "6B-M2R8": "Arribas Herranz, Neila", "6B-T9C3": "Barquín López, María", "6B-P5X1": "Benito Camarero, Eric", "6B-H8N6": "Caballero García, Julia", "6B-V3L7": "Calderón Ambrosio, Sofía", "6B-R6Q2": "Calzada Ruiz, Mireia", "6B-D4W9": "Casares Fresno, Carla", "6B-N7F5": "Cob Valenciano, Héctor", "6B-B9K2": "Gimeno López, Daniela", "6B-X4M8": "González Martínez, Sara", "6B-C6T1": "Güemes Cámara, Mario", "6B-J8V3": "Izquierdo Fernández, Rodrigo", "6B-F2R7": "Jiménez Alonso, Noa", "6B-Q5H9": "Jorge Alonso, Alba", "6B-L3X6": "Losantos García, Valeria", "6B-S7D4": "Merino Serrano, Vega", "6B-G9P1": "Moreno Cortés, Raúl", "6B-W2N8": "Nava Durán, Miguel Ángel", "6B-E6K5": "Olalla Revilla, Mateo", "6B-U4C7": "Pascual Quintanilla, Himilce", "6B-A8Q3": "Ruiz Barriuso, Jimena", "6B-Z5R2": "Sainz López, Saúl", "6B-Y7M4": "Santamaría García, Martín", "6B-I3V9": "Vicario González, Enrique"};
 let KEY="";
-let ALL=[];
+let ALL=[];let SESSION=null;
 
-function nameFor(code){ return STUDENTS[code] || code || "—"; }
+function nameFor(code,row=null){ return row?.student_name || STUDENTS[code] || code || "—"; }
 
 async function connect(){
   KEY=document.getElementById("teacherKey").value.trim();
@@ -169,8 +169,12 @@ async function connect(){
     const d=await r.json();
     if(!r.ok)throw new Error(d.error||"No autorizado");
     ALL=d.results||[];
+    SESSION=d.user||null;
     loginView.classList.add("hidden");
     panelView.classList.remove("hidden");
+    who.textContent=SESSION ? `Sesión: ${SESSION.name} · ${SESSION.role==="admin"?"Administrador":"Profesor"}` : "Resultados del alumnado";
+    if(SESSION?.role==="admin"){manageBtn.classList.remove("hidden");publishBtn.classList.remove("hidden")}
+    buildGroupFilter();
     buildActivityFilter();
     render();
   }catch(e){
@@ -184,9 +188,18 @@ async function loadResults(){
     const d=await r.json();
     if(!r.ok)throw new Error(d.error||"Error");
     ALL=d.results||[];
+    buildGroupFilter();
     buildActivityFilter();
     render();
   }catch(e){ alert("No se pudieron actualizar los resultados."); }
+}
+
+function buildGroupFilter(){
+  const sel=document.getElementById("groupFilter");
+  const current=sel.value;
+  const groups=[...new Set(ALL.map(x=>x.group_name).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todos los grupos</option>'+groups.map(g=>`<option>${escapeHtml(g)}</option>`).join("");
+  if(groups.includes(current))sel.value=current;
 }
 
 function buildActivityFilter(){
@@ -202,7 +215,7 @@ function filtered(){
   const g=document.getElementById("groupFilter").value;
   const a=document.getElementById("activityFilter").value;
   return ALL.filter(x=>{
-    const nm=nameFor(x.student_code);
+    const nm=nameFor(x.student_code,x);
     const act=x.activity_title||x.activity_id||"";
     return (!g||x.group_name===g) &&
            (!a||act===a) &&
@@ -217,7 +230,7 @@ function render(){
     const cls=n>=8?"good":n>=5?"mid":"low";
     const dt=formatDate(x.finished_at||x.created_at);
     return `<tr>
-      <td><div class="name">${escapeHtml(nameFor(x.student_code))}</div><div class="code">${escapeHtml(x.student_code||"")}</div></td>
+      <td><div class="name">${escapeHtml(nameFor(x.student_code,x))}</div><div class="code">${escapeHtml(x.student_code||"")}</div></td>
       <td>${escapeHtml(x.group_name||"—")}</td>
       <td><span class="pill activity">${escapeHtml(x.activity_title||x.activity_id||"—")}</span></td>
       <td><span class="pill ${cls}">${n.toFixed(1).replace(".",",")}</span></td>
@@ -253,14 +266,28 @@ function formatDate(v){
   return d.toLocaleString("es-ES",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
 }
 
-function openDetail(x){
-  modalTitle.textContent=nameFor(x.student_code);
+async function openDetail(x){
+  modalTitle.textContent=nameFor(x.student_code,x);
   modalSub.textContent=(x.activity_title||x.activity_id||"") + " · " + (x.group_name||"");
   dNote.textContent=Number(x.score10||0).toFixed(1).replace(".",",");
   dAcc.textContent=Math.round(Number(x.accuracy||0))+"%";
   dXp.textContent=x.xp||0;
   dCombo.textContent=x.combo_best||0;
+  eventList.textContent="Cargando detalle…";
   modal.classList.remove("hidden");
+  try{
+    const rr=await fetch(WORKER_URL+"/api/result-detail?id="+encodeURIComponent(x.id),{headers:{"X-Teacher-Key":KEY}});
+    const dd=await rr.json();
+    if(!rr.ok)throw new Error(dd.error||"Error");
+    const ev=dd.result?.events||[];
+    if(!ev.length){eventList.textContent="Esta actividad no guardó detalle pregunta por pregunta.";return}
+    eventList.innerHTML=ev.map((e,i)=>{
+      if(e.type==="audio")return `<div class="event"><b>🎧 Audio</b><br><small>Escuchas: ${e.plays??"—"}${e.maxPlays?` / ${e.maxPlays}`:""}</small></div>`;
+      const ok=e.correct===true;
+      return `<div class="event"><b>${ok?"✅":"❌"} ${escapeHtml(e.question||("Pregunta "+(e.questionNumber||i+1)))}</b><br>
+      <small>Respuesta: ${escapeHtml(e.answer??"—")} · Correcta: ${escapeHtml(e.expected??"—")}</small></div>`;
+    }).join("");
+  }catch(e){eventList.textContent="No se pudo cargar el detalle."}
 }
 
 function closeModal(){modal.classList.add("hidden")}
@@ -269,7 +296,7 @@ function exportCSV(){
   const rows=filtered();
   const data=[["Alumno","Código","Grupo","Actividad","Nota","Precisión","XP","Combo","Fecha","Estado"]];
   rows.forEach(x=>data.push([
-    nameFor(x.student_code),x.student_code||"",x.group_name||"",
+    nameFor(x.student_code,x),x.student_code||"",x.group_name||"",
     x.activity_title||x.activity_id||"",Number(x.score10||0).toFixed(2),
     Number(x.accuracy||0),x.xp||0,x.combo_best||0,
     x.finished_at||x.created_at||"",x.finished?"Finalizado":"En curso"

@@ -1,0 +1,17 @@
+ESPACIO 6.º · WEB V7
+
+Nuevo acceso:
+profesor/gestion.html
+
+Gestión académica:
+- Cursos escolares y grupos
+- Profesores con clave individual
+- Materias por profesor/grupo
+- Registro de actividades
+- Permisos de actividad por grupos y profesores
+- Alumnado asociado a grupo
+
+Resultados:
+- Administrador: todos los resultados
+- Profesor invitado: únicamente resultados de grupos + actividades autorizadas
+- Detalle pregunta a pregunta cuando la actividad lo registra

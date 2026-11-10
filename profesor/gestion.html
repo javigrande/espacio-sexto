@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gestión académica · Espacio 6.º</title>
+<style>
+*{box-sizing:border-box}:root{--ink:#172033;--muted:#67748a;--line:#e2e8f0;--blue:#4657e8;--violet:#7a4cf0;--green:#159b6b;--red:#d84b61;--amber:#d98900}
+body{margin:0;background:linear-gradient(180deg,#eef3ff,#f7f9fc 260px);font-family:Inter,system-ui,Segoe UI,sans-serif;color:var(--ink)}
+.wrap{max-width:1320px;margin:auto;padding:24px}.hidden{display:none!important}.card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 50px #31405b12}
+.login{max-width:540px;margin:60px auto;padding:26px}.eyebrow{font-size:.76rem;letter-spacing:.13em;font-weight:950;color:#5b59d6}
+h1{font-size:clamp(2rem,4vw,3.5rem);letter-spacing:-.04em;margin:.4rem 0}.muted{color:var(--muted)}
+input,select{width:100%;padding:11px 12px;border:1px solid #d6deea;border-radius:11px;background:#fff;font:inherit}
+button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:pointer}.primary{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}.light{background:#fff;border:1px solid var(--line);color:var(--ink)}.danger{background:#fff0f2;color:#ad2c45}.green{background:#e9f9f3;color:#12774f}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:18px}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{background:#fff;border:1px solid var(--line)}.tab.active{background:#222c49;color:#fff}
+.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.section{padding:18px}.section h2{margin-top:0}.formgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end}.formgrid .wide{grid-column:span 2}
+.list{display:grid;gap:9px;margin-top:14px}.item{border:1px solid #e6ebf3;border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}.item small{color:var(--muted)}
+.pill{display:inline-flex;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#4c4bb4;font-size:.75rem;font-weight:900;margin:2px}
+.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.check{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:9px}.check input{width:auto}
+.stat{padding:16px}.stat b{font-size:1.8rem;display:block}.status{white-space:pre-wrap;margin-top:10px;font-size:.86rem}.ok{color:var(--green)}.bad{color:var(--red)}
+@media(max-width:900px){.grid,.grid3{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr 1fr}.checkbox-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.wrap{padding:12px}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="login" class="card login">
+  <div class="eyebrow">ESPACIO 6.º · ADMINISTRACIÓN</div>
+  <h2>Gestión académica</h2>
+  <p class="muted">Solo la clave general de administrador puede modificar cursos, profesores y permisos.</p>
+  <input id="key" type="password" placeholder="Clave de administrador">
+  <br><br><button class="primary" onclick="enter()">Entrar</button>
+  <div id="loginMsg" class="status"></div>
+</section>
+
+<section id="app" class="hidden">
+  <div class="top">
+    <div><div class="eyebrow">ESPACIO 6.º · GESTIÓN ACADÉMICA</div><h1>Curso y accesos</h1><p class="muted">Curso → grupo → materia → profesor → actividad.</p></div>
+    <div class="actions">
+      <button class="light" onclick="location.href='index.html'">← Área docente</button>
+      <button class="light" onclick="loadState()">↻ Actualizar</button>
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="card stat"><small>PROFESORES</small><b id="nTeachers">0</b></div>
+    <div class="card stat"><small>GRUPOS</small><b id="nGroups">0</b></div>
+    <div class="card stat"><small>ACTIVIDADES</small><b id="nActivities">0</b></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="courses">🏫 Cursos y grupos</button>
+    <button class="tab" data-tab="teachers">👨‍🏫 Profesores</button>
+    <button class="tab" data-tab="assign">🧩 Asignaciones</button>
+    <button class="tab" data-tab="activities">📚 Actividades</button>
+    <button class="tab" data-tab="students">👥 Alumnado</button>
+  </div>
+
+  <div id="courses" class="panel active">
+    <div class="grid">
+      <div class="card section"><h2>Nuevo curso</h2>
+        <div class="formgrid"><div class="wide"><label>Curso escolar</label><input id="yearLabel" value="2026-2027"></div>
+        <div><label>Activo</label><select id="yearActive"><option value="1">Sí</option><option value="0">No</option></select></div>
+        <button class="primary" onclick="saveYear()">Guardar</button></div>
+        <div id="yearsList" class="list"></div>
+      </div>
+      <div class="card section"><h2>Nuevo grupo</h2>
+        <div class="formgrid"><div class="wide"><label>Curso</label><select id="groupYear"></select></div>
+        <div><label>Grupo</label><input id="groupName" placeholder="6.º A"></div><button class="primary" onclick="saveGroup()">Añadir</button></div>
+        <div id="groupsList" class="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="teachers" class="panel">
+    <div class="card section"><h2>Profesores</h2>
+      <div class="formgrid">
+        <div class="wide"><label>Nombre</label><input id="teacherName" placeholder="Nombre del profesor"></div>
+        <div><label>Clave propia</label><input id="teacherKey" placeholder="mín. 6 caracteres"></div>
+        <button class="primary" onclick="saveTeacher()">Crear profesor</button>
+      </div>
+      <p class="muted">La clave se guarda como hash. Después no se puede consultar; solo sustituirla por otra.</p>
+      <div id="teachersList" class="list"></div>
+    </div>
+  </div>
+
+  <div id="assign" class="panel">
+    <div class="card section"><h2>Profesor · grupo · materia</h2>
+      <div class="formgrid">
+        <div><label>Profesor</label><select id="asTeacher"></select></div>
+        <div><label>Grupo</label><select id="asGroup"></select></div>
+        <div><label>Materia</label><select id="asSubject"></select></div>
+        <button class="primary" onclick="saveAssignment()">Asignar</button>
+      </div>
+      <div id="assignmentsList" class="list"></div>
+    </div>
+  </div>
+
+  <div id="activities" class="panel">
+    <div class="grid">
+      <div class="card section"><h2>Registrar actividad</h2>
+        <button class="light" onclick="syncActivities()">↻ Detectar actividades con resultados</button>
+        <br><br>
+        <label>ID de actividad</label><input id="actId" placeholder="laboratorio-potencias">
+        <label>Título</label><input id="actTitle" placeholder="Laboratorio de Potencias">
+        <label>Materia</label><select id="actSubject"></select>
+        <br><button class="primary" onclick="saveActivity()">Guardar actividad</button>
+        <div id="activitiesList" class="list"></div>
+      </div>
+      <div class="card section"><h2>Permisos de actividad</h2>
+        <label>Actividad</label><select id="accessActivity" onchange="renderAccess()"></select>
+        <h3>Grupos</h3><div id="accessGroups" class="checkbox-grid"></div>
+        <h3>Profesores</h3><div id="accessTeachers" class="checkbox-grid"></div>
+        <br><button class="primary" onclick="saveAccess()">Guardar permisos</button>
+        <p class="muted">Para que un profesor vea resultados, la actividad debe estar asignada al profesor y al grupo, y el profesor debe tener ese grupo en sus asignaciones.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="students" class="panel">
+    <div class="card section"><h2>Alumnado</h2><p class="muted">Los 25 códigos oficiales de 6.º B ya quedan asociados al grupo. 6.º A podrá incorporarse cuando tengamos su listado.</p>
+      <div id="studentsList" class="list"></div>
+    </div>
+  </div>
+  <div id="status" class="status"></div>
+</section>
+</div>
+<script>
+const WORKER="https://espacio-sexto-resultados.javigr77.workers.dev";
+let KEY="",S={years:[],groups:[],subjects:[],teachers:[],assignments:[],activities:[],activityGroups:[],activityTeachers:[],students:[]};
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+async function api(path,opt={}){
+  const r=await fetch(WORKER+path,{...opt,headers:{"X-Teacher-Key":KEY,"Content-Type":"application/json",...(opt.headers||{})}});
+  let d={};try{d=await r.json()}catch{}
+  if(!r.ok)throw new Error(d.error||d.detail||("Error "+r.status));
+  return d;
+}
+async function enter(){
+  KEY=$("key").value.trim(); $("loginMsg").textContent="Conectando...";
+  try{await loadState();$("login").classList.add("hidden");$("app").classList.remove("hidden");}
+  catch(e){$("loginMsg").textContent="No autorizado: "+e.message}
+}
+async function loadState(){
+  const d=await api("/api/admin/academic/state");
+  S=d; renderAll();
+}
+function renderAll(){
+  $("nTeachers").textContent=S.teachers.length;$("nGroups").textContent=S.groups.length;$("nActivities").textContent=S.activities.length;
+  $("groupYear").innerHTML=S.years.map(x=>`<option value="${x.id}">${esc(x.label)}</option>`).join("");
+  $("asTeacher").innerHTML=S.teachers.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+  $("asGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
+  const subopts=S.subjects.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+  $("asSubject").innerHTML=subopts;$("actSubject").innerHTML='<option value="">Sin materia</option>'+subopts;
+  $("accessActivity").innerHTML=S.activities.filter(x=>x.active).map(x=>`<option value="${esc(x.activity_id)}">${esc(x.title)}</option>`).join("");
+
+  $("yearsList").innerHTML=S.years.map(x=>`<div class="item"><div><b>${esc(x.label)}</b><br><small>${x.active?"Activo":"Archivado"}</small></div></div>`).join("");
+  $("groupsList").innerHTML=S.groups.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${esc(x.year_label)}</small></div></div>`).join("");
+  $("teachersList").innerHTML=S.teachers.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${x.active?"Activo":"Desactivado"} · clave privada</small></div><button class="light" onclick='resetTeacher(${JSON.stringify(x.id)},${JSON.stringify(x.name)})'>Cambiar clave</button></div>`).join("");
+  $("assignmentsList").innerHTML=S.assignments.map(x=>`<div class="item"><div><b>${esc(x.teacher_name)}</b> <span class="pill">${esc(x.group_name)}</span> <span class="pill">${esc(x.subject_name)}</span></div><button class="danger" onclick='deleteAssignment(${JSON.stringify(x.id)})'>Quitar</button></div>`).join("");
+  $("activitiesList").innerHTML=S.activities.map(x=>`<div class="item"><div><b>${esc(x.title)}</b><br><small>${esc(x.activity_id)}${x.subject_name?" · "+esc(x.subject_name):""}</small></div></div>`).join("");
+  $("studentsList").innerHTML=S.students.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${esc(x.code)} · ${esc(x.group_name||"Sin grupo")}</small></div></div>`).join("");
+  renderAccess();
+}
+function renderAccess(){
+  const aid=$("accessActivity").value;
+  const gids=new Set(S.activityGroups.filter(x=>x.activity_id===aid).map(x=>x.group_id));
+  const tids=new Set(S.activityTeachers.filter(x=>x.activity_id===aid).map(x=>x.teacher_id));
+  $("accessGroups").innerHTML=S.groups.filter(x=>x.active).map(x=>`<label class="check"><input type="checkbox" name="ag" value="${x.id}" ${gids.has(x.id)?"checked":""}> ${esc(x.name)}</label>`).join("");
+  $("accessTeachers").innerHTML=S.teachers.filter(x=>x.active).map(x=>`<label class="check"><input type="checkbox" name="at" value="${x.id}" ${tids.has(x.id)?"checked":""}> ${esc(x.name)}</label>`).join("");
+}
+async function saveYear(){try{await api("/api/admin/academic/year",{method:"POST",body:JSON.stringify({label:$("yearLabel").value,active:$("yearActive").value==="1"})});await loadState();ok("Curso guardado.")}catch(e){bad(e)}}
+async function saveGroup(){try{await api("/api/admin/academic/group",{method:"POST",body:JSON.stringify({schoolYearId:$("groupYear").value,name:$("groupName").value,active:true})});$("groupName").value="";await loadState();ok("Grupo añadido.")}catch(e){bad(e)}}
+async function saveTeacher(){try{await api("/api/admin/academic/teacher",{method:"POST",body:JSON.stringify({name:$("teacherName").value,accessKey:$("teacherKey").value,role:"teacher",active:true})});$("teacherName").value="";$("teacherKey").value="";await loadState();ok("Profesor creado.")}catch(e){bad(e)}}
+async function resetTeacher(id,name){const k=prompt("Nueva clave para "+name+" (mínimo 6 caracteres):");if(!k)return;try{await api("/api/admin/academic/teacher",{method:"POST",body:JSON.stringify({id,name,accessKey:k,role:"teacher",active:true})});ok("Clave actualizada.")}catch(e){bad(e)}}
+async function saveAssignment(){try{await api("/api/admin/academic/assignment",{method:"POST",body:JSON.stringify({teacherId:$("asTeacher").value,groupId:$("asGroup").value,subjectId:$("asSubject").value})});await loadState();ok("Asignación guardada.")}catch(e){bad(e)}}
+async function deleteAssignment(id){try{await api("/api/admin/academic/assignment?id="+encodeURIComponent(id),{method:"DELETE"});await loadState();ok("Asignación eliminada.")}catch(e){bad(e)}}
+async function saveActivity(){try{await api("/api/admin/academic/activity",{method:"POST",body:JSON.stringify({activityId:$("actId").value,title:$("actTitle").value,subjectId:$("actSubject").value||null,active:true})});$("actId").value="";$("actTitle").value="";await loadState();ok("Actividad guardada.")}catch(e){bad(e)}}
+async function syncActivities(){try{await api("/api/admin/academic/sync-attempt-activities",{method:"POST",body:"{}"});await loadState();ok("Actividades detectadas desde los resultados.")}catch(e){bad(e)}}
+async function saveAccess(){try{
+  const activityId=$("accessActivity").value;
+  const groupIds=[...document.querySelectorAll('input[name="ag"]:checked')].map(x=>x.value);
+  const teacherIds=[...document.querySelectorAll('input[name="at"]:checked')].map(x=>x.value);
+  await api("/api/admin/academic/activity-access",{method:"POST",body:JSON.stringify({activityId,groupIds,teacherIds})});
+  await loadState();ok("Permisos actualizados.");
+}catch(e){bad(e)}}
+function ok(t){$("status").className="status ok";$("status").textContent="✓ "+t}
+function bad(e){$("status").className="status bad";$("status").textContent="Error: "+(e.message||e)}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");$(b.dataset.tab).classList.add("active");
+});
+</script>
+</body></html>

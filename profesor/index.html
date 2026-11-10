@@ -24,7 +24,7 @@ body{
 .eyebrow{font-size:.78rem;letter-spacing:.14em;font-weight:950;color:#5b59d6}
 h1{font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.05em;line-height:.95;margin:10px 0 14px}
 .lead{font-size:1.08rem;color:#667085;max-width:650px;line-height:1.6}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
 .card{
   display:block;text-decoration:none;color:inherit;background:rgba(255,255,255,.95);
   border:1px solid #e3e8f2;border-radius:26px;padding:26px;
@@ -37,7 +37,7 @@ h1{font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.05em;line-height:.95;margin
   font-size:2rem;margin-bottom:22px
 }
 .results .icon{background:#e9efff}
-.publish .icon{background:#e9fff5}
+.publish .icon{background:#e9fff5}.manage .icon{background:#fff3df}
 .card h2{font-size:1.6rem;margin:0 0 8px}
 .card p{margin:0;color:#6b7280;line-height:1.55}
 .arrow{display:inline-block;margin-top:24px;font-weight:950;color:#5046d8}
@@ -66,12 +66,19 @@ h1{font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.05em;line-height:.95;margin
     <a class="card publish" href="publicador.html">
       <div class="icon">🚀</div>
       <h2>Publicar actividad</h2>
-      <p>Sube nuevos HTML, actualiza el catálogo, destaca recursos y gestiona lo ya publicado.</p>
+      <p>Sube nuevos HTML, paquetes ZIP, actualiza el catálogo y gestiona lo publicado.</p>
       <span class="arrow">Abrir publicador →</span>
+    </a>
+
+    <a class="card manage" href="gestion.html">
+      <div class="icon">🏫</div>
+      <h2>Gestión académica</h2>
+      <p>Organiza cursos, grupos, profesores, materias y permisos de las actividades.</p>
+      <span class="arrow">Gestionar curso →</span>
     </a>
   </section>
 
-  <div class="note">🔐 Ambos accesos utilizan tu clave docente. El token de GitHub no se incluye en la página pública.</div>
+  <div class="note">🔐 La gestión y publicación requieren la clave de administrador. Los profesores invitados usan su propia clave para consultar sus resultados. El token de GitHub no se incluye en la página pública.</div>
 </main>
 </body>
 </html>
