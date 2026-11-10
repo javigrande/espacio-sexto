@@ -125,22 +125,22 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
         <input id="studentOriginalCode" type="hidden">
         <div class="formgrid">
           <div class="wide"><label>Nombre y apellidos</label><input id="studentName" placeholder="Apellidos, Nombre"></div>
-          <div><label>Código</label><input id="studentCode" placeholder="6A-K4P7"></div>
+          <div><label>Código <small class="muted">(opcional)</small></label><input id="studentCode" placeholder="Se genera automáticamente"></div>
           <div><label>Grupo</label><select id="studentGroup"></select></div>
         </div>
         <br><div class="actions">
           <button class="primary" onclick="saveStudent()">Guardar alumno</button>
           <button class="light" onclick="clearStudentForm()">Limpiar</button>
         </div>
-        <p class="muted">El código debe coincidir con el grupo. TEST-001 queda reservado para pruebas.</p>
+        <p class="muted">Si dejas el código vacío, Espacio 6.º generará uno único automáticamente según el grupo. TEST-001 queda reservado para pruebas.</p>
       </div>
 
       <div class="card section">
         <h2>Importación masiva</h2>
         <label>Grupo de destino</label><select id="bulkGroup"></select><br><br>
         <label>Pegar lista</label>
-        <textarea id="bulkText" style="width:100%;min-height:180px;padding:12px;border:1px solid #d6deea;border-radius:11px;font:inherit" placeholder="Nombre;Código&#10;Ana Pérez;6A-K4P7&#10;Lucas Martín;6A-R8M2"></textarea>
-        <p class="muted">Admite <b>Nombre;Código</b> o <b>Nombre;Código;Grupo</b>.</p>
+        <textarea id="bulkText" style="width:100%;min-height:180px;padding:12px;border:1px solid #d6deea;border-radius:11px;font:inherit" placeholder="Nombre&#10;Arias Arnáeza, Lucía&#10;Cardoso Santamaría, Laia&#10;Casique Neira, Álvaro Jese"></textarea>
+        <p class="muted">Lo más sencillo: pega <b>un alumno por línea</b> y selecciona el grupo. Los códigos se generan automáticamente. También admite Nombre;Código o Nombre;Código;Grupo si ya dispones de códigos.</p>
         <div class="actions">
           <button class="primary" onclick="previewBulk()">Revisar lista</button>
           <button class="light" onclick="document.getElementById('csvFile').click()">Importar CSV</button>
@@ -263,33 +263,62 @@ function parseBulkText(text,defaultGroupId){
   const groupByName=new Map(S.groups.map(g=>[String(g.name).trim().toLowerCase(),g.id]));
   const lines=String(text||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
   const rows=[],errors=[],seen=new Set();
+
   lines.forEach((line,idx)=>{
-    const parts=line.split(/[;\t]/).map(x=>x.trim());
-    if(idx===0&&/nombre/i.test(parts[0]||"")&&/c[oó]digo/i.test(parts[1]||""))return;
-    if(parts.length<2){errors.push(`Línea ${idx+1}: faltan columnas`);return}
-    const name=parts[0],code=normalizeCode(parts[1]);
-    let groupId=defaultGroupId;
-    if(parts[2]){
-      const raw=parts[2].trim();
-      groupId=(S.groups.find(g=>g.id===raw)?.id)||groupByName.get(raw.toLowerCase())||"";
+    let parts=line.split(/[;\t]/).map(x=>x.trim());
+
+    if(idx===0 && /^nombre/i.test(parts[0]||"")) return;
+
+    // Una sola columna = nombre; el código se genera automáticamente.
+    if(parts.length===1){
+      const name=parts[0];
+      const group=S.groups.find(g=>g.id===defaultGroupId);
+      if(!name){errors.push(`Línea ${idx+1}: falta nombre`);return}
+      if(!group){errors.push(`Línea ${idx+1}: selecciona un grupo`);return}
+      rows.push({name,code:null,groupId:group.id,groupName:group.name});
+      return;
     }
+
+    const name=parts[0];
+    let code=null;
+    let groupId=defaultGroupId;
+
+    // Nombre;Código
+    if(parts[1] && /^6[AB][\s\-–—]/i.test(parts[1])){
+      code=normalizeCode(parts[1]);
+      if(parts[2]){
+        const raw=parts[2];
+        groupId=(S.groups.find(g=>g.id===raw)?.id)||groupByName.get(raw.toLowerCase())||"";
+      }
+    }else{
+      // Nombre;Grupo
+      const raw=parts[1]||"";
+      groupId=(S.groups.find(g=>g.id===raw)?.id)||groupByName.get(raw.toLowerCase())||defaultGroupId;
+    }
+
     if(!name){errors.push(`Línea ${idx+1}: falta nombre`);return}
-    if(!/^6[AB]-[A-Z0-9]{4,8}$/.test(code)){errors.push(`Línea ${idx+1}: código no válido (${code||"vacío"})`);return}
-    if(seen.has(code)){errors.push(`Código duplicado: ${code}`);return}
-    seen.add(code);
     const group=S.groups.find(g=>g.id===groupId);
     if(!group){errors.push(`Línea ${idx+1}: grupo no reconocido`);return}
-    if(code.startsWith("6A-")&&group.name!=="6.º A"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
-    if(code.startsWith("6B-")&&group.name!=="6.º B"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
+
+    if(code){
+      if(!/^6[AB]-[A-Z0-9]{4,8}$/.test(code)){errors.push(`Línea ${idx+1}: código no válido (${code})`);return}
+      if(seen.has(code)){errors.push(`Código duplicado: ${code}`);return}
+      seen.add(code);
+      if(code.startsWith("6A-")&&group.name!=="6.º A"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
+      if(code.startsWith("6B-")&&group.name!=="6.º B"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
+    }
+
     rows.push({name,code,groupId,groupName:group.name});
   });
+
   return {rows,errors};
 }
+
 function previewBulk(){
   const p=parseBulkText(bulkText.value,bulkGroup.value);
   BULK_ROWS=p.errors.length?[]:p.rows;
   if(p.errors.length){bulkPreview.className="status bad";bulkPreview.textContent=p.errors.join("\n");bulkImportBtn.classList.add("hidden");return}
-  bulkPreview.className="status ok";bulkPreview.textContent=`✓ ${p.rows.length} alumnos preparados:\n`+p.rows.map(r=>`${r.name} · ${r.code} · ${r.groupName}`).join("\n");
+  bulkPreview.className="status ok";bulkPreview.textContent=`✓ ${p.rows.length} alumnos preparados:\n`+p.rows.map(r=>`${r.name} · ${r.code||"código automático"} · ${r.groupName}`).join("\n");
   bulkImportBtn.classList.remove("hidden");
 }
 async function importBulk(){
@@ -297,7 +326,9 @@ async function importBulk(){
   try{
     const d=await api("/api/admin/academic/students-import",{method:"POST",body:JSON.stringify({students:BULK_ROWS})});
     bulkText.value="";bulkPreview.textContent="";bulkImportBtn.classList.add("hidden");BULK_ROWS=[];
-    await loadState();ok(`${d.imported} alumnos importados.`);
+    await loadState();
+    const generated=(d.students||[]).map(s=>`${s.name}: ${s.code}`).join("\n");
+    ok(`${d.imported} alumnos importados.\n\nCódigos generados:\n${generated}`);
   }catch(e){bad(e)}
 }
 function loadCSV(ev){
@@ -305,7 +336,7 @@ function loadCSV(ev){
   const rd=new FileReader();rd.onload=()=>{bulkText.value=String(rd.result||"");previewBulk()};rd.readAsText(f,"utf-8");ev.target.value="";
 }
 function downloadStudentTemplate(){
-  const csv="Nombre;Código;Grupo\nAna Pérez;6A-K4P7;6.º A\nLucas Martín;6A-R8M2;6.º A\n";
+  const csv="Nombre\nArias Arnáeza, Lucía\nCardoso Santamaría, Laia\nCasique Neira, Álvaro Jese\n";
   const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="plantilla_alumnado_espacio6.csv";a.click();URL.revokeObjectURL(a.href);
 }
