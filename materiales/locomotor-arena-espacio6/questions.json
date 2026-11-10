@@ -1,0 +1,310 @@
+[
+  {
+    "m": "Sistema locomotor",
+    "q": "¿Qué dos sistemas forman el aparato locomotor?",
+    "o": [
+      "Esquelético y muscular",
+      "Digestivo y respiratorio",
+      "Nervioso y circulatorio",
+      "Muscular y digestivo"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Sistema locomotor",
+    "q": "¿De qué está formado el sistema esquelético?",
+    "o": [
+      "Huesos y articulaciones",
+      "Músculos y tendones",
+      "Ligamentos y nervios",
+      "Huesos y músculos"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Sistema locomotor",
+    "q": "Según el texto, ¿cuántos huesos tiene aproximadamente el esqueleto humano?",
+    "o": [
+      "206",
+      "650",
+      "120",
+      "350"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Tipos de huesos",
+    "q": "¿Qué tipo de hueso es la tibia?",
+    "o": [
+      "Largo",
+      "Corto",
+      "Plano",
+      "Cartilaginoso"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Tipos de huesos",
+    "q": "¿Qué tipo de hueso es una vértebra?",
+    "o": [
+      "Corto",
+      "Largo",
+      "Plano",
+      "Muscular"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Tipos de huesos",
+    "q": "¿Qué tipo de huesos son los del cráneo y la escápula?",
+    "o": [
+      "Planos",
+      "Cortos",
+      "Largos",
+      "Móviles"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Articulaciones",
+    "q": "¿Qué tipo de articulación permite movimiento, como la rodilla?",
+    "o": [
+      "Móvil",
+      "Semimóvil",
+      "Fija",
+      "Cartilaginosa"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Articulaciones",
+    "q": "¿Qué tipo de articulación permite pequeños movimientos, como las vértebras?",
+    "o": [
+      "Semimóvil",
+      "Móvil",
+      "Fija",
+      "Ósea"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Articulaciones",
+    "q": "¿Qué tipo de articulación son las suturas del cráneo?",
+    "o": [
+      "Fijas",
+      "Móviles",
+      "Semimóviles",
+      "Elásticas"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Huesos del cuerpo",
+    "q": "¿Qué hueso está en el brazo, entre hombro y codo?",
+    "o": [
+      "Húmero",
+      "Radio",
+      "Cúbito",
+      "Fémur"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Huesos del cuerpo",
+    "q": "¿Qué hueso se localiza en el muslo?",
+    "o": [
+      "Fémur",
+      "Tibia",
+      "Peroné",
+      "Rótula"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Huesos del cuerpo",
+    "q": "¿Cuál de estos huesos está en la pierna?",
+    "o": [
+      "Tibia",
+      "Clavícula",
+      "Esternón",
+      "Mandíbula"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Huesos del cuerpo",
+    "q": "¿Qué hueso protege la parte anterior del tórax y aparece en el centro del pecho?",
+    "o": [
+      "Esternón",
+      "Omóplato",
+      "Radio",
+      "Frontal"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Huesos del cuerpo",
+    "q": "¿Qué huesos forman la columna vertebral?",
+    "o": [
+      "Vértebras",
+      "Costillas",
+      "Clavículas",
+      "Rótulas"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Huesos del cuerpo",
+    "q": "¿Qué hueso se encuentra en la rodilla?",
+    "o": [
+      "Rótula",
+      "Peroné",
+      "Cúbito",
+      "Omóplato"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Sistema muscular",
+    "q": "¿Qué estructuras permiten mover el esqueleto y están sujetas a los huesos por tendones?",
+    "o": [
+      "Músculos",
+      "Ligamentos",
+      "Articulaciones",
+      "Cartílagos"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Sistema muscular",
+    "q": "¿Cuántos músculos estriados tiene aproximadamente el cuerpo humano según el texto?",
+    "o": [
+      "Unos 650",
+      "Unos 206",
+      "Unos 80",
+      "Unos 1.500"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Músculos del cuerpo",
+    "q": "¿Qué músculo se encuentra en la parte anterior del brazo?",
+    "o": [
+      "Bíceps",
+      "Tríceps",
+      "Gemelo",
+      "Trapecio"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Músculos del cuerpo",
+    "q": "¿Qué músculo está en la parte posterior del brazo y trabaja de forma opuesta al bíceps?",
+    "o": [
+      "Tríceps",
+      "Pectoral",
+      "Deltoides",
+      "Frontal"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Músculos del cuerpo",
+    "q": "¿Qué músculo aparece señalado en la pantorrilla?",
+    "o": [
+      "Gemelo",
+      "Cuádriceps",
+      "Abdominal",
+      "Pectoral"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Músculos del cuerpo",
+    "q": "¿Qué músculo está en la parte anterior del muslo?",
+    "o": [
+      "Cuádriceps",
+      "Gemelo",
+      "Bíceps",
+      "Trapecio"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Músculos del cuerpo",
+    "q": "¿Qué músculo está en el pecho?",
+    "o": [
+      "Pectoral",
+      "Deltoides",
+      "Temporal",
+      "Orbicular de los párpados"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Músculos del cuerpo",
+    "q": "¿Qué músculo está en la zona del hombro?",
+    "o": [
+      "Deltoides",
+      "Abdominal",
+      "Gemelo",
+      "Frontal"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Tendones y ligamentos",
+    "q": "¿Cuál es la función principal de los tendones?",
+    "o": [
+      "Unir músculos a huesos",
+      "Unir huesos entre sí",
+      "Formar células musculares",
+      "Proteger órganos"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Tendones y ligamentos",
+    "q": "¿Qué estructuras unen los huesos de las articulaciones y ayudan a estabilizarlas?",
+    "o": [
+      "Ligamentos",
+      "Tendones",
+      "Músculos",
+      "Nervios"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Tendones y ligamentos",
+    "q": "¿Qué tendón une los músculos de la pantorrilla con los huesos del pie?",
+    "o": [
+      "Tendón de Aquiles",
+      "Ligamento del hombro",
+      "Tendón rotuliano",
+      "Tendón frontal"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Prevención",
+    "q": "¿Qué es la tendinitis según el texto?",
+    "o": [
+      "Inflamación de un tendón",
+      "Rotura de un hueso",
+      "Inflamación de un músculo",
+      "Desgaste de una articulación"
+    ],
+    "a": 0
+  },
+  {
+    "m": "Prevención",
+    "q": "¿Qué ayuda a prevenir lesiones del sistema locomotor?",
+    "o": [
+      "Estiramientos y deporte regular adecuado",
+      "Evitar todo movimiento",
+      "Solo descansar",
+      "Hacer esfuerzos máximos sin calentar"
+    ],
+    "a": 0
+  }
+]

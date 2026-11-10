@@ -1,0 +1,20 @@
+
+const WORKER="https://espacio-sexto-resultados.javigr77.workers.dev/api/attempts";
+const ACTIVITY_ID="ccnn-aparato-locomotor-huesos-musculos";
+const ACTIVITY_TITLE="Locomotor Arena · Huesos, músculos, articulaciones y tendones";
+const $=s=>document.querySelector(s);
+let Q=[],mode="practice",idx=0,answers=[],started=null,studentCode="",group="",xp=0,combo=0,bestCombo=0;
+async function init(){Q=await fetch("questions.json").then(r=>r.json());mode=document.body.dataset.mode||"practice";$("#total").textContent=Q.length;if(mode==="evaluation")$("#identity").classList.remove("hidden");else startQuiz()}
+function startEvaluation(){const v=window.ESPACIO6_validateStudent($("#studentCode").value,$("#group").value);$("#identityMsg").textContent="";if(!v.ok){$("#identityMsg").textContent=v.error;return}studentCode=v.code;group=v.group;$("#identity").classList.add("hidden");startQuiz()}
+function startQuiz(){started=new Date().toISOString();$("#quiz").classList.remove("hidden");render()}
+function render(){const q=Q[idx];$("#mission").textContent=q.m;$("#qnum").textContent=idx+1;$("#bar").style.width=(idx/Q.length*100)+"%";$("#question").textContent=q.q;$("#options").innerHTML="";$("#next").disabled=true;$("#feedback").textContent="";
+q.o.forEach((t,i)=>{const b=document.createElement("button");b.className="opt";b.textContent=String.fromCharCode(65+i)+". "+t;b.onclick=()=>choose(i);$("#options").appendChild(b)});hud()}
+function choose(i){answers[idx]=i;[...document.querySelectorAll(".opt")].forEach((b,n)=>b.classList.toggle("sel",n===i));$("#next").disabled=false;
+if(mode==="practice"){const q=Q[idx],ok=i===q.a;[...document.querySelectorAll(".opt")].forEach((b,n)=>{b.disabled=true;if(n===q.a)b.classList.add("ok");if(n===i&&!ok)b.classList.add("bad")});if(ok){combo++;bestCombo=Math.max(bestCombo,combo);xp+=100+Math.min(combo*10,60);$("#feedback").textContent="✓ Correcto";$("#feedback").className="feedback good"}else{combo=0;$("#feedback").textContent="✗ Revisa el contenido antes de continuar";$("#feedback").className="feedback badmsg"}hud()}}
+function nextQ(){if(answers[idx]===undefined)return;if(mode==="evaluation"){if(answers[idx]===Q[idx].a){combo++;bestCombo=Math.max(bestCombo,combo);xp+=100+Math.min(combo*10,60)}else combo=0}idx++;idx>=Q.length?finish():render()}
+function hud(){$("#xp").textContent=xp;$("#combo").textContent=combo}
+async function finish(){const correct=answers.reduce((n,a,i)=>n+(a===Q[i].a?1:0),0),acc=Math.round(correct/Q.length*100),score=Math.round(correct/Q.length*100)/10;$("#quiz").classList.add("hidden");$("#result").classList.remove("hidden");$("#rCorrect").textContent=correct+"/"+Q.length;$("#rAcc").textContent=acc+"%";$("#rScore").textContent=score.toFixed(1).replace(".",",");$("#rXp").textContent=xp;$("#rank").textContent=acc>=95?"S+":acc>=90?"S":acc>=80?"A":acc>=70?"B":acc>=60?"C":"D";
+if(mode==="evaluation"){const events=Q.map((q,i)=>({type:"answer",questionNumber:i+1,mission:q.m,question:q.q,answer:q.o[answers[i]],expected:q.o[q.a],correct:answers[i]===q.a}));const payload={activityId:ACTIVITY_ID,activityTitle:ACTIVITY_TITLE,studentCode,group,startedAtIso:started,finishedAtIso:new Date().toISOString(),finished:true,xp,comboBest:bestCombo,correct,answered:answers.filter(x=>x!==undefined).length,accuracy:acc,score10:score,stage:7,events};send(payload)}}
+async function send(payload){const s=$("#saveState");s.textContent="Guardando resultado…";try{const k="attempt_"+ACTIVITY_ID+"_"+studentCode+"_"+started;if(sessionStorage.getItem(k)==="sent"){s.textContent="✓ Resultado ya registrado";s.className="feedback good";return}const r=await fetch(WORKER,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});if(!r.ok)throw 0;sessionStorage.setItem(k,"sent");s.textContent="✓ Resultado registrado correctamente";s.className="feedback good"}catch{window._pending=payload;s.textContent="No se ha podido registrar el resultado. No cierres esta página y avisa al profesor.";s.className="feedback badmsg";$("#retry").classList.remove("hidden")}}
+function retrySend(){if(window._pending)send(window._pending)}
+window.addEventListener("DOMContentLoaded",init);

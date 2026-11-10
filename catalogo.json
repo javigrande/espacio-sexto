@@ -4,6 +4,17 @@
     "materia": "Matemáticas",
     "tiempo": "15 min",
     "fecha": "2026-11-10",
+    "titulo": "Locomotor Arena",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/locomotor-arena-espacio6/index.html",
+    "destacado": false
+  },
+  {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-10",
     "titulo": "Mision Numerales · Práctica",
     "tipo": "Repaso",
     "icono": "🧪",
