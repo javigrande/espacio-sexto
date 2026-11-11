@@ -1,0 +1,222 @@
+[
+  {
+    "mission": "Clasifica",
+    "q": "En «Marta compró seis peras», ¿qué tipo de numeral es «seis»?",
+    "o": [
+      "Cardinal",
+      "Ordinal",
+      "Indefinido",
+      "No es numeral"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Clasifica",
+    "q": "En «Se alquila el séptimo piso», ¿qué tipo de numeral es «séptimo»?",
+    "o": [
+      "Cardinal",
+      "Ordinal",
+      "Indefinido",
+      "Colectivo"
+    ],
+    "a": 1
+  },
+  {
+    "mission": "Clasifica",
+    "q": "En «Jaime quedó en quinto puesto», ¿qué tipo de numeral es «quinto»?",
+    "o": [
+      "Cardinal",
+      "Ordinal",
+      "Indefinido",
+      "Partitivo"
+    ],
+    "a": 1
+  },
+  {
+    "mission": "Clasifica",
+    "q": "En «El local tenía un aforo de ochenta personas», ¿qué tipo de numeral es «ochenta»?",
+    "o": [
+      "Ordinal",
+      "Cardinal",
+      "Indefinido",
+      "Multiplicativo"
+    ],
+    "a": 1
+  },
+  {
+    "mission": "Completa ordinales",
+    "q": "¿Qué ordinal corresponde a 3.º?",
+    "o": [
+      "tercero",
+      "trece",
+      "tercer",
+      "trigésimo"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Completa ordinales",
+    "q": "¿Qué ordinal corresponde a 6.º?",
+    "o": [
+      "sexto",
+      "seis",
+      "séptimo",
+      "decimosexto"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Completa ordinales",
+    "q": "¿Qué ordinal corresponde a 8.º?",
+    "o": [
+      "octavo",
+      "ocho",
+      "octogésimo",
+      "decimoctavo"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Completa ordinales",
+    "q": "¿Qué ordinal corresponde a 14.º?",
+    "o": [
+      "decimocuarto",
+      "cuadragésimo",
+      "catorce",
+      "decimoquinto"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Completa ordinales",
+    "q": "¿Qué ordinal corresponde a 15.º?",
+    "o": [
+      "decimoquinto",
+      "quincuagésimo",
+      "quince",
+      "decimosexto"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Completa ordinales",
+    "q": "¿Qué ordinal corresponde a 19.º?",
+    "o": [
+      "decimonoveno",
+      "noveno",
+      "diecinueve",
+      "vigésimo"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Ordinal ↔ cardinal",
+    "q": "¿Qué cardinal corresponde a «vigesimocuarto»?",
+    "o": [
+      "24",
+      "42",
+      "14",
+      "40"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Ordinal ↔ cardinal",
+    "q": "¿Qué cardinal corresponde a «decimoquinto»?",
+    "o": [
+      "15",
+      "50",
+      "25",
+      "12"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Ordinal ↔ cardinal",
+    "q": "¿Qué cardinal corresponde a «cuadragésimo sexto»?",
+    "o": [
+      "46",
+      "64",
+      "36",
+      "56"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Ordinal ↔ cardinal",
+    "q": "¿Qué cardinal corresponde a «quincuagésimo cuarto»?",
+    "o": [
+      "54",
+      "45",
+      "44",
+      "50"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Función",
+    "q": "En «La primera de las pruebas consistirá en una carrera de sacos», ¿qué función cumple «primera»?",
+    "o": [
+      "Núcleo",
+      "Determinante",
+      "Complemento",
+      "No forma parte del sintagma nominal"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Función",
+    "q": "En «Es la tercera vez que visito este museo», ¿qué función cumple «tercera»?",
+    "o": [
+      "Determinante",
+      "Núcleo",
+      "Complemento",
+      "Atributo"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Función",
+    "q": "En «Sandra entrena cinco días a la semana», ¿qué función cumple «cinco»?",
+    "o": [
+      "Determinante",
+      "Núcleo",
+      "Complemento",
+      "Sujeto"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Función",
+    "q": "En «Os quedan quince minutos para entregar el examen», ¿qué función cumple «quince»?",
+    "o": [
+      "Determinante",
+      "Núcleo",
+      "Complemento",
+      "Predicado"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Función",
+    "q": "En «Cogí uno», ¿qué función cumple el numeral?",
+    "o": [
+      "Núcleo",
+      "Determinante",
+      "Complemento",
+      "Atributo"
+    ],
+    "a": 0
+  },
+  {
+    "mission": "Función",
+    "q": "En «La quinta fila», ¿qué función cumple «quinta»?",
+    "o": [
+      "Complemento",
+      "Núcleo",
+      "Determinante",
+      "Sujeto"
+    ],
+    "a": 0
+  }
+]

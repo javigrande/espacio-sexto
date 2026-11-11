@@ -3,6 +3,17 @@
     "descripcion": "",
     "materia": "Matemáticas",
     "tiempo": "15 min",
+    "fecha": "2026-11-11",
+    "titulo": "Mision Numerales",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/mision-numerales-espacio6-respuestas-aleatorias-1/index.html",
+    "destacado": false
+  },
+  {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
     "fecha": "2026-11-10",
     "titulo": "El aparato locomotor",
     "tipo": "Evaluación",
