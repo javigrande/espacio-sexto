@@ -1,5 +1,16 @@
 [
   {
+    "titulo": "COMPARA - CONTRASTA",
+    "descripcion": "",
+    "materia": "CCNN",
+    "tipo": "Actividad",
+    "icono": "🎯",
+    "tiempo": "10 min",
+    "destacado": true,
+    "fecha": "2026-11-11",
+    "archivo": "materiales/compara-contrasta.html"
+  },
+  {
     "descripcion": "",
     "materia": "Matemáticas",
     "tiempo": "15 min",
