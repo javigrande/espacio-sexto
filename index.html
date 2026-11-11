@@ -201,5 +201,15 @@
 }
 </style>
 
+
+<script>
+document.addEventListener("click", function(e){
+  const a=e.target.closest('a[href*="materiales/"]');
+  if(!a) return;
+  a.setAttribute("target","_blank");
+  a.setAttribute("rel","noopener noreferrer");
+}, true);
+</script>
+
 </body>
 </html>
