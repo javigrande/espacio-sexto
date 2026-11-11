@@ -77,11 +77,19 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
     <div class="card section"><h2>Profesores</h2>
       <div class="formgrid">
         <div class="wide"><label>Nombre</label><input id="teacherName" placeholder="Nombre del profesor"></div>
-        <div><label>Clave propia</label><input id="teacherKey" placeholder="mín. 6 caracteres"></div>
-        <button class="primary" onclick="saveTeacher()">Crear profesor</button>
+        <div><label>PIN</label><input id="teacherKey" placeholder="Automático" readonly></div>
+        <button class="primary" onclick="saveTeacher()">Crear profesor y generar PIN</button>
       </div>
-      <p class="muted">La clave se guarda como hash. Después no se puede consultar; solo sustituirla por otra.</p>
+      <p class="muted">El PIN se genera automáticamente al crear el profesor. Se mostrará una sola vez para que puedas copiarlo.</p>
       <div id="teachersList" class="list"></div>
+      <div id="generatedPinBox" class="hidden" style="margin-top:14px;padding:14px;border:1px solid #b8e0cd;background:#effaf5;border-radius:14px">
+        <b>PIN generado</b>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+          <input id="generatedPin" readonly style="font-size:1.25rem;font-weight:900;letter-spacing:.18em">
+          <button class="green" onclick="copyGeneratedPin()">Copiar</button>
+        </div>
+        <small class="muted">Guárdalo ahora: por seguridad no podrá volver a mostrarse después.</small>
+      </div>
     </div>
   </div>
 
@@ -211,18 +219,20 @@ function renderAccess(){
 }
 async function saveYear(){try{await api("/api/admin/academic/year",{method:"POST",body:JSON.stringify({label:$("yearLabel").value,active:$("yearActive").value==="1"})});await loadState();ok("Curso guardado.")}catch(e){bad(e)}}
 async function saveGroup(){try{await api("/api/admin/academic/group",{method:"POST",body:JSON.stringify({schoolYearId:$("groupYear").value,name:$("groupName").value,active:true})});$("groupName").value="";await loadState();ok("Grupo añadido.")}catch(e){bad(e)}}
-async function saveTeacher(){try{await api("/api/admin/academic/teacher",{method:"POST",body:JSON.stringify({name:$("teacherName").value,accessKey:$("teacherKey").value,role:"teacher",active:true})});$("teacherName").value="";$("teacherKey").value="";await loadState();ok("Profesor creado.")}catch(e){bad(e)}}
-async function resetTeacher(id,name){const k=prompt("Nueva clave para "+name+" (mínimo 6 caracteres):");if(!k)return;try{await api("/api/admin/academic/teacher",{method:"POST",body:JSON.stringify({id,name,accessKey:k,role:"teacher",active:true})});ok("Clave actualizada.")}catch(e){bad(e)}}
-async function saveAssignment(){try{await api("/api/admin/academic/assignment",{method:"POST",body:JSON.stringify({teacherId:$("asTeacher").value,groupId:$("asGroup").value,subjectId:$("asSubject").value})});await loadState();ok("Asignación guardada.")}catch(e){bad(e)}}
-async function deleteAssignment(id){try{await api("/api/admin/academic/assignment?id="+encodeURIComponent(id),{method:"DELETE"});await loadState();ok("Asignación eliminada.")}catch(e){bad(e)}}
-async function saveActivity(){try{await api("/api/admin/academic/activity",{method:"POST",body:JSON.stringify({activityId:$("actId").value,title:$("actTitle").value,subjectId:$("actSubject").value||null,active:true})});$("actId").value="";$("actTitle").value="";await loadState();ok("Actividad guardada.")}catch(e){bad(e)}}
-async function syncActivities(){try{await api("/api/admin/academic/sync-attempt-activities",{method:"POST",body:"{}"});await loadState();ok("Actividades detectadas desde los resultados.")}catch(e){bad(e)}}
-async function saveAccess(){try{
-  const activityId=$("accessActivity").value;
-  const groupIds=[...document.querySelectorAll('input[name="ag"]:checked')].map(x=>x.value);
-  const teacherIds=[...document.querySelectorAll('input[name="at"]:checked')].map(x=>x.value);
-  await api("/api/admin/academic/activity-access",{method:"POST",body:JSON.stringify({activityId,groupIds,teacherIds})});
-  await loadState();ok("Permisos actualizados.");
+async function saveTeacher(){
+  try{
+    const d=await api("/api/admin/academic/teacher",{method:"POST",body:JSON.stringify({
+      name:$("teacherName").value,role:"teacher",active:true,generatePin:true
+    })});
+    $("teacherName").value="";
+    $("teacherKey").value="";
+    await loadState();
+    if(d.pin){
+      $("generatedPin").value=d.pin;
+      $("generatedPinBox").classList.remove("hidden");
+    }
+    ok("Profesor creado.");
+  }catch(e){bad(e)}
 }catch(e){bad(e)}}
 
 let BULK_ROWS=[];
@@ -234,13 +244,34 @@ function normalizeCode(v){
 }
 function renderStudents(){
   const q=($("studentSearch")?.value||"").trim().toLowerCase();
-  const rows=S.students.filter(x=>!q||(`${x.name} ${x.code} ${x.group_name||""}`).toLowerCase().includes(q));
-  $("studentsList").innerHTML=rows.map(x=>`<div class="item">
-    <div><b>${esc(x.name)}</b><br><small>${esc(x.code)} · ${esc(x.group_name||"Sin grupo")}</small></div>
-    <div class="actions"><button class="light" onclick='editStudent(${JSON.stringify(x.code)})'>Editar</button>
-    <button class="danger" onclick='deleteStudent(${JSON.stringify(x.code)},${JSON.stringify(x.name)})'>Eliminar</button></div>
-  </div>`).join("")||'<div class="muted">No hay alumnos.</div>';
+  const groups=S.groups.filter(g=>g.active);
+
+  $("studentsList").innerHTML=groups.map(gr=>{
+    const rows=S.students.filter(x=>x.group_id===gr.id && (!q||(`${x.name} ${x.code}`).toLowerCase().includes(q)));
+    const allCount=S.students.filter(x=>x.group_id===gr.id).length;
+    return `<div class="card" style="box-shadow:none;border-radius:14px;overflow:hidden">
+      <button type="button" class="light" style="width:100%;display:flex;justify-content:space-between;align-items:center;border:0;border-radius:0;padding:14px 16px"
+        onclick="toggleClassList('${gr.id}')">
+        <span><b>${esc(gr.name)}</b> · ${esc(gr.year_label||"")}</span>
+        <span>${allCount} alumnos ▾</span>
+      </button>
+      <div id="class_${gr.id}" class="hidden" style="padding:10px">
+        ${rows.length ? rows.map(x=>`<div class="item">
+          <div><b>${esc(x.name)}</b><br><small>${esc(x.code)}</small></div>
+          <div class="actions">
+            <button class="light" onclick='editStudent(${JSON.stringify(x.code)})'>Editar</button>
+            <button class="danger" onclick='deleteStudent(${JSON.stringify(x.code)},${JSON.stringify(x.name)})'>Eliminar</button>
+          </div>
+        </div>`).join("") : '<div class="muted" style="padding:10px">No hay alumnos con este filtro.</div>'}
+      </div>
+    </div>`;
+  }).join("") || '<div class="muted">No hay grupos activos.</div>';
 }
+function toggleClassList(id){
+  const el=document.getElementById("class_"+id);
+  if(el) el.classList.toggle("hidden");
+}
+
 function clearStudentForm(){studentOriginalCode.value="";studentName.value="";studentCode.value=""}
 function editStudent(code){
   const s=S.students.find(x=>x.code===code); if(!s)return;
@@ -339,6 +370,13 @@ function downloadStudentTemplate(){
   const csv="Nombre\nArias Arnáeza, Lucía\nCardoso Santamaría, Laia\nCasique Neira, Álvaro Jese\n";
   const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="plantilla_alumnado_espacio6.csv";a.click();URL.revokeObjectURL(a.href);
+}
+
+function copyGeneratedPin(){
+  const v=$("generatedPin").value;
+  if(!v)return;
+  navigator.clipboard?.writeText(v);
+  ok("PIN copiado.");
 }
 
 function ok(t){$("status").className="status ok";$("status").textContent="✓ "+t}

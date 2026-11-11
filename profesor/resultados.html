@@ -62,6 +62,13 @@ tr:hover td{background:#fbfcff}
 .note{color:#6f7787;font-size:.85rem}
 @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr 1fr}.detail-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.wrap{padding:14px}.stats{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}}
+
+.manual-review{border:1px solid #f0d9a8;background:#fffaf0;border-radius:14px;padding:14px;margin:12px 0}
+.manual-review textarea{width:100%;min-height:70px;padding:10px;border:1px solid #d8dfeb;border-radius:10px;font:inherit}
+.manual-score{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.manual-score select{width:auto}
+.pending-pill{background:#fff3db;color:#9a6400}
+.final-pill{background:#e8f8f0;color:#11754b}
 </style>
 </head>
 <body>
@@ -144,7 +151,7 @@ tr:hover td{background:#fbfcff}
         <div class="detail-box"><span>Mejor combo</span><strong id="dCombo">—</strong></div>
       </div>
       <h3>Detalle del intento</h3>
-      <div id="eventList" class="note">Este Worker actual devuelve el resumen de cada intento. Si quieres ver respuesta por respuesta, añadiremos el endpoint de detalle en la siguiente versión.</div>
+      <div id="eventList" class="note">Cargando detalle del intento…</div>
     </div>
   </div>
 </div>
@@ -238,7 +245,7 @@ function render(){
       <td>${x.xp||0}</td>
       <td>${x.combo_best||0}</td>
       <td>${dt}</td>
-      <td><span class="pill status">${x.finished?"Finalizado":"En curso"}</span></td>
+      <td><span class="pill ${x.manual_pending?"pending-pill":"status"}">${x.manual_pending?"Pendiente de corregir":(x.finished?"Finalizado":"En curso")}</span></td>
       <td><button class="detail-btn" onclick='openDetail(${JSON.stringify(x).replace(/'/g,"&#39;")})'>Ver</button></td>
     </tr>`;
   }).join("");
@@ -275,19 +282,100 @@ async function openDetail(x){
   dCombo.textContent=x.combo_best||0;
   eventList.textContent="Cargando detalle…";
   modal.classList.remove("hidden");
+
   try{
     const rr=await fetch(WORKER_URL+"/api/result-detail?id="+encodeURIComponent(x.id),{headers:{"X-Teacher-Key":KEY}});
     const dd=await rr.json();
     if(!rr.ok)throw new Error(dd.error||"Error");
-    const ev=dd.result?.events||[];
-    if(!ev.length){eventList.textContent="Esta actividad no guardó detalle pregunta por pregunta.";return}
-    eventList.innerHTML=ev.map((e,i)=>{
-      if(e.type==="audio")return `<div class="event"><b>🎧 Audio</b><br><small>Escuchas: ${e.plays??"—"}${e.maxPlays?` / ${e.maxPlays}`:""}</small></div>`;
-      const ok=e.correct===true;
-      return `<div class="event"><b>${ok?"✅":"❌"} ${escapeHtml(e.question||("Pregunta "+(e.questionNumber||i+1)))}</b><br>
-      <small>Respuesta: ${escapeHtml(e.answer??"—")} · Correcta: ${escapeHtml(e.expected??"—")}</small></div>`;
-    }).join("");
-  }catch(e){eventList.textContent="No se pudo cargar el detalle."}
+    const result=dd.result||{};
+    const ev=result.events||[];
+    const grades=result.manual_grades||{};
+    const manualQuestions=ev.filter(e=>e.manual===true);
+
+    const parts=[];
+
+    ev.forEach((e,i)=>{
+      if(e.type==="audio"){
+        parts.push(`<div class="event"><b>🎧 Audio</b><br><small>Escuchas: ${e.plays??"—"}${e.maxPlays?` / ${e.maxPlays}`:""}</small></div>`);
+        return;
+      }
+
+      if(e.manual===true){
+        const qid=e.questionId||("manual_"+i);
+        const g=grades[qid]||{};
+        parts.push(`<div class="manual-review">
+          <b>✍️ ${escapeHtml(e.question||("Pregunta "+(i+1)))}</b>
+          <div style="margin-top:8px"><small>Respuesta del alumno</small></div>
+          <div style="white-space:pre-wrap;background:#fff;border:1px solid #eadfca;border-radius:10px;padding:10px;margin-top:4px">${escapeHtml(typeof e.answer==="string"?e.answer:JSON.stringify(e.answer??""))}</div>
+          <div class="manual-score">
+            <label>Puntuación
+              <select id="score_${escapeHtml(qid)}">
+                ${manualScoreOptions(Number(e.points||1),g.points_awarded)}
+              </select>
+              / ${Number(e.points||1).toFixed(2).replace(".",",")}
+            </label>
+          </div>
+          <label style="display:block;margin-top:8px">Comentario del profesor
+            <textarea id="comment_${escapeHtml(qid)}" placeholder="Opcional">${escapeHtml(g.comment||"")}</textarea>
+          </label>
+          <button class="btn btn-primary" style="margin-top:10px" onclick='saveManualGrade(${JSON.stringify(x.id)},${JSON.stringify(qid)},${Number(e.points||1)})'>Guardar corrección</button>
+        </div>`);
+      }else{
+        const ok=e.correct===true;
+        parts.push(`<div class="event"><b>${ok?"✅":"❌"} ${escapeHtml(e.question||("Pregunta "+(e.questionNumber||i+1)))}</b><br>
+        <small>Respuesta: ${escapeHtml(formatAnswer(e.answer))}${e.expected!==undefined?` · Correcta: ${escapeHtml(formatAnswer(e.expected))}`:""}</small></div>`);
+      }
+    });
+
+    if(!ev.length) parts.push('<div class="note">Esta actividad no guardó detalle pregunta por pregunta.</div>');
+
+    if(manualQuestions.length){
+      const summary=result.review_summary||{};
+      parts.unshift(`<div class="manual-review">
+        <b>${summary.complete?"✅ Corrección manual completada":"⏳ Corrección manual pendiente"}</b><br>
+        <small>Parte automática: ${Number(summary.auto_score||0).toFixed(2).replace(".",",")} · Parte manual: ${Number(summary.manual_score||0).toFixed(2).replace(".",",")} / ${Number(summary.manual_max||0).toFixed(2).replace(".",",")}</small>
+        ${summary.complete?`<div style="margin-top:6px;font-weight:900">Nota final: ${Number(summary.final_score||0).toFixed(2).replace(".",",")} / 10</div>`:""}
+      </div>`);
+    }
+
+    eventList.innerHTML=parts.join("");
+  }catch(e){
+    eventList.textContent="No se pudo cargar el detalle: "+(e.message||e);
+  }
+}
+function manualScoreOptions(max,current){
+  const vals=[];
+  const step=0.25;
+  for(let v=0;v<=max+0.001;v+=step) vals.push(Math.round(v*100)/100);
+  if(!vals.some(v=>Math.abs(v-max)<0.001)) vals.push(max);
+  return ['<option value="">Sin corregir</option>'].concat(vals.map(v=>`<option value="${v}" ${Number(current)===v?"selected":""}>${v.toFixed(2).replace(".",",")}</option>`)).join("");
+}
+function formatAnswer(v){
+  if(Array.isArray(v))return v.join(", ");
+  if(v===null||v===undefined)return "—";
+  return String(v);
+}
+async function saveManualGrade(attemptId,questionId,maxPoints){
+  const scoreEl=document.getElementById("score_"+questionId);
+  const commentEl=document.getElementById("comment_"+questionId);
+  if(!scoreEl||scoreEl.value===""){alert("Selecciona una puntuación.");return}
+  try{
+    const resp=await fetch(WORKER_URL+"/api/manual-grade",{
+      method:"POST",
+      headers:{"X-Teacher-Key":KEY,"Content-Type":"application/json"},
+      body:JSON.stringify({
+        attemptId,questionId,
+        pointsAwarded:Number(scoreEl.value),
+        maxPoints:Number(maxPoints),
+        comment:commentEl?.value||""
+      })
+    });
+    const d=await resp.json();
+    if(!resp.ok)throw new Error(d.error||"No se pudo guardar");
+    await loadResults();
+    const row=ALL.find(z=>String(z.id)===String(attemptId));
+    if(row) openDetail(row);
+  }catch(e){alert("Error: "+(e.message||e))}
 }
 
 function closeModal(){modal.classList.add("hidden")}
