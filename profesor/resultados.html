@@ -293,6 +293,9 @@ async function openDetail(x){
     const manualQuestions=ev.filter(e=>e.manual===true);
 
     const parts=[];
+    if(result.manual_grading_available===false && manualQuestions.length){
+      parts.push(`<div class="manual-review"><b>⚠ Respuestas recuperadas</b><br><small>Puedes leer las respuestas del alumno. La tabla de corrección manual aún no está disponible en D1; podrás puntuar cuando se aplique el esquema V17.</small></div>`);
+    }
 
     ev.forEach((e,i)=>{
       if(e.type==="audio"){
@@ -318,7 +321,9 @@ async function openDetail(x){
           <label style="display:block;margin-top:8px">Comentario del profesor
             <textarea id="comment_${escapeHtml(qid)}" placeholder="Opcional">${escapeHtml(g.comment||"")}</textarea>
           </label>
-          <button class="btn btn-primary" style="margin-top:10px" onclick='saveManualGrade(${JSON.stringify(x.id)},${JSON.stringify(qid)},${Number(e.points||1)})'>Guardar corrección</button>
+          ${result.manual_grading_available===false
+            ? '<div class="note" style="margin-top:10px">Corrección manual temporalmente no disponible.</div>'
+            : `<button class="btn btn-primary" style="margin-top:10px" onclick='saveManualGrade(${JSON.stringify(x.id)},${JSON.stringify(qid)},${Number(e.points||1)})'>Guardar corrección</button>`}
         </div>`);
       }else{
         const ok=e.correct===true;
