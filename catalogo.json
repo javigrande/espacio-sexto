@@ -8,7 +8,8 @@
     "tipo": "Evaluación",
     "icono": "🎯",
     "archivo": "materiales/evaluacion-aparato-locomotor-espacio6/evaluacion.html",
-    "destacado": false
+    "destacado": false,
+    "visible": false
   },
   {
     "descripcion": "",
