@@ -31,6 +31,11 @@ button:disabled{opacity:.6;cursor:wait}
 .warn-tag{display:inline-block;background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:999px;font-size:.76rem;font-weight:900}
 @media(max-width:650px){.detected{grid-template-columns:1fr}}
 
+
+.visibility-pill{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:.76rem;font-weight:900}
+.visibility-pill.on{background:#e8f8f0;color:#11754b}
+.visibility-pill.off{background:#eef1f5;color:#5c6574}
+.visibility-toggle{background:#475569!important}
 </style>
 </head>
 <body>
@@ -103,6 +108,9 @@ button:disabled{opacity:.6;cursor:wait}
 
       <label style="display:flex;gap:8px;align-items:center">
         <input id="destacado" type="checkbox" style="width:auto;margin:0"> Destacado
+      </label>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <input id="visible" type="checkbox" style="width:auto;margin:0" checked> Visible para el alumnado
       </label>
 
       <br>
@@ -310,6 +318,7 @@ $("publish").onclick=async()=>{
       icono:$("icono").value.trim()||"🎯",
       tiempo:$("tiempo").value.trim()||"10 min",
       destacado:$("destacado").checked,
+      visible:$("visible").checked,
       fecha:new Date().toISOString().slice(0,10)
     };
 
@@ -335,6 +344,24 @@ $("publish").onclick=async()=>{
     btn.disabled=false;
   }
 };
+
+
+async function toggleVisibility(i){
+  const item=catalogCache[i];
+  const newValue=item.visible===false;
+  try{
+    await api("/api/publisher/update-item",{
+      method:"POST",
+      body:JSON.stringify({archivo:item.archivo,changes:{visible:newValue}})
+    });
+    show("status",newValue
+      ?"✓ Actividad visible para el alumnado."
+      :"✓ Actividad oculta. No se ha eliminado y conserva sus resultados.","ok");
+    await loadActivities();
+  }catch(e){
+    show("status","No se pudo cambiar la visibilidad: "+e.message,"err");
+  }
+}
 
 async function loadActivities(){
   try{
@@ -452,7 +479,8 @@ $("publishZip").onclick=async()=>{
         tipo:"Repaso",
         icono:$("practiceIcon").value.trim()||"🧪",
         archivo:`materiales/${folder}/index.html`,
-        destacado:false
+        destacado:false,
+        visible:true
       });
     }
 
@@ -464,7 +492,8 @@ $("publishZip").onclick=async()=>{
         tipo:"Evaluación",
         icono:$("evaluationIcon").value.trim()||"🎯",
         archivo:`materiales/${folder}/evaluacion.html`,
-        destacado:$("zipDestacado").checked
+        destacado:$("zipDestacado").checked,
+        visible:true
       });
     }
 
@@ -519,6 +548,8 @@ function renderActivities(){
           <div style="font-size:.85rem;color:#64748b">${escapeHtml(x.materia||"")} · ${escapeHtml(x.tipo||"")} · ${escapeHtml(x.archivo||"")}</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="visibility-pill ${x.visible===false?"off":"on"}">${x.visible===false?"🙈 Oculta":"👁 Visible"}</span>
+          <button type="button" class="visibility-toggle" onclick="toggleVisibility(${i})">${x.visible===false?"Mostrar":"Ocultar"}</button>
           <button type="button" onclick="toggleFeatured(${i})" style="background:#0f766e">${x.destacado?"Quitar destacado":"Destacar"}</button>
           <button type="button" onclick="removeActivity(${i})" style="background:#b91c1c">Eliminar</button>
         </div>

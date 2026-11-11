@@ -4,7 +4,7 @@ let ALL=[],kind='Todos',subject='Todos';
 async function load(){
   try{
     const r=await fetch('catalogo.json?ts='+Date.now(),{cache:'no-store'});
-    ALL=await r.json();
+    ALL=(await r.json()).filter(x=>x.visible!==false && x.oculto!==true);
   }catch(e){ALL=[]}
   updateStats();
   renderFeatured();
@@ -23,6 +23,8 @@ function renderFeatured(){
     const a=document.createElement('a');
     a.className='featured-card fc'+(i%3);
     a.href=x.archivo;
+    a.target='_blank';
+    a.rel='noopener noreferrer';
     a.innerHTML=`<div class="big-icon">${x.icono||'📘'}</div><span class="tag" style="width:max-content;background:rgba(255,255,255,.18);color:#fff">${x.tipo||'Recurso'}</span><h3>${x.titulo}</h3><p>${x.descripcion||''}</p>`;
     box.appendChild(a);
   });
@@ -42,6 +44,8 @@ function render(){
     const a=document.createElement('a');
     a.className='resource'+(x.destacado?' featured':'');
     a.href=x.archivo;
+    a.target='_blank';
+    a.rel='noopener noreferrer';
     a.innerHTML=`<div class="resource-top"><span class="tag">${x.tipo||'Recurso'}</span><span class="resource-icon">${x.icono||'📘'}</span></div><h3>${x.titulo}</h3><p>${x.descripcion||''}</p><div class="meta"><span>📘 ${x.materia||'General'}</span><span>⏱ ${x.tiempo||'—'}</span></div>`;
     grid.appendChild(a);
   });
