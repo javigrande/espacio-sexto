@@ -1,0 +1,23 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evaluación · El aparato locomotor</title><link rel="stylesheet" href="styles.css"></head>
+<body><div class="wrap">
+<section class="hero"><div class="kicker">ESPACIO 6.º · CIENCIAS NATURALES · EVALUACIÓN</div>
+<h1>El aparato locomotor</h1><p>Huesos, articulaciones, músculos, tendones y ligamentos.</p>
+<div class="tags"><span class="tag">12 actividades</span><span class="tag">Imágenes</span><span class="tag">8 puntos automáticos</span><span class="tag">2 puntos escritos</span></div></section>
+
+<section id="identity" class="card"><h2>Identificación</h2><p class="note">Introduce tu código personal y tu grupo. No escribas tu nombre.</p>
+<div class="row"><label>Código personal<input id="studentCode" placeholder="Ej.: 6B-K7P4"></label>
+<label>Grupo<select id="group"><option value="">Selecciona...</option><option>6.º A</option><option>6.º B</option></select></label></div>
+<div id="identityMsg" class="message bad"></div><br><button onclick="startEvaluation()">Comenzar evaluación</button></section>
+
+<section id="quiz" class="card hidden">
+<div class="qtop"><b>Pregunta <span id="qnum">1</span> de <span id="total">12</span></b><span class="points" id="qpoints"></span></div>
+<div class="progress"><div id="bar"></div></div><div id="media"></div><h2 id="question"></h2><div id="answerArea" class="options"></div>
+<div id="msg" class="message bad"></div><br><div style="display:flex;justify-content:space-between;gap:10px"><button id="prevBtn" class="secondary" onclick="prev()">← Anterior</button><button id="nextBtn" onclick="next()">Siguiente</button></div>
+</section>
+
+<section id="results" class="card hidden"><h2>Evaluación enviada</h2>
+<div class="stats"><div class="stat">Parte automática<b id="rAuto">0 / 8</b></div><div class="stat">Precisión<b id="rAcc">0%</b></div><div class="stat">Parte escrita<b id="rManual">2 puntos</b></div><div class="stat">Nota final<b id="rFinal">Pendiente</b></div></div>
+<div class="manual"><b>✍️ Corrección docente pendiente</b><p>Las dos preguntas desarrolladas valen 2 puntos en total. El profesor revisará esas respuestas para completar la nota sobre 10.</p></div>
+<div id="saveState" class="message"></div></section>
+</div><script src="alumnos-validos.js"></script><script src="app.js"></script></body></html>

@@ -1,0 +1,186 @@
+[
+  {
+    "id": "q1",
+    "type": "single",
+    "points": 0.75,
+    "question": "¿Qué estructuras forman el sistema esquelético?",
+    "options": [
+      "Los huesos y las articulaciones",
+      "Los músculos y los tendones",
+      "Los huesos y los músculos",
+      "Los ligamentos y los músculos"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "q2",
+    "type": "classify",
+    "points": 0.75,
+    "question": "Clasifica estos huesos según su forma.",
+    "items": [
+      {
+        "text": "Tibia",
+        "answer": "Largo"
+      },
+      {
+        "text": "Vértebra",
+        "answer": "Corto"
+      },
+      {
+        "text": "Escápula",
+        "answer": "Plano"
+      },
+      {
+        "text": "Peroné",
+        "answer": "Largo"
+      }
+    ],
+    "choices": [
+      "Largo",
+      "Corto",
+      "Plano"
+    ]
+  },
+  {
+    "id": "q3",
+    "type": "single",
+    "points": 0.75,
+    "image": "img/articulaciones.png",
+    "question": "Observa la imagen. ¿Cuál de estas asociaciones es correcta?",
+    "options": [
+      "Rodilla → móvil",
+      "Vértebras → fija",
+      "Cráneo → semimóvil",
+      "Rodilla → fija"
+    ],
+    "answer": 0
+  },
+  {
+    "id": "q4",
+    "type": "multi",
+    "points": 1.0,
+    "question": "Selecciona todas las afirmaciones correctas sobre las articulaciones.",
+    "options": [
+      "Las móviles permiten el movimiento, como la rodilla.",
+      "Las semimóviles permiten pequeños movimientos, como entre las vértebras.",
+      "Las fijas impiden el movimiento, como las suturas del cráneo.",
+      "Todas las articulaciones permiten el mismo grado de movimiento."
+    ],
+    "answers": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "id": "q5",
+    "type": "single",
+    "points": 0.75,
+    "question": "¿Qué tejido es más esponjoso y flexible y aparece en la oreja, la nariz y los extremos de algunos huesos largos?",
+    "options": [
+      "Tejido óseo",
+      "Tejido cartilaginoso",
+      "Tejido muscular",
+      "Tejido tendinoso"
+    ],
+    "answer": 1
+  },
+  {
+    "id": "q6",
+    "type": "single",
+    "points": 0.75,
+    "image": "img/musculos.png",
+    "question": "¿Qué afirmación describe mejor el sistema muscular?",
+    "options": [
+      "Está formado por músculos y tendones.",
+      "Está formado solo por músculos.",
+      "Está formado por huesos y ligamentos.",
+      "Está formado por articulaciones y músculos."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "q7",
+    "type": "matching",
+    "points": 1.0,
+    "question": "Relaciona cada tipo de tejido muscular con su característica.",
+    "pairs": [
+      {
+        "left": "Estriado",
+        "right": "Contracción voluntaria"
+      },
+      {
+        "left": "Liso",
+        "right": "Contracción involuntaria"
+      },
+      {
+        "left": "Cardíaco",
+        "right": "Forma el corazón"
+      }
+    ],
+    "choices": [
+      "Contracción voluntaria",
+      "Contracción involuntaria",
+      "Forma el corazón"
+    ]
+  },
+  {
+    "id": "q8",
+    "type": "single",
+    "points": 0.75,
+    "image": "img/biceps_triceps.png",
+    "question": "Al flexionar el brazo, ¿qué ocurre?",
+    "options": [
+      "El bíceps se contrae y el tríceps se relaja.",
+      "El bíceps se relaja y el tríceps se contrae.",
+      "Bíceps y tríceps se contraen a la vez.",
+      "Ningún músculo cambia."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "q9",
+    "type": "multi",
+    "points": 0.75,
+    "image": "img/tendones_ligamentos.png",
+    "question": "Selecciona las afirmaciones correctas.",
+    "options": [
+      "Los tendones unen músculos a huesos.",
+      "Los ligamentos forman parte de las articulaciones y ayudan a estabilizarlas.",
+      "Los tendones son muy elásticos.",
+      "Los ligamentos ayudan a evitar que los huesos se separen."
+    ],
+    "answers": [
+      0,
+      1,
+      3
+    ]
+  },
+  {
+    "id": "q10",
+    "type": "single",
+    "points": 0.75,
+    "question": "¿Qué medida ayuda a prevenir lesiones del sistema muscular?",
+    "options": [
+      "Realizar estiramientos y practicar deporte de forma regular y adecuada.",
+      "Evitar cualquier actividad física.",
+      "Forzar los músculos cuando aparece dolor.",
+      "Entrenar siempre al máximo sin calentamiento."
+    ],
+    "answer": 0
+  },
+  {
+    "id": "q11",
+    "type": "text",
+    "points": 1.0,
+    "question": "Explica con tus palabras la diferencia entre tendón y ligamento. Debes indicar qué une cada uno y cuál es su función principal.",
+    "minChars": 70
+  },
+  {
+    "id": "q12",
+    "type": "text",
+    "points": 1.0,
+    "question": "Desarrolla: ¿cómo trabajan juntos huesos, articulaciones, músculos y tendones para producir un movimiento, por ejemplo flexionar el brazo?",
+    "minChars": 100
+  }
+]

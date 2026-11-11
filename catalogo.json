@@ -1,6 +1,17 @@
 [
   {
     "descripcion": "",
+    "materia": "CCNN",
+    "tiempo": "15 min",
+    "fecha": "2026-11-11",
+    "titulo": "Aparato Locomotor · Evaluación",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "archivo": "materiales/evaluacion-aparato-locomotor-espacio6/evaluacion.html",
+    "destacado": false
+  },
+  {
+    "descripcion": "",
     "materia": "Matemáticas",
     "tiempo": "15 min",
     "fecha": "2026-11-11",
