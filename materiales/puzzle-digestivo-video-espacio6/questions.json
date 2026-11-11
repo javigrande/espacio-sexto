@@ -1,0 +1,102 @@
+[
+  {
+    "q": "¿En qué órgano comienza el recorrido del alimento que muestra el vídeo?",
+    "o": [
+      "Boca",
+      "Estómago",
+      "Intestino delgado",
+      "Hígado"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué estructura comunica la faringe con el estómago?",
+    "o": [
+      "Esófago",
+      "Intestino grueso",
+      "Páncreas",
+      "Ano"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Cuál es el orden correcto de las primeras partes del recorrido?",
+    "o": [
+      "Boca → faringe → esófago → estómago",
+      "Boca → estómago → faringe → esófago",
+      "Faringe → boca → estómago → esófago",
+      "Boca → esófago → faringe → estómago"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué dos órganos aparecen señalados junto al estómago como órganos asociados a la digestión?",
+    "o": [
+      "Hígado y páncreas",
+      "Riñones y pulmones",
+      "Corazón y bazo",
+      "Faringe y ano"
+    ],
+    "a": 0
+  },
+  {
+    "q": "En la animación, las secreciones procedentes del hígado y del páncreas llegan al…",
+    "o": [
+      "Intestino delgado",
+      "Esófago",
+      "Intestino grueso",
+      "Ano"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué parte del aparato digestivo aparece muy enrollada en el interior del abdomen?",
+    "o": [
+      "Intestino delgado",
+      "Estómago",
+      "Esófago",
+      "Ano"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué parte rodea al intestino delgado en las imágenes del vídeo?",
+    "o": [
+      "Intestino grueso",
+      "Páncreas",
+      "Hígado",
+      "Faringe"
+    ],
+    "a": 0
+  },
+  {
+    "q": "Después de mostrar el intestino delgado, ¿qué sistema del cuerpo aparece destacado con vasos rojos y azules?",
+    "o": [
+      "Sistema circulatorio",
+      "Sistema respiratorio",
+      "Sistema nervioso",
+      "Sistema muscular"
+    ],
+    "a": 0
+  },
+  {
+    "q": "Casi al final del vídeo se amplían unos microorganismos situados en el intestino. ¿Qué representan?",
+    "o": [
+      "Bacterias de la microbiota intestinal",
+      "Glóbulos rojos",
+      "Células musculares",
+      "Virus de la sangre"
+    ],
+    "a": 0
+  },
+  {
+    "q": "¿Qué estructura aparece etiquetada como salida final del tubo digestivo?",
+    "o": [
+      "Ano",
+      "Páncreas",
+      "Faringe",
+      "Hígado"
+    ],
+    "a": 0
+  }
+]

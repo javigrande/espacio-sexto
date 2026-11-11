@@ -1,5 +1,27 @@
 [
   {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-11",
+    "titulo": "Puzzle Digestivo Video Espacio6 · Evaluación",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "archivo": "materiales/puzzle-digestivo-video-espacio6/evaluacion.html",
+    "destacado": true
+  },
+  {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-11",
+    "titulo": "Puzzle Digestivo Video · Práctica",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/puzzle-digestivo-video-espacio6/index.html",
+    "destacado": false
+  },
+  {
     "titulo": "COMPARA - CONTRASTA",
     "descripcion": "",
     "materia": "CCNN",

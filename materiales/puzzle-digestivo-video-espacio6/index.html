@@ -1,0 +1,14 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Puzzle Digestivo</title><link rel="stylesheet" href="styles.css"></head>
+<body data-mode="practice"><div class="wrap">
+<section class="hero"><div class="kicker">ESPACIO 6.º · CIENCIAS NATURALES</div><h1>Puzzle Digestivo</h1><p>Primero observa el vídeo completo. Después responde 10 preguntas y reconstruye el aparato digestivo pieza a pieza.</p><div class="badges"><span class="badge">Vídeo obligatorio</span><span class="badge">10 preguntas</span><span class="badge">10 piezas</span><span class="badge">Nota /10</span></div></section>
+
+<section id="identity" class="panel hidden"><h2>Modo evaluación</h2><div class="row"><input id="studentCode" placeholder="Ej.: 6B-K7P4"><select id="group"><option value="">Selecciona grupo</option><option>6.º A</option><option>6.º B</option></select></div><div id="identityMsg" class="feedback badmsg"></div><br><button onclick="startEvaluation()">Comenzar</button></section>
+
+<section id="videoStage" class="panel hidden"><div class="kicker">FASE 1 · OBSERVA</div><h2>Visualiza el vídeo completo</h2><div class="video-wrap"><video id="video" src="aparato-digestivo.mp4" controls playsinline preload="metadata"></video></div><div class="video-lock">🔒 Las preguntas se desbloquean al finalizar el vídeo. Visualizado: <b id="watchPct">0%</b></div></section>
+
+<section id="quizStage" class="panel hidden"><div class="top"><div><div class="kicker">FASE 2 · RECONSTRUYE</div><b>Pregunta <span id="qnum">1</span>/<span id="total">10</span></b></div><div class="hud"><span>🧩 Puzzle digestivo</span></div></div><div class="progress"><div id="bar"></div></div>
+<div class="game"><div><div id="puzzle" class="puzzle"></div><p class="note">Cada acierto desbloquea una pieza del puzzle.</p></div>
+<div><div id="question" class="question"></div><div id="options" class="options"></div><div id="feedback" class="feedback"></div><br><button id="next" onclick="nextQ()" disabled>Siguiente →</button></div></div></section>
+
+<section id="result" class="panel hidden"><div class="kicker">PUZZLE COMPLETADO</div><h2>Resultado final</h2><div class="stats"><div class="stat"><small>Aciertos</small><b id="rCorrect"></b></div><div class="stat"><small>Precisión</small><b id="rAcc"></b></div><div class="stat"><small>Nota</small><b id="rScore"></b></div><div class="stat"><small>Piezas</small><b id="rPuzzle"></b></div></div><div id="saveState" class="feedback"></div><button id="retry" class="secondary hidden" onclick="retrySend()">Reintentar envío</button></section>
+</div><script src="alumnos-validos.js"></script><script src="app.js"></script></body></html>
