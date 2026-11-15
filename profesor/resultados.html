@@ -377,6 +377,9 @@ async function saveManualGrade(attemptId,questionId,maxPoints){
     });
     const d=await resp.json();
     if(!resp.ok)throw new Error(d.error||"No se pudo guardar");
+    alert(d.summary?.complete
+      ? "Corrección guardada. Nota final: "+Number(d.summary.final_score||0).toFixed(2).replace(".",",")+" / 10"
+      : "Corrección guardada correctamente.");
     await loadResults();
     const row=ALL.find(z=>String(z.id)===String(attemptId));
     if(row) openDetail(row);
