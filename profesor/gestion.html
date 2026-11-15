@@ -204,7 +204,7 @@ function renderAll(){
 
   $("yearsList").innerHTML=S.years.map(x=>`<div class="item"><div><b>${esc(x.label)}</b><br><small>${x.active?"Activo":"Archivado"}</small></div></div>`).join("");
   $("groupsList").innerHTML=S.groups.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${esc(x.year_label)}</small></div></div>`).join("");
-  $("teachersList").innerHTML=S.teachers.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${x.active?"Activo":"Desactivado"} · clave privada</small></div><button class="light" onclick='resetTeacher(${JSON.stringify(x.id)},${JSON.stringify(x.name)})'>Cambiar clave</button></div>`).join("");
+  $("teachersList").innerHTML=S.teachers.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${x.active?"Activo":"Desactivado"} · clave privada</small></div><button class="light" onclick='resetTeacher(${JSON.stringify(x.id)},${JSON.stringify(x.name)})'>Cambiar PIN</button></div>`).join("");
   $("assignmentsList").innerHTML=S.assignments.map(x=>`<div class="item"><div><b>${esc(x.teacher_name)}</b> <span class="pill">${esc(x.group_name)}</span> <span class="pill">${esc(x.subject_name)}</span></div><button class="danger" onclick='deleteAssignment(${JSON.stringify(x.id)})'>Quitar</button></div>`).join("");
   $("activitiesList").innerHTML=S.activities.map(x=>`<div class="item"><div><b>${esc(x.title)}</b><br><small>${esc(x.activity_id)}${x.subject_name?" · "+esc(x.subject_name):""}</small></div></div>`).join("");
   renderStudents();
@@ -372,6 +372,37 @@ function downloadStudentTemplate(){
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="plantilla_alumnado_espacio6.csv";a.click();URL.revokeObjectURL(a.href);
 }
 
+
+async function resetTeacher(id,name){
+  if(!id){
+    bad(new Error("No se ha podido identificar al profesor."));
+    return;
+  }
+  if(!confirm("¿Generar un PIN nuevo para "+name+"? El PIN anterior dejará de funcionar.")) return;
+  try{
+    const d=await api("/api/admin/academic/teacher",{
+      method:"POST",
+      body:JSON.stringify({
+        id:String(id),
+        name:String(name||"Profesor"),
+        role:"teacher",
+        active:true,
+        generatePin:true
+      })
+    });
+    if(!d || !d.pin){
+      throw new Error("El servidor no devolvió el nuevo PIN.");
+    }
+    $("generatedPin").value=d.pin;
+    $("generatedPinBox").classList.remove("hidden");
+    $("generatedPinBox").scrollIntoView({behavior:"smooth",block:"center"});
+    ok("PIN regenerado correctamente para "+name+".");
+    await loadState();
+  }catch(e){
+    bad(e);
+  }
+}
+
 function copyGeneratedPin(){
   const v=$("generatedPin").value;
   if(!v)return;
@@ -387,4 +418,17 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
   b.classList.add("active");$(b.dataset.tab).classList.add("active");
 });
 </script>
+
+<script id="ESPACIO6_ENTER_LOGIN">
+document.addEventListener("DOMContentLoaded",function(){
+  const inputs=[...document.querySelectorAll('input[type="password"],input[id*="key" i],input[id*="clave" i],input[id*="pin" i]')];
+  inputs.forEach(inp=>inp.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){
+      e.preventDefault();
+      enter();
+    }
+  }));
+});
+</script>
+
 </body></html>

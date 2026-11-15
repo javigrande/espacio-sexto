@@ -408,5 +408,18 @@ function escapeHtml(v){
   return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
 </script>
+
+<script id="ESPACIO6_ENTER_LOGIN">
+document.addEventListener("DOMContentLoaded",function(){
+  const inputs=[...document.querySelectorAll('input[type="password"],input[id*="key" i],input[id*="clave" i],input[id*="pin" i]')];
+  inputs.forEach(inp=>inp.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){
+      e.preventDefault();
+      connect();
+    }
+  }));
+});
+</script>
+
 </body>
 </html>
