@@ -1,0 +1,225 @@
+[
+  {
+    "m": 1,
+    "n": "ZERO FACTORY",
+    "t": "zeros",
+    "p": "Construye 10⁴.",
+    "z": 4
+  },
+  {
+    "m": 1,
+    "n": "ZERO FACTORY",
+    "t": "zeros",
+    "p": "Construye 10⁷.",
+    "z": 7
+  },
+  {
+    "m": 1,
+    "n": "ZERO FACTORY",
+    "t": "input",
+    "p": "Completa: 10□ = 100 000",
+    "a": 5
+  },
+  {
+    "m": 1,
+    "n": "ZERO FACTORY",
+    "t": "input",
+    "p": "Completa: 10□ = 1 000 000",
+    "a": 6
+  },
+  {
+    "m": 2,
+    "n": "POWER BUILDER",
+    "t": "product",
+    "p": "Selecciona exactamente los factores necesarios para representar 10³.",
+    "a": 3
+  },
+  {
+    "m": 2,
+    "n": "POWER BUILDER",
+    "t": "product",
+    "p": "Selecciona exactamente los factores necesarios para representar 10⁵.",
+    "a": 5
+  },
+  {
+    "m": 2,
+    "n": "POWER BUILDER",
+    "t": "input",
+    "p": "10 000 = 10□",
+    "a": 4
+  },
+  {
+    "m": 2,
+    "n": "POWER BUILDER",
+    "t": "input",
+    "p": "1 000 000 = 10□",
+    "a": 6
+  },
+  {
+    "m": 3,
+    "n": "NUMBER TRANSFORMER",
+    "t": "input",
+    "p": "36 000 = 36 × 10□",
+    "a": 3
+  },
+  {
+    "m": 3,
+    "n": "NUMBER TRANSFORMER",
+    "t": "input",
+    "p": "20 000 = 20 × 10□",
+    "a": 3
+  },
+  {
+    "m": 3,
+    "n": "NUMBER TRANSFORMER",
+    "t": "input",
+    "p": "410 000 = 410 × 10□",
+    "a": 3
+  },
+  {
+    "m": 3,
+    "n": "NUMBER TRANSFORMER",
+    "t": "input",
+    "p": "9 000 000 = 9 × 10□",
+    "a": 6
+  },
+  {
+    "m": 4,
+    "n": "COSMIC NUMBERS",
+    "t": "choice",
+    "p": "150 000 000 km equivale a…",
+    "o": [
+      "150 × 10⁶ km",
+      "15 × 10⁶ km",
+      "150 × 10⁵ km",
+      "1 500 × 10⁶ km"
+    ],
+    "a": 0
+  },
+  {
+    "m": 4,
+    "n": "COSMIC NUMBERS",
+    "t": "choice",
+    "p": "300 000 000 m/s equivale a…",
+    "o": [
+      "300 × 10⁶ m/s",
+      "30 × 10⁶ m/s",
+      "3 × 10⁶ m/s",
+      "300 × 10⁵ m/s"
+    ],
+    "a": 0
+  },
+  {
+    "m": 4,
+    "n": "COSMIC NUMBERS",
+    "t": "choice",
+    "p": "38 000 000 000 000 equivale a…",
+    "o": [
+      "38 × 10¹²",
+      "38 × 10⁹",
+      "380 × 10¹²",
+      "38 × 10¹⁰"
+    ],
+    "a": 0
+  },
+  {
+    "m": 4,
+    "n": "COSMIC NUMBERS",
+    "t": "choice",
+    "p": "8 000 000 000 equivale a…",
+    "o": [
+      "8 × 10⁹",
+      "8 × 10⁸",
+      "80 × 10⁹",
+      "8 × 10¹⁰"
+    ],
+    "a": 0
+  },
+  {
+    "m": 5,
+    "n": "FINAL PORTAL",
+    "t": "match",
+    "p": "Une cada potencia con su valor.",
+    "pairs": [
+      [
+        "10²",
+        "100"
+      ],
+      [
+        "10³",
+        "1 000"
+      ],
+      [
+        "10⁵",
+        "100 000"
+      ],
+      [
+        "10⁷",
+        "10 000 000"
+      ]
+    ]
+  },
+  {
+    "m": 5,
+    "n": "FINAL PORTAL",
+    "t": "sort",
+    "p": "Clasifica cada expresión.",
+    "targets": [
+      "Potencia",
+      "Número",
+      "Producto con potencia de 10"
+    ],
+    "items": [
+      [
+        "10⁶",
+        "Potencia"
+      ],
+      [
+        "75 000",
+        "Número"
+      ],
+      [
+        "75 × 10³",
+        "Producto con potencia de 10"
+      ],
+      [
+        "10⁹",
+        "Potencia"
+      ],
+      [
+        "410 000",
+        "Número"
+      ],
+      [
+        "9 × 10⁶",
+        "Producto con potencia de 10"
+      ]
+    ]
+  },
+  {
+    "m": 5,
+    "n": "FINAL PORTAL",
+    "t": "choice",
+    "p": "¿Cuál es equivalente a 107 000 000?",
+    "o": [
+      "107 × 10⁶",
+      "107 × 10⁵",
+      "10,7 × 10⁶",
+      "1 070 × 10⁶"
+    ],
+    "a": 0
+  },
+  {
+    "m": 5,
+    "n": "FINAL PORTAL",
+    "t": "choice",
+    "p": "¿Qué regla resume mejor las potencias de base 10?",
+    "o": [
+      "10ⁿ es 1 seguido de n ceros",
+      "10ⁿ siempre termina en n unos",
+      "10ⁿ es n × 10",
+      "10ⁿ solo sirve para números pequeños"
+    ],
+    "a": 0
+  }
+]

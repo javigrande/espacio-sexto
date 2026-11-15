@@ -1,0 +1,30 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>POWER 10 QUEST</title><link rel="stylesheet" href="styles.css"></head>
+<body data-mode="practice"><div class="wrap">
+<div class="topline"><span>⚡ TIME TRAVEL CHALLENGE</span><span>ISSUE #10 · POWER QUEST</span></div>
+<section class="hero"><div class="comic">WHOOSH!</div><div class="eyebrow">✦ AN EPIC MATH ADVENTURE ✦</div><h1>POWER 10 <span>QUEST</span></h1><p>Domina las potencias de base 10, transforma números gigantes y activa las cinco piezas del Portal 10.</p></section>
+
+<section id="identity" class="panel hidden">
+<h2>IDENTIFICACIÓN DE MISIÓN</h2><p class="note">Introduce tu código personal y grupo.</p>
+<div class="row"><input id="studentCode" placeholder="Ej.: 6B-K7P4"><select id="group"><option value="">Selecciona grupo</option><option>6.º A</option><option>6.º B</option></select></div>
+<div id="identityMsg" class="feedback badmsg"></div><br><button class="btn" onclick="startEvaluation()">START MY MISSION! →</button>
+</section>
+
+<section id="videoStage" class="panel hidden">
+<div class="eyebrow">PHASE 01 · TRAINING TRANSMISSION</div><h2>PRIMERO, VISUALIZA EL VÍDEO</h2>
+<div class="videoShell"><div class="videoBox"><div id="ytplayer"></div></div></div>
+<div class="lock">🔒 Las misiones permanecen bloqueadas hasta finalizar el vídeo. Progreso de visualización: <b id="watchPct">0%</b></div>
+</section>
+
+<section id="gameStage" class="panel hidden">
+<div id="portal" class="portal"></div>
+<div class="gameHead"><div><span id="mission" class="missionTag"></span><h2>RETO <span id="qnum"></span>/<span id="total"></span></h2></div><div class="hud"><span>⚡ <b id="xp">0</b> XP</span><span>🔥 COMBO <b id="combo">0</b></span></div></div>
+<div class="progress"><div id="bar"></div></div><div id="prompt" class="prompt"></div><div id="task"></div><div id="feedback" class="feedback"></div>
+<div class="foot"><span class="note">Feedback inmediato para aprender jugando.</span><div><button id="check" class="btn alt" onclick="check()">CHECK!</button> <button id="next" class="btn hidden" onclick="nextTask()">NEXT →</button></div></div>
+</section>
+
+<section id="result" class="panel hidden">
+<div class="eyebrow">LEVEL CLEAR!</div><div class="finalPortal">◉</div><h2>PORTAL 10 COMPLETADO · RANGO <span id="rank" class="rank">A</span></h2>
+<div class="stats"><div class="stat"><small>RETOS</small><b id="rCorrect"></b></div><div class="stat"><small>PRECISIÓN</small><b id="rAcc"></b></div><div class="stat"><small>NOTA</small><b id="rScore"></b></div><div class="stat"><small>XP</small><b id="rXp"></b></div></div>
+<div id="saveState" class="feedback"></div><button id="retry" class="btn alt hidden" onclick="retrySend()">REINTENTAR ENVÍO</button>
+</section>
+</div><script src="alumnos-validos.js"></script><script src="app.js"></script></body></html>

@@ -1,6 +1,18 @@
 [
   {
     "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-15",
+    "titulo": "POWER 10 QUEST",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/power-10-quest-espacio6/index.html",
+    "destacado": false,
+    "visible": true
+  },
+  {
+    "descripcion": "",
     "materia": "CCNN",
     "tiempo": "15 min",
     "fecha": "2026-11-11",
