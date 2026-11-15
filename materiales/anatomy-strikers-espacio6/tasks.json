@@ -1,0 +1,346 @@
+[
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza el CRÁNEO.",
+    "answer": "cráneo",
+    "x": 52.5,
+    "y": 15.5,
+    "r": 6
+  },
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza la CLAVÍCULA.",
+    "answer": "clavícula",
+    "x": 50.5,
+    "y": 24.8,
+    "r": 7
+  },
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza el HÚMERO.",
+    "answer": "húmero",
+    "x": 41.8,
+    "y": 28.5,
+    "r": 6
+  },
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza las COSTILLAS.",
+    "answer": "costillas",
+    "x": 50.5,
+    "y": 30.5,
+    "r": 8
+  },
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza la PELVIS.",
+    "answer": "pelvis",
+    "x": 47.5,
+    "y": 40.2,
+    "r": 8
+  },
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza el FÉMUR.",
+    "answer": "fémur",
+    "x": 45.0,
+    "y": 51.0,
+    "r": 7
+  },
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza la RÓTULA.",
+    "answer": "rótula",
+    "x": 57.0,
+    "y": 55.1,
+    "r": 5
+  },
+  {
+    "m": 1,
+    "n": "DEFENSA ÓSEA",
+    "type": "hotspot",
+    "img": "assets/skeleton.png",
+    "prompt": "Localiza la TIBIA.",
+    "answer": "tibia",
+    "x": 57.0,
+    "y": 63.0,
+    "r": 6
+  },
+  {
+    "m": 2,
+    "n": "ATAQUE MUSCULAR",
+    "type": "hotspot",
+    "img": "assets/muscles.png",
+    "prompt": "Localiza el músculo FRONTAL.",
+    "answer": "frontal",
+    "x": 53.5,
+    "y": 14.8,
+    "r": 5
+  },
+  {
+    "m": 2,
+    "n": "ATAQUE MUSCULAR",
+    "type": "hotspot",
+    "img": "assets/muscles.png",
+    "prompt": "Localiza el DELTOIDES.",
+    "answer": "deltoides",
+    "x": 42.5,
+    "y": 26.0,
+    "r": 5
+  },
+  {
+    "m": 2,
+    "n": "ATAQUE MUSCULAR",
+    "type": "hotspot",
+    "img": "assets/muscles.png",
+    "prompt": "Localiza el PECTORAL.",
+    "answer": "pectoral",
+    "x": 55.5,
+    "y": 26.5,
+    "r": 7
+  },
+  {
+    "m": 2,
+    "n": "ATAQUE MUSCULAR",
+    "type": "hotspot",
+    "img": "assets/muscles.png",
+    "prompt": "Localiza el BÍCEPS.",
+    "answer": "bíceps",
+    "x": 42.5,
+    "y": 31.8,
+    "r": 6
+  },
+  {
+    "m": 2,
+    "n": "ATAQUE MUSCULAR",
+    "type": "hotspot",
+    "img": "assets/muscles.png",
+    "prompt": "Localiza los ABDOMINALES.",
+    "answer": "abdominales",
+    "x": 54.5,
+    "y": 37.0,
+    "r": 7
+  },
+  {
+    "m": 2,
+    "n": "ATAQUE MUSCULAR",
+    "type": "hotspot",
+    "img": "assets/muscles.png",
+    "prompt": "Localiza el CUÁDRICEPS.",
+    "answer": "cuádriceps",
+    "x": 46.0,
+    "y": 52.0,
+    "r": 7
+  },
+  {
+    "m": 2,
+    "n": "ATAQUE MUSCULAR",
+    "type": "hotspot",
+    "img": "assets/muscles.png",
+    "prompt": "Localiza el GEMELO.",
+    "answer": "gemelo",
+    "x": 45.0,
+    "y": 63.0,
+    "r": 6
+  },
+  {
+    "m": 3,
+    "n": "PASE PERFECTO",
+    "type": "match",
+    "prompt": "Une cada elemento con su localización.",
+    "pairs": [
+      [
+        "Húmero",
+        "Brazo"
+      ],
+      [
+        "Fémur",
+        "Muslo"
+      ],
+      [
+        "Rótula",
+        "Rodilla"
+      ],
+      [
+        "Gemelo",
+        "Pantorrilla"
+      ]
+    ]
+  },
+  {
+    "m": 3,
+    "n": "PASE PERFECTO",
+    "type": "sort",
+    "prompt": "Clasifica cada elemento.",
+    "targets": [
+      "Hueso",
+      "Músculo",
+      "Articulación"
+    ],
+    "items": [
+      [
+        "tibia",
+        "Hueso"
+      ],
+      [
+        "bíceps",
+        "Músculo"
+      ],
+      [
+        "rodilla",
+        "Articulación"
+      ],
+      [
+        "fémur",
+        "Hueso"
+      ],
+      [
+        "deltoides",
+        "Músculo"
+      ],
+      [
+        "hombro",
+        "Articulación"
+      ]
+    ]
+  },
+  {
+    "m": 4,
+    "n": "ENTRENAMIENTO EXTREMO",
+    "type": "choice",
+    "prompt": "¿Qué estructura une los músculos a los huesos?",
+    "options": [
+      "Tendón",
+      "Ligamento",
+      "Articulación",
+      "Cartílago"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 4,
+    "n": "ENTRENAMIENTO EXTREMO",
+    "type": "choice",
+    "prompt": "¿Qué estructura ayuda a unir y estabilizar los huesos de una articulación?",
+    "options": [
+      "Ligamento",
+      "Tendón",
+      "Músculo",
+      "Vértebra"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 4,
+    "n": "ENTRENAMIENTO EXTREMO",
+    "type": "choice",
+    "prompt": "¿Qué tendón une los músculos de la pantorrilla con los huesos del pie?",
+    "options": [
+      "Tendón de Aquiles",
+      "Tendón frontal",
+      "Ligamento del hombro",
+      "Tendón pectoral"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 4,
+    "n": "ENTRENAMIENTO EXTREMO",
+    "type": "multi",
+    "prompt": "Selecciona las medidas que ayudan a prevenir lesiones.",
+    "options": [
+      "Realizar estiramientos",
+      "Practicar deporte de forma regular y adecuada",
+      "Hacer esfuerzos máximos sin calentar",
+      "Evitar cualquier movimiento"
+    ],
+    "correct": [
+      0,
+      1
+    ]
+  },
+  {
+    "m": 5,
+    "n": "SUPERTIRO ANATÓMICO",
+    "type": "multi",
+    "prompt": "Un delantero golpea el balón extendiendo con fuerza la pierna. ¿Qué elementos intervienen claramente?",
+    "options": [
+      "Fémur",
+      "Tibia",
+      "Cuádriceps",
+      "Rodilla",
+      "Clavícula"
+    ],
+    "correct": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "m": 5,
+    "n": "SUPERTIRO ANATÓMICO",
+    "type": "multi",
+    "prompt": "El portero eleva el brazo para despejar un balón alto. ¿Qué elementos están relacionados con ese movimiento?",
+    "options": [
+      "Húmero",
+      "Hombro",
+      "Deltoides",
+      "Rótula",
+      "Gemelo"
+    ],
+    "correct": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "m": 5,
+    "n": "SUPERTIRO ANATÓMICO",
+    "type": "choice",
+    "prompt": "Si se inflama un tendón y duele al moverlo, hablamos de…",
+    "options": [
+      "Tendinitis",
+      "Fractura",
+      "Luxación",
+      "Esguince"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 5,
+    "n": "SUPERTIRO ANATÓMICO",
+    "type": "choice",
+    "prompt": "¿Qué pareja representa correctamente una estructura y una función?",
+    "options": [
+      "Tendón → une músculo y hueso",
+      "Ligamento → produce la contracción muscular",
+      "Rótula → une músculo y hueso",
+      "Gemelo → une dos huesos"
+    ],
+    "correct": 0
+  }
+]
