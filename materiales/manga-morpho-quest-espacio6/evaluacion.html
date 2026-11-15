@@ -1,0 +1,51 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MANGA MORPHO QUEST</title><link rel="stylesheet" href="styles.css"></head>
+<body data-mode="evaluation"><div class="wrap">
+<div class="topbar"><span>🎌 Sakura Grammar Academy</span><span>Episode #01 · Morpho Quest</span></div>
+<section class="hero">
+<div class="badge">SUPER MISIÓN DE LENGUA</div>
+<div class="mangaBurst">YATTA!</div>
+<div class="title">MANGA MORPHO QUEST</div>
+<div class="subtitle">Adéntrate en una aventura gamificada para dominar <b>numerales</b>, <b>indefinidos</b> y el <b>análisis morfológico</b> con retos visuales, dinámicos y muy coloridos.</div>
+</section>
+<div class="sectionCaption">⚡ EXPLORA EL MAPA, SUPERA LAS MISIONES Y DERROTA AL BOSS FINAL ⚡</div>
+
+<section id="identity" class="panel ">
+<h2>🧑‍🏫 Modo evaluación</h2>
+<p class="note">Introduce tu código personal y tu grupo para comenzar la misión.</p>
+<div class="row">
+<input id="studentCode" placeholder="Ej.: 6B-K7P4">
+<select id="group"><option value="">Selecciona grupo</option><option>6.º A</option><option>6.º B</option></select>
+</div>
+<div id="identityMsg" class="feedback badmsg"></div><br>
+<button class="btn" onclick="startEvaluation()">INICIAR MISIÓN →</button>
+</section>
+
+<section id="game" class="panel hidden">
+<div id="map" class="map"></div>
+<div class="gameHead">
+<div><span id="mission" class="tag"></span><h2>Reto <span id="qnum"></span>/<span id="total"></span></h2></div>
+<div class="hud"><span>⭐ XP <b id="xp">0</b></span><span>🔥 Combo <b id="combo">0</b></span></div>
+</div>
+<div class="progress"><div id="bar"></div></div>
+<div id="prompt" class="prompt"></div>
+<div id="task"></div>
+<div id="feedback" class="feedback"></div>
+<div class="foot">
+<span class="note">Sin mostrar soluciones durante la evaluación.</span>
+<div><button id="check" class="btn alt" onclick="check()">COMPROBAR</button> <button id="next" class="btn green hidden" onclick="nextTask()">SIGUIENTE →</button></div>
+</div>
+</section>
+
+<section id="result" class="panel hidden">
+<div class="finalIcon">🏯</div>
+<h2>¡MISIÓN COMPLETADA! <span id="rank" class="rank">A</span></h2>
+<div class="stats">
+<div class="stat"><small>Retos</small><b id="rCorrect"></b></div>
+<div class="stat"><small>Precisión</small><b id="rAcc"></b></div>
+<div class="stat"><small>Nota</small><b id="rScore"></b></div>
+<div class="stat"><small>XP</small><b id="rXp"></b></div>
+</div>
+<div id="saveState" class="feedback"></div>
+<button id="retry" class="btn alt hidden" onclick="retrySend()">REINTENTAR ENVÍO</button>
+</section>
+</div><script src="alumnos-validos.js"></script><script src="app.js"></script></body></html>

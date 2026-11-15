@@ -1,0 +1,339 @@
+[
+  {
+    "m": 1,
+    "n": "NUMERAL SCOUT",
+    "t": "choice",
+    "p": "En «Marta compró seis peras y tres plátanos», ¿qué numerales aparecen?",
+    "o": [
+      "seis y tres",
+      "Marta y peras",
+      "compró y plátanos",
+      "Marta y tres"
+    ],
+    "a": 0
+  },
+  {
+    "m": 1,
+    "n": "NUMERAL SCOUT",
+    "t": "sort",
+    "p": "Clasifica los numerales.",
+    "targets": [
+      "Cardinal",
+      "Ordinal"
+    ],
+    "items": [
+      [
+        "dos",
+        "Cardinal"
+      ],
+      [
+        "séptimo",
+        "Ordinal"
+      ],
+      [
+        "trece",
+        "Cardinal"
+      ],
+      [
+        "primera",
+        "Ordinal"
+      ],
+      [
+        "ochenta",
+        "Cardinal"
+      ],
+      [
+        "quinto",
+        "Ordinal"
+      ]
+    ]
+  },
+  {
+    "m": 1,
+    "n": "NUMERAL SCOUT",
+    "t": "choice",
+    "p": "En «En la duodécima edición Jaime quedó en quinto puesto», ¿qué ordinales aparecen?",
+    "o": [
+      "duodécima y quinto",
+      "edición y puesto",
+      "Jaime y quinto",
+      "duodécima y edición"
+    ],
+    "a": 0
+  },
+  {
+    "m": 1,
+    "n": "NUMERAL SCOUT",
+    "t": "input",
+    "p": "Escribe la clase de numeral de «veinte» en «ciento veinte minutos».",
+    "a": "cardinal"
+  },
+  {
+    "m": 2,
+    "n": "INDEFINITE FOREST",
+    "t": "sort",
+    "p": "Clasifica los indefinidos por número.",
+    "targets": [
+      "Singular",
+      "Plural"
+    ],
+    "items": [
+      [
+        "alguna",
+        "Singular"
+      ],
+      [
+        "ningún",
+        "Singular"
+      ],
+      [
+        "muchas",
+        "Plural"
+      ],
+      [
+        "pocos",
+        "Plural"
+      ],
+      [
+        "todo",
+        "Singular"
+      ],
+      [
+        "demasiadas",
+        "Plural"
+      ]
+    ]
+  },
+  {
+    "m": 2,
+    "n": "INDEFINITE FOREST",
+    "t": "choice",
+    "p": "¿Cuál de estas palabras es un indefinido?",
+    "o": [
+      "muchas",
+      "séptimo",
+      "trece",
+      "segunda"
+    ],
+    "a": 0
+  },
+  {
+    "m": 2,
+    "n": "INDEFINITE FOREST",
+    "t": "multi",
+    "p": "Selecciona todos los indefinidos.",
+    "o": [
+      "alguna",
+      "pocas",
+      "quinto",
+      "ningunos"
+    ],
+    "a": [
+      0,
+      1,
+      3
+    ]
+  },
+  {
+    "m": 2,
+    "n": "INDEFINITE FOREST",
+    "t": "choice",
+    "p": "En «No tenía ninguna raqueta», la palabra «ninguna» es…",
+    "o": [
+      "indefinido femenino singular",
+      "numeral cardinal",
+      "numeral ordinal",
+      "indefinido masculino plural"
+    ],
+    "a": 0
+  },
+  {
+    "m": 3,
+    "n": "MORPHO LAB",
+    "t": "match",
+    "p": "Relaciona cada palabra con su análisis morfológico.",
+    "pairs": [
+      [
+        "pocos",
+        "indefinido, masculino, plural"
+      ],
+      [
+        "algunas",
+        "indefinido, femenino, plural"
+      ],
+      [
+        "primer",
+        "numeral ordinal"
+      ],
+      [
+        "dos",
+        "numeral cardinal"
+      ]
+    ]
+  },
+  {
+    "m": 3,
+    "n": "MORPHO LAB",
+    "t": "choice",
+    "p": "En «Pocos viajeros cogieron el primer tren», el análisis correcto de «pocos» es…",
+    "o": [
+      "indefinido, masculino, plural",
+      "numeral cardinal",
+      "indefinido, femenino, plural",
+      "numeral ordinal"
+    ],
+    "a": 0
+  },
+  {
+    "m": 3,
+    "n": "MORPHO LAB",
+    "t": "choice",
+    "p": "En «Este zumo lleva dos peras y muchas fresas», el análisis correcto de «muchas» es…",
+    "o": [
+      "indefinido, femenino, plural",
+      "numeral cardinal",
+      "indefinido, masculino, singular",
+      "numeral ordinal"
+    ],
+    "a": 0
+  },
+  {
+    "m": 3,
+    "n": "MORPHO LAB",
+    "t": "input",
+    "p": "Completa: «primer» es un numeral ________.",
+    "a": "ordinal"
+  },
+  {
+    "m": 4,
+    "n": "SYNTAX GATE",
+    "t": "choice",
+    "p": "En «alguna actriz», el indefinido funciona como…",
+    "o": [
+      "determinante",
+      "núcleo",
+      "complemento",
+      "verbo"
+    ],
+    "a": 0
+  },
+  {
+    "m": 4,
+    "n": "SYNTAX GATE",
+    "t": "choice",
+    "p": "En «un animal cualquiera», el indefinido «cualquiera» funciona como…",
+    "o": [
+      "complemento",
+      "determinante",
+      "núcleo",
+      "adverbio"
+    ],
+    "a": 0
+  },
+  {
+    "m": 4,
+    "n": "SYNTAX GATE",
+    "t": "choice",
+    "p": "En «nadie habló», el indefinido «nadie» funciona como…",
+    "o": [
+      "núcleo",
+      "determinante",
+      "complemento",
+      "artículo"
+    ],
+    "a": 0
+  },
+  {
+    "m": 4,
+    "n": "SYNTAX GATE",
+    "t": "sort",
+    "p": "Clasifica según la función que desempeñan.",
+    "targets": [
+      "Determinante",
+      "Núcleo",
+      "Complemento"
+    ],
+    "items": [
+      [
+        "alguna (en «alguna actriz»)",
+        "Determinante"
+      ],
+      [
+        "nadie",
+        "Núcleo"
+      ],
+      [
+        "cualquiera",
+        "Complemento"
+      ],
+      [
+        "muchas (en «muchas fotografías»)",
+        "Determinante"
+      ],
+      [
+        "uno (en «cogí uno»)",
+        "Núcleo"
+      ],
+      [
+        "quinta (en «la quinta fila»)",
+        "Complemento"
+      ]
+    ]
+  },
+  {
+    "m": 5,
+    "n": "BOSS BATTLE",
+    "t": "choice",
+    "p": "En «No había nadie en la azotea del décimo piso», ¿qué análisis es correcto?",
+    "o": [
+      "nadie: indefinido; décimo: numeral ordinal",
+      "nadie: numeral cardinal; décimo: indefinido",
+      "nadie: verbo; décimo: adjetivo calificativo",
+      "nadie: artículo; décimo: numeral cardinal"
+    ],
+    "a": 0
+  },
+  {
+    "m": 5,
+    "n": "BOSS BATTLE",
+    "t": "choice",
+    "p": "En «Algunas semanas teníamos tres partidos», ¿qué opción es correcta?",
+    "o": [
+      "algunas es indefinido y tres es numeral cardinal",
+      "algunas es numeral ordinal y tres es indefinido",
+      "ambas son indefinidos",
+      "ambas son ordinales"
+    ],
+    "a": 0
+  },
+  {
+    "m": 5,
+    "n": "BOSS BATTLE",
+    "t": "multi",
+    "p": "Selecciona todas las afirmaciones correctas.",
+    "o": [
+      "Los cardinales expresan cantidad exacta",
+      "Los ordinales expresan orden",
+      "Los indefinidos expresan cantidad o existencia imprecisa",
+      "Los indefinidos siempre son numerales"
+    ],
+    "a": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "m": 5,
+    "n": "BOSS BATTLE",
+    "t": "choice",
+    "p": "¿Cuál de estas secuencias resume mejor lo aprendido?",
+    "o": [
+      "cardinal = cantidad exacta; ordinal = orden; indefinido = cantidad imprecisa",
+      "cardinal = orden; ordinal = cantidad exacta; indefinido = siempre plural",
+      "cardinal = artículo; ordinal = pronombre; indefinido = verbo",
+      "todas son falsas"
+    ],
+    "a": 0
+  }
+]

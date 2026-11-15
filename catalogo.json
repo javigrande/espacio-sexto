@@ -1,6 +1,18 @@
 [
   {
     "descripcion": "",
+    "materia": "Lengua",
+    "tiempo": "15 min",
+    "fecha": "2026-11-15",
+    "titulo": "MANGA MORPHO QUEST",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/manga-morpho-quest-espacio6/index.html",
+    "destacado": false,
+    "visible": true
+  },
+  {
+    "descripcion": "",
     "materia": "Matemáticas",
     "tiempo": "15 min",
     "fecha": "2026-11-15",
