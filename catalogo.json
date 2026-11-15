@@ -1,6 +1,18 @@
 [
   {
     "descripcion": "",
+    "materia": "CCNN",
+    "tiempo": "15 min",
+    "fecha": "2026-11-15",
+    "titulo": "ANATOMY STRIKERS",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/anatomy-strikers-compacto-espacio6/index.html",
+    "destacado": false,
+    "visible": true
+  },
+  {
+    "descripcion": "",
     "materia": "Lengua",
     "tiempo": "15 min",
     "fecha": "2026-11-15",
