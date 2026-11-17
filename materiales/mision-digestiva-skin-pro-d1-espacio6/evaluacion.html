@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Misión Digestiva</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="evaluation">
+<div class="wrap">
+  <section class="header">
+    <div class="level">6.º Primaria</div>
+    <div class="titleWrap">
+      <div class="title">Misión <span class="accent">Digestiva</span></div>
+      <div class="subtitle">Ruta del alimento</div>
+    </div>
+    <div class="hud">
+      <div class="hudBox">⭐ Puntos<br><b id="points">0</b></div>
+      <div class="hudBox">🔥 Racha<br><b id="streak">0</b></div>
+      <div class="hudBox hudWide">
+        <span>🎯 Precisión</span>
+        <div class="meter"><div id="meterFill"></div></div>
+        <b id="accuracy">100 %</b>
+      </div>
+    </div>
+  </section>
+
+  <div id="tabs" class="tabs"></div>
+
+  <section id="identity" class="identity ">
+    <h2>Modo evaluación</h2>
+    <div class="row">
+      <input id="studentCode" placeholder="Ej.: 6B-K7P4">
+      <select id="group">
+        <option value="">Selecciona grupo</option>
+        <option>6.º A</option>
+        <option>6.º B</option>
+      </select>
+    </div>
+    <div id="identityMsg" class="feedback bad"></div>
+    <br>
+    <button class="btn primary" onclick="startEvaluation()">Comenzar evaluación</button>
+  </section>
+
+  <section id="game" class="game hidden">
+    <div class="mainCard">
+      <div class="missionRibbon">
+        <div id="badge" class="badge">Misión 1</div>
+        <div id="missionTitle" class="bigTitle"></div>
+      </div>
+      <div id="instruction" class="instruction"></div>
+      <div id="stageCount" class="stageHint"></div>
+      <div id="taskArea"></div>
+      <div id="feedback" class="feedback"></div>
+      <div class="footerBar">
+        <div class="note">Durante la evaluación no se muestran soluciones.</div>
+        <div>
+          <button id="checkBtn" class="btn primary" onclick="check()">Comprobar</button>
+          <button id="nextBtn" class="btn next hidden" onclick="nextTask()">Siguiente</button>
+        </div>
+      </div>
+    </div>
+    <aside class="sideCard">
+      <div class="previewTitle">🔎 Próxima actividad</div>
+      <div id="previewMission" class="badgeSmall">Misión 2</div>
+      <div id="previewTitle" class="previewSub"></div>
+      <div id="previewPanel" class="previewBody"></div>
+    </aside>
+  </section>
+
+  <section id="result" class="result hidden">
+    <h2>¡Misión completada!</h2>
+    <div class="rank">Ruta dominada</div>
+    <div class="stats">
+      <div class="stat"><small>Aciertos</small><b id="rCorrect"></b></div>
+      <div class="stat"><small>Precisión</small><b id="rAcc"></b></div>
+      <div class="stat"><small>Nota</small><b id="rScore"></b></div>
+      <div class="stat"><small>Mejor racha</small><b id="rStreak"></b></div>
+    </div>
+    <div id="saveState" class="feedback"></div>
+    <button id="retryBtn" class="btn hidden" onclick="retrySend()">Reintentar envío</button>
+  </section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
