@@ -5,18 +5,6 @@
     "tiempo": "15 min",
     "fecha": "2026-11-17",
     "titulo": "MISION DIGESTIVA",
-    "tipo": "Evaluación",
-    "icono": "🎯",
-    "archivo": "materiales/mision-digestiva-skin-pro-aleatoria-espacio6-codigos-d1/evaluacion.html",
-    "destacado": true,
-    "visible": true
-  },
-  {
-    "descripcion": "",
-    "materia": "CCNN",
-    "tiempo": "15 min",
-    "fecha": "2026-11-17",
-    "titulo": "MISION DIGESTIVA",
     "tipo": "Repaso",
     "icono": "🧪",
     "archivo": "materiales/mision-digestiva-skin-pro-aleatoria-espacio6/index.html",
