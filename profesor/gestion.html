@@ -21,6 +21,27 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
 .stat{padding:16px}.stat b{font-size:1.8rem;display:block}.status{white-space:pre-wrap;margin-top:10px;font-size:.86rem}.ok{color:var(--green)}.bad{color:var(--red)}
 @media(max-width:900px){.grid,.grid3{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr 1fr}.checkbox-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.wrap{padding:12px}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}}
+
+.teaching-toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+.teaching-stats{display:flex;gap:8px;flex-wrap:wrap}
+.teaching-stat{background:#f7f9fc;border:1px solid #e3e8ef;border-radius:12px;padding:8px 11px;font-size:.85rem}
+.teaching-matrix-wrap{overflow:auto;border:1px solid #dfe6ef;border-radius:16px;background:white}
+.teaching-matrix{border-collapse:separate;border-spacing:0;width:100%;min-width:780px}
+.teaching-matrix th,.teaching-matrix td{padding:11px;border-right:1px solid #e7ebf1;border-bottom:1px solid #e7ebf1;vertical-align:top}
+.teaching-matrix th{background:#f5f7fb;font-size:.86rem;text-align:left}
+.teaching-matrix th:first-child,.teaching-matrix td:first-child{position:sticky;left:0;z-index:2;background:#fbfcfe;min-width:170px;font-weight:900}
+.teaching-matrix thead th{position:sticky;top:0;z-index:3}
+.teaching-matrix thead th:first-child{z-index:4}
+.teaching-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;margin:2px;border-radius:999px;background:#eef3ff;border:1px solid #ccd7ff;font-size:.78rem;font-weight:850}
+.teaching-chip button{border:0;background:transparent;color:#9b2436;padding:0;cursor:pointer;font-weight:900}
+.teaching-add{display:block;margin-top:6px;border:1px dashed #aeb8c7;background:#fff;color:#334155;padding:6px 8px;border-radius:9px;font-size:.76rem}
+.teacher-card{border:1px solid #e1e7ef;border-radius:14px;padding:12px;margin:8px 0;background:#fff}
+.teacher-card .chips{margin-top:8px}
+.teacher-assignment-chip{display:inline-block;padding:5px 8px;margin:2px;border-radius:999px;background:#f3f6fa;border:1px solid #dce3ec;font-size:.77rem}
+.picker-backdrop{position:fixed;inset:0;background:#0f172a88;z-index:99;display:flex;align-items:center;justify-content:center;padding:18px}
+.picker-card{width:min(560px,100%);max-height:80vh;overflow:auto;background:#fff;border-radius:18px;padding:18px;box-shadow:0 24px 80px #0005}
+.picker-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid #e3e8ef;border-radius:12px;margin:8px 0}
+@media(max-width:720px){.teaching-matrix{min-width:680px}}
 </style>
 </head>
 <body>
@@ -52,7 +73,7 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
   <div class="tabs">
     <button class="tab active" data-tab="courses">🏫 Cursos y grupos</button>
     <button class="tab" data-tab="teachers">👨‍🏫 Profesores</button>
-    <button class="tab" data-tab="assign">🧩 Asignaciones</button>
+    <button class="tab" data-tab="assign">🧩 Docencia</button>
     <button class="tab" data-tab="activities">📚 Actividades</button>
     <button class="tab" data-tab="students">👥 Alumnado</button>
   </div>
@@ -94,14 +115,34 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
   </div>
 
   <div id="assign" class="panel">
-    <div class="card section"><h2>Profesor · grupo · materia</h2>
-      <div class="formgrid">
-        <div><label>Profesor</label><select id="asTeacher"></select></div>
-        <div><label>Grupo</label><select id="asGroup"></select></div>
-        <div><label>Materia</label><select id="asSubject"></select></div>
-        <button class="primary" onclick="saveAssignment()">Asignar</button>
+    <div class="card section">
+      <div class="teaching-toolbar">
+        <div>
+          <h2 style="margin-bottom:4px">Docencia por clases y áreas</h2>
+          <div class="muted">Cada celda representa una clase y un área. Puedes asignar uno o varios profesores.</div>
+        </div>
+        <div class="teaching-stats">
+          <span class="teaching-stat"><b id="docGroupsCount">0</b> clases</span>
+          <span class="teaching-stat"><b id="docSubjectsCount">0</b> áreas</span>
+          <span class="teaching-stat"><b id="docAssignmentsCount">0</b> asignaciones</span>
+        </div>
       </div>
-      <div id="assignmentsList" class="list"></div>
+
+      <div id="teachingMatrix" class="teaching-matrix-wrap"></div>
+
+      <h3 style="margin-top:22px">Resumen por profesor</h3>
+      <div id="teacherTeachingSummary"></div>
+    </div>
+  </div>
+
+  <div id="docenciaPicker" class="hidden picker-backdrop">
+    <div class="picker-card">
+      <h3 id="docenciaPickerTitle">Asignar profesorado</h3>
+      <div class="muted" id="docenciaPickerSubtitle"></div>
+      <div id="docenciaPickerList" style="margin-top:12px"></div>
+      <div class="actions" style="justify-content:flex-end;margin-top:14px">
+        <button class="light" onclick="closeDocenciaPicker()">Cerrar</button>
+      </div>
     </div>
   </div>
 
@@ -194,22 +235,139 @@ async function loadState(){
 function renderAll(){
   $("nTeachers").textContent=S.teachers.length;$("nGroups").textContent=S.groups.length;$("nActivities").textContent=S.activities.length;
   $("groupYear").innerHTML=S.years.map(x=>`<option value="${x.id}">${esc(x.label)}</option>`).join("");
-  $("asTeacher").innerHTML=S.teachers.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
-  $("asGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
   $("studentGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
   $("bulkGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
   const subopts=S.subjects.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
-  $("asSubject").innerHTML=subopts;$("actSubject").innerHTML='<option value="">Sin materia</option>'+subopts;
+$("actSubject").innerHTML='<option value="">Sin materia</option>'+subopts;
   $("accessActivity").innerHTML=S.activities.filter(x=>x.active).map(x=>`<option value="${esc(x.activity_id)}">${esc(x.title)}</option>`).join("");
 
   $("yearsList").innerHTML=S.years.map(x=>`<div class="item"><div><b>${esc(x.label)}</b><br><small>${x.active?"Activo":"Archivado"}</small></div></div>`).join("");
   $("groupsList").innerHTML=S.groups.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${esc(x.year_label)}</small></div></div>`).join("");
   $("teachersList").innerHTML=S.teachers.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${x.active?"Activo":"Desactivado"} · clave privada</small></div><button class="light" onclick='resetTeacher(${JSON.stringify(x.id)},${JSON.stringify(x.name)})'>Cambiar PIN</button></div>`).join("");
-  $("assignmentsList").innerHTML=S.assignments.map(x=>`<div class="item"><div><b>${esc(x.teacher_name)}</b> <span class="pill">${esc(x.group_name)}</span> <span class="pill">${esc(x.subject_name)}</span></div><button class="danger" onclick='deleteAssignment(${JSON.stringify(x.id)})'>Quitar</button></div>`).join("");
   $("activitiesList").innerHTML=S.activities.map(x=>`<div class="item"><div><b>${esc(x.title)}</b><br><small>${esc(x.activity_id)}${x.subject_name?" · "+esc(x.subject_name):""}</small></div></div>`).join("");
   renderStudents();
+  renderTeachingManagement();
   renderAccess();
 }
+
+function renderTeachingManagement(){
+  if(!S)return;
+  const groups=(S.groups||[]).filter(x=>x.active);
+  const subjects=(S.subjects||[]).filter(x=>x.active);
+  const teachers=(S.teachers||[]).filter(x=>x.active);
+  const assignments=S.assignments||[];
+
+  const setText=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
+  setText("docGroupsCount",groups.length);
+  setText("docSubjectsCount",subjects.length);
+  setText("docAssignmentsCount",assignments.length);
+
+  const teacherById=new Map(teachers.map(t=>[String(t.id),t]));
+  const cellMap=new Map();
+  assignments.forEach(a=>{
+    const k=String(a.group_id)+"|"+String(a.subject_id);
+    if(!cellMap.has(k))cellMap.set(k,[]);
+    cellMap.get(k).push(a);
+  });
+
+  const matrix=document.getElementById("teachingMatrix");
+  if(matrix){
+    matrix.innerHTML=`<table class="teaching-matrix">
+      <thead><tr><th>Área</th>${groups.map(gr=>`<th>${esc(gr.name)}</th>`).join("")}</tr></thead>
+      <tbody>${subjects.map(sub=>`<tr>
+        <td>${esc(sub.name)}</td>
+        ${groups.map(gr=>{
+          const rows=cellMap.get(String(gr.id)+"|"+String(sub.id))||[];
+          return `<td>
+            ${rows.map(a=>{
+              const t=teacherById.get(String(a.teacher_id));
+              return t?`<span class="teaching-chip">${esc(t.name)} <button title="Quitar asignación" onclick='removeTeachingAssignment(${JSON.stringify(a.id)},${JSON.stringify(t.name)},${JSON.stringify(gr.name)},${JSON.stringify(sub.name)})'>×</button></span>`:"";
+            }).join("")}
+            <button class="teaching-add" onclick='openDocenciaPicker(${JSON.stringify(gr.id)},${JSON.stringify(gr.name)},${JSON.stringify(sub.id)},${JSON.stringify(sub.name)})'>+ Asignar profesor</button>
+          </td>`;
+        }).join("")}
+      </tr>`).join("")}</tbody>
+    </table>`;
+  }
+
+  const summary=document.getElementById("teacherTeachingSummary");
+  if(summary){
+    summary.innerHTML=teachers.map(t=>{
+      const mine=assignments.filter(a=>String(a.teacher_id)===String(t.id));
+      return `<div class="teacher-card">
+        <b>${esc(t.name)}</b>
+        <div class="chips">${mine.length
+          ? mine.map(a=>`<span class="teacher-assignment-chip">${esc(a.group_name)} · ${esc(a.subject_name)}</span>`).join("")
+          : '<span class="muted">Sin docencia asignada</span>'}</div>
+      </div>`;
+    }).join("") || '<div class="muted">No hay profesores activos.</div>';
+  }
+}
+
+function openDocenciaPicker(groupId,groupName,subjectId,subjectName){
+  const picker=document.getElementById("docenciaPicker");
+  const title=document.getElementById("docenciaPickerTitle");
+  const subtitle=document.getElementById("docenciaPickerSubtitle");
+  const list=document.getElementById("docenciaPickerList");
+  if(!picker||!title||!subtitle||!list)return;
+
+  title.textContent="Asignar profesorado";
+  subtitle.textContent=groupName+" · "+subjectName;
+
+  const assigned=new Set((S.assignments||[])
+    .filter(a=>String(a.group_id)===String(groupId)&&String(a.subject_id)===String(subjectId))
+    .map(a=>String(a.teacher_id)));
+
+  const teachers=(S.teachers||[]).filter(t=>t.active);
+  list.innerHTML=teachers.map(t=>`
+    <label class="picker-row">
+      <span><b>${esc(t.name)}</b><br><small>${assigned.has(String(t.id))?"Asignado":"No asignado"}</small></span>
+      <input type="checkbox" ${assigned.has(String(t.id))?"checked":""}
+        onchange='toggleTeachingTeacher(${JSON.stringify(groupId)},${JSON.stringify(subjectId)},${JSON.stringify(t.id)},this.checked)'>
+    </label>`).join("") || '<div class="muted">No hay profesores activos.</div>';
+
+  picker.classList.remove("hidden");
+}
+
+function closeDocenciaPicker(){
+  const picker=document.getElementById("docenciaPicker");
+  if(picker)picker.classList.add("hidden");
+}
+
+async function toggleTeachingTeacher(groupId,subjectId,teacherId,checked){
+  try{
+    if(checked){
+      await api("/api/admin/academic/assignment",{
+        method:"POST",
+        body:JSON.stringify({teacherId,groupId,subjectId})
+      });
+    }else{
+      const a=(S.assignments||[]).find(x=>
+        String(x.group_id)===String(groupId)&&
+        String(x.subject_id)===String(subjectId)&&
+        String(x.teacher_id)===String(teacherId)
+      );
+      if(a){
+        await api("/api/admin/academic/assignment?id="+encodeURIComponent(a.id),{method:"DELETE"});
+      }
+    }
+    await loadState();
+    openDocenciaPicker(groupId,
+      (S.groups.find(x=>String(x.id)===String(groupId))||{}).name||"",
+      subjectId,
+      (S.subjects.find(x=>String(x.id)===String(subjectId))||{}).name||"");
+  }catch(e){bad(e)}
+}
+
+async function removeTeachingAssignment(id,teacherName,groupName,subjectName){
+  if(!confirm(`¿Quitar a ${teacherName} de ${groupName} · ${subjectName}?`))return;
+  try{
+    await api("/api/admin/academic/assignment?id="+encodeURIComponent(id),{method:"DELETE"});
+    await loadState();
+    ok("Asignación eliminada.");
+  }catch(e){bad(e)}
+}
+
 function renderAccess(){
   const aid=$("accessActivity").value;
   const gids=new Set(S.activityGroups.filter(x=>x.activity_id===aid).map(x=>x.group_id));
@@ -417,6 +575,11 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");$(b.dataset.tab).classList.add("active");
 });
+
+document.addEventListener("click",e=>{
+  if(e.target?.id==="docenciaPicker") closeDocenciaPicker();
+});
+
 </script>
 
 <script id="ESPACIO6_ENTER_LOGIN">
