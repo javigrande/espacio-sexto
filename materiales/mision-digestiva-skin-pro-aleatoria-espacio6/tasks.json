@@ -1,0 +1,209 @@
+[
+  {
+    "mission": 1,
+    "missionName": "Ruta del alimento",
+    "type": "order",
+    "prompt": "Ordena el recorrido correcto del alimento desde que entra hasta que sale.",
+    "instruction": "Toca los botones en el orden correcto.",
+    "items": [
+      "Boca",
+      "Esófago",
+      "Estómago",
+      "Intestino delgado",
+      "Intestino grueso",
+      "Ano"
+    ]
+  },
+  {
+    "mission": 1,
+    "missionName": "Ruta del alimento",
+    "type": "choice",
+    "prompt": "¿Qué parte transporta el alimento desde la boca hasta el estómago?",
+    "options": [
+      "Esófago",
+      "Páncreas",
+      "Intestino grueso",
+      "Hígado"
+    ],
+    "correct": 0
+  },
+  {
+    "mission": 1,
+    "missionName": "Ruta del alimento",
+    "type": "choice",
+    "prompt": "¿Dónde se mezclan los alimentos con los jugos gástricos?",
+    "options": [
+      "Estómago",
+      "Boca",
+      "Esófago",
+      "Ano"
+    ],
+    "correct": 0
+  },
+  {
+    "mission": 2,
+    "missionName": "Glándulas digestivas",
+    "type": "match",
+    "prompt": "Relaciona cada glándula u órgano con lo que produce.",
+    "pairs": [
+      [
+        "Glándulas salivales",
+        "Saliva"
+      ],
+      [
+        "Hígado",
+        "Bilis"
+      ],
+      [
+        "Páncreas",
+        "Jugo pancreático"
+      ]
+    ]
+  },
+  {
+    "mission": 2,
+    "missionName": "Glándulas digestivas",
+    "type": "choice",
+    "prompt": "¿Qué órgano produce la bilis?",
+    "options": [
+      "Hígado",
+      "Estómago",
+      "Esófago",
+      "Intestino delgado"
+    ],
+    "correct": 0
+  },
+  {
+    "mission": 3,
+    "missionName": "Digestión y absorción",
+    "type": "multi",
+    "prompt": "Selecciona las funciones principales del aparato digestivo.",
+    "options": [
+      "Descomponer los alimentos",
+      "Absorber nutrientes",
+      "Eliminar restos no aprovechados",
+      "Fabricar huesos"
+    ],
+    "correct": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "mission": 3,
+    "missionName": "Digestión y absorción",
+    "type": "choice",
+    "prompt": "¿Dónde se completa la digestión y se absorben los nutrientes?",
+    "options": [
+      "Intestino delgado",
+      "Estómago",
+      "Intestino grueso",
+      "Boca"
+    ],
+    "correct": 0
+  },
+  {
+    "mission": 3,
+    "missionName": "Digestión y absorción",
+    "type": "choice",
+    "prompt": "¿Qué parte absorbe agua y ayuda a formar las heces?",
+    "options": [
+      "Intestino grueso",
+      "Páncreas",
+      "Esófago",
+      "Glándulas salivales"
+    ],
+    "correct": 0
+  },
+  {
+    "mission": 4,
+    "missionName": "Completa y aplica",
+    "type": "fill",
+    "prompt": "Completa la frase.",
+    "sentence": "En la boca, los alimentos se trituran y se mezclan con la ____.",
+    "answer": "saliva"
+  },
+  {
+    "mission": 4,
+    "missionName": "Completa y aplica",
+    "type": "fill",
+    "prompt": "Completa la frase.",
+    "sentence": "El aparato digestivo está formado por el tubo digestivo y las glándulas ____.",
+    "answer": "digestivas"
+  },
+  {
+    "mission": 4,
+    "missionName": "Completa y aplica",
+    "type": "choice",
+    "prompt": "Si una persona mastica una manzana, ¿en qué parte comienza la digestión?",
+    "options": [
+      "Boca",
+      "Estómago",
+      "Intestino delgado",
+      "Ano"
+    ],
+    "correct": 0
+  },
+  {
+    "mission": 5,
+    "missionName": "Jefe final",
+    "type": "match",
+    "prompt": "Relaciona cada tramo con su función.",
+    "pairs": [
+      [
+        "Boca",
+        "Tritura y mezcla con saliva"
+      ],
+      [
+        "Estómago",
+        "Mezcla con jugos gástricos"
+      ],
+      [
+        "Intestino delgado",
+        "Absorbe nutrientes"
+      ],
+      [
+        "Intestino grueso",
+        "Forma las heces"
+      ]
+    ]
+  },
+  {
+    "mission": 5,
+    "missionName": "Jefe final",
+    "type": "multi",
+    "prompt": "Selecciona los órganos que pertenecen al tubo digestivo.",
+    "options": [
+      "Boca",
+      "Esófago",
+      "Estómago",
+      "Intestino delgado",
+      "Intestino grueso",
+      "Ano",
+      "Hígado",
+      "Páncreas"
+    ],
+    "correct": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "mission": 5,
+    "missionName": "Jefe final",
+    "type": "choice",
+    "prompt": "¿Qué opción resume mejor para qué sirve el aparato digestivo?",
+    "options": [
+      "Transforma alimentos, absorbe nutrientes y elimina restos",
+      "Hace que la sangre circule por el cuerpo",
+      "Permite mover los músculos",
+      "Dirige todos los pensamientos"
+    ],
+    "correct": 0
+  }
+]
