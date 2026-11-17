@@ -1,6 +1,18 @@
 [
   {
     "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-17",
+    "titulo": "MISION DIGESTIVA",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/mision-digestiva-skin-pro-espacio6/index.html",
+    "destacado": false,
+    "visible": true
+  },
+  {
+    "descripcion": "",
     "materia": "CCNN",
     "tiempo": "15 min",
     "fecha": "2026-11-15",
