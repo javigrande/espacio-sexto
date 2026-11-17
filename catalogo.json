@@ -3,6 +3,18 @@
     "descripcion": "",
     "materia": "CCNN",
     "tiempo": "15 min",
+    "fecha": "2026-11-17",
+    "titulo": "DIGESTIVE DASH",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/digestive-dash-sin-infografia-espacio6/index.html",
+    "destacado": false,
+    "visible": true
+  },
+  {
+    "descripcion": "",
+    "materia": "CCNN",
+    "tiempo": "15 min",
     "fecha": "2026-11-15",
     "titulo": "ANATOMY STRIKERS",
     "tipo": "Repaso",

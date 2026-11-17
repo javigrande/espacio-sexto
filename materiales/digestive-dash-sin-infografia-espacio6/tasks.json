@@ -1,0 +1,221 @@
+[
+  {
+    "m": 1,
+    "n": "RUTA EXPRESS",
+    "type": "order",
+    "prompt": "Ordena el recorrido correcto del alimento.",
+    "items": [
+      "Boca",
+      "Esófago",
+      "Estómago",
+      "Intestino delgado",
+      "Intestino grueso",
+      "Ano"
+    ]
+  },
+  {
+    "m": 1,
+    "n": "RUTA EXPRESS",
+    "type": "match",
+    "prompt": "Relaciona cada tramo con su función.",
+    "pairs": [
+      [
+        "Boca",
+        "Entrada y comienzo de la digestión"
+      ],
+      [
+        "Esófago",
+        "Transporta el alimento"
+      ],
+      [
+        "Estómago",
+        "Mezcla con jugos gástricos"
+      ],
+      [
+        "Intestino delgado",
+        "Absorbe nutrientes"
+      ],
+      [
+        "Intestino grueso",
+        "Absorbe agua y forma las heces"
+      ],
+      [
+        "Ano",
+        "Expulsa las heces"
+      ]
+    ]
+  },
+  {
+    "m": 2,
+    "n": "GLÁNDULA POWER",
+    "type": "match",
+    "prompt": "Une cada glándula u órgano con lo que produce.",
+    "pairs": [
+      [
+        "Glándulas salivales",
+        "Saliva"
+      ],
+      [
+        "Hígado",
+        "Bilis"
+      ],
+      [
+        "Páncreas",
+        "Jugo pancreático"
+      ]
+    ]
+  },
+  {
+    "m": 2,
+    "n": "GLÁNDULA POWER",
+    "type": "choice",
+    "prompt": "¿Qué órgano produce la bilis?",
+    "options": [
+      "Hígado",
+      "Páncreas",
+      "Estómago",
+      "Esófago"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 2,
+    "n": "GLÁNDULA POWER",
+    "type": "choice",
+    "prompt": "¿Qué glándulas fabrican la saliva?",
+    "options": [
+      "Glándulas salivales",
+      "Páncreas",
+      "Hígado",
+      "Intestino grueso"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 3,
+    "n": "ABSORCIÓN TURBO",
+    "type": "choice",
+    "prompt": "¿Dónde se completa la digestión y se absorben los nutrientes?",
+    "options": [
+      "Intestino delgado",
+      "Intestino grueso",
+      "Esófago",
+      "Ano"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 3,
+    "n": "ABSORCIÓN TURBO",
+    "type": "multi",
+    "prompt": "Selecciona las funciones del aparato digestivo.",
+    "options": [
+      "Descomponer los alimentos",
+      "Absorber nutrientes",
+      "Eliminar restos no aprovechados",
+      "Producir oxígeno"
+    ],
+    "correct": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "m": 3,
+    "n": "ABSORCIÓN TURBO",
+    "type": "choice",
+    "prompt": "¿Qué parte absorbe agua y forma las heces?",
+    "options": [
+      "Intestino grueso",
+      "Intestino delgado",
+      "Estómago",
+      "Boca"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 4,
+    "n": "DIGESTIÓN EN ACCIÓN",
+    "type": "fill",
+    "prompt": "Completa: Los alimentos se trituran y se mezclan con la ____ en la boca.",
+    "answer": "saliva"
+  },
+  {
+    "m": 4,
+    "n": "DIGESTIÓN EN ACCIÓN",
+    "type": "fill",
+    "prompt": "Completa: En el estómago los alimentos se mezclan con los jugos _____.",
+    "answer": "gástricos"
+  },
+  {
+    "m": 4,
+    "n": "DIGESTIÓN EN ACCIÓN",
+    "type": "choice",
+    "prompt": "¿Qué estructura lleva el alimento desde la boca hasta el estómago?",
+    "options": [
+      "Esófago",
+      "Ano",
+      "Hígado",
+      "Páncreas"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 5,
+    "n": "BOSS DIGESTIVO",
+    "type": "choice",
+    "prompt": "¿Qué opción resume mejor para qué sirve el aparato digestivo?",
+    "options": [
+      "Transformar alimentos, absorber nutrientes y eliminar restos",
+      "Mover el cuerpo y proteger órganos",
+      "Transportar oxígeno y nutrientes",
+      "Coordinar respuestas del organismo"
+    ],
+    "correct": 0
+  },
+  {
+    "m": 5,
+    "n": "BOSS DIGESTIVO",
+    "type": "multi",
+    "prompt": "Selecciona los órganos que pertenecen al tubo digestivo.",
+    "options": [
+      "Boca",
+      "Esófago",
+      "Estómago",
+      "Intestino delgado",
+      "Intestino grueso",
+      "Ano",
+      "Hígado",
+      "Páncreas"
+    ],
+    "correct": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "m": 5,
+    "n": "BOSS DIGESTIVO",
+    "type": "match",
+    "prompt": "Relaciona cada etapa final con su descripción.",
+    "pairs": [
+      [
+        "Intestino delgado",
+        "Se absorben los nutrientes"
+      ],
+      [
+        "Intestino grueso",
+        "Se forma la materia de desecho"
+      ],
+      [
+        "Ano",
+        "Se expulsan las heces"
+      ]
+    ]
+  }
+]
