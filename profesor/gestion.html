@@ -152,7 +152,7 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
         <div class="top">
           <div>
             <h2 style="margin:0">Actividades del espacio</h2>
-            <p class="muted" style="margin:.3rem 0 0">Se sincronizan con el catálogo real publicado en GitHub.</p>
+            <p class="muted" style="margin:.3rem 0 0">Todas las actividades están disponibles para todos los grupos.</p>
           </div>
           <button class="light" onclick="syncCatalogActivities()">↻ Sincronizar catálogo</button>
         </div>
@@ -160,21 +160,23 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
       </div>
 
       <div class="card section">
-        <h2>Asignar actividad</h2>
+        <h2>Área de la actividad</h2>
+        <p class="muted">Solo necesitas indicar a qué área pertenece cada actividad.</p>
+
         <label>Actividad</label>
         <select id="accessActivity" onchange="renderAccess()"></select>
 
         <label style="margin-top:12px">Área</label>
-        <select id="accessSubject" onchange="renderAccessPreview()"></select>
+        <select id="accessSubject"></select>
 
-        <h3>Clases</h3>
-        <div id="accessGroups" class="checkbox-grid" onchange="renderAccessPreview()"></div>
+        <br><button class="primary" onclick="saveAccess()">Guardar área</button>
 
-        <h3>Profesorado responsable</h3>
-        <div id="accessTeachersAuto" class="list"></div>
-
-        <br><button class="primary" onclick="saveAccess()">Guardar asignación</button>
-        <p class="muted">El profesorado se calcula automáticamente a partir de Docencia: profesor + clase + área.</p>
+        <div style="margin-top:16px;padding:12px;border:1px solid #dfe6ef;border-radius:12px;background:#f8fafc">
+          <b>Acceso automático del profesorado</b>
+          <div class="muted" style="margin-top:5px">
+            Alumno → código → grupo → área de la actividad → profesor configurado para ese grupo y área.
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -257,14 +259,13 @@ $("accessSubject").innerHTML='<option value="">Selecciona área...</option>'+sub
   const previousActivity=$("accessActivity").value;
   $("accessActivity").innerHTML=S.activities.filter(x=>x.active).map(x=>`<option value="${esc(x.activity_id)}">${esc(x.title)}${x.subject_name?" · "+esc(x.subject_name):""}</option>`).join("");
   if(previousActivity && S.activities.some(x=>x.activity_id===previousActivity)) $("accessActivity").value=previousActivity;
-
-  $("yearsList").innerHTML=S.years.map(x=>`<div class="item"><div><b>${esc(x.label)}</b><br><small>${x.active?"Activo":"Archivado"}</small></div></div>`).join("");
   $("groupsList").innerHTML=S.groups.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${esc(x.year_label)}</small></div></div>`).join("");
   $("teachersList").innerHTML=S.teachers.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${x.active?"Activo":"Desactivado"} · clave privada</small></div><button class="light" onclick='resetTeacher(${JSON.stringify(x.id)},${JSON.stringify(x.name)})'>Cambiar PIN</button></div>`).join("");
-  $("activitiesList").innerHTML=S.activities.filter(x=>x.active).map(x=>{
-    const gs=S.activityGroups.filter(a=>a.activity_id===x.activity_id).map(a=>(S.groups.find(g=>g.id===a.group_id)||{}).name).filter(Boolean);
-    return `<div class="item"><div><b>${esc(x.title)}</b><br><small>${x.subject_name?esc(x.subject_name)+" · ":""}${gs.length?gs.map(esc).join(", "):"Sin clases asignadas"}${x.catalog_path?" · catálogo":""}</small></div><button class="light" onclick='selectActivity(${JSON.stringify(x.activity_id)})'>Configurar</button></div>`;
-  }).join("") || '<div class="muted">No hay actividades. Pulsa Sincronizar catálogo.</div>';
+  $("activitiesList").innerHTML=S.activities.filter(x=>x.active).map(x=>`
+    <div class="item">
+      <div><b>${esc(x.title)}</b><br><small>${x.subject_name?esc(x.subject_name):"Sin área"} · Todos los grupos</small></div>
+      <button class="light" onclick='selectActivity(${JSON.stringify(x.activity_id)})'>Configurar área</button>
+    </div>`).join("") || '<div class="muted">No hay actividades. Pulsa Sincronizar catálogo.</div>';
   renderStudents();
   renderTeachingManagement();
   renderAccess();
@@ -391,26 +392,7 @@ async function removeTeachingAssignment(id,teacherName,groupName,subjectName){
 function renderAccess(){
   const aid=$("accessActivity").value;
   const act=S.activities.find(x=>x.activity_id===aid);
-  if(act && act.subject_id) $("accessSubject").value=act.subject_id;
-  else $("accessSubject").value="";
-
-  const gids=new Set(S.activityGroups.filter(x=>x.activity_id===aid).map(x=>String(x.group_id)));
-  $("accessGroups").innerHTML=S.groups.filter(x=>x.active).map(x=>`<label class="check"><input type="checkbox" name="ag" value="${x.id}" ${gids.has(String(x.id))?"checked":""}> ${esc(x.name)}</label>`).join("");
-  renderAccessPreview();
-}
-
-function renderAccessPreview(){
-  const subjectId=$("accessSubject").value;
-  const groupIds=[...document.querySelectorAll('input[name="ag"]:checked')].map(x=>String(x.value));
-  const rows=(S.assignments||[]).filter(a=>String(a.subject_id)===String(subjectId) && groupIds.includes(String(a.group_id)));
-  const teacherIds=[...new Set(rows.map(a=>String(a.teacher_id)))];
-  const teachers=teacherIds.map(id=>S.teachers.find(t=>String(t.id)===id)).filter(Boolean);
-  $("accessTeachersAuto").innerHTML=teachers.length
-    ? teachers.map(t=>{
-        const mine=rows.filter(a=>String(a.teacher_id)===String(t.id)).map(a=>a.group_name);
-        return `<div class="item"><div><b>${esc(t.name)}</b><br><small>${mine.map(esc).join(", ")}</small></div></div>`;
-      }).join("")
-    : '<div class="muted">No hay profesorado asignado a esta combinación de área y clases. Configúralo primero en Docencia.</div>';
+  $("accessSubject").value=act?.subject_id||"";
 }
 
 function selectActivity(id){
@@ -433,17 +415,14 @@ async function saveAccess(){
     const subjectId=$("accessSubject").value;
     if(!activityId) throw new Error("Selecciona una actividad.");
     if(!subjectId) throw new Error("Selecciona un área.");
-    const groupIds=[...document.querySelectorAll('input[name="ag"]:checked')].map(x=>x.value);
-    if(!groupIds.length) throw new Error("Selecciona al menos una clase.");
-
-    const d=await api("/api/admin/academic/activity-access",{
+    await api("/api/admin/academic/activity-access",{
       method:"POST",
-      body:JSON.stringify({activityId,subjectId,groupIds})
+      body:JSON.stringify({activityId,subjectId})
     });
     await loadState(false);
     $("accessActivity").value=activityId;
     renderAccess();
-    ok(`Actividad asignada. ${d.teacherIds?.length||0} profesor(es) responsable(s) asociados automáticamente.`);
+    ok("Área guardada. La actividad está disponible para todos los grupos.");
   }catch(e){bad(e)}
 }
 

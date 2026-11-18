@@ -56,21 +56,21 @@ h1{font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.05em;line-height:.95;margin
   <p class="lead">Gestiona las actividades de Espacio 6.º y consulta el desempeño del alumnado desde un único lugar.</p>
 
   <section class="grid">
-    <a class="card results" href="resultados.html">
+    <a class="card results" href="resultados.html" target="_blank" rel="noopener noreferrer">
       <div class="icon">📊</div>
       <h2>Resultados</h2>
       <p>Consulta notas, precisión, XP, intentos y exporta los resultados del alumnado.</p>
       <span class="arrow">Abrir resultados →</span>
     </a>
 
-    <a class="card publish" href="publicador.html">
+    <a class="card publish" href="publicador.html" target="_blank" rel="noopener noreferrer">
       <div class="icon">🚀</div>
       <h2>Publicar actividad</h2>
       <p>Sube nuevos HTML, paquetes ZIP, actualiza el catálogo y gestiona lo publicado.</p>
       <span class="arrow">Abrir publicador →</span>
     </a>
 
-    <a class="card manage" href="gestion.html">
+    <a class="card manage" href="gestion.html" target="_blank" rel="noopener noreferrer">
       <div class="icon">🏫</div>
       <h2>Gestión académica</h2>
       <p>Organiza cursos, grupos, profesores, materias y permisos de las actividades.</p>
@@ -80,5 +80,16 @@ h1{font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-.05em;line-height:.95;margin
 
   <div class="note">🔐 La gestión y publicación requieren la clave de administrador. Los profesores invitados usan su propia clave para consultar sus resultados. El token de GitHub no se incluye en la página pública.</div>
 </main>
+
+<section id="teacher-results-direct" style="max-width:980px;margin:24px auto;padding:0 18px">
+  <a href="resultados.html" target="_blank" rel="noopener noreferrer" style="display:block;text-decoration:none;color:inherit">
+    <div style="background:#fff;border:1px solid #dfe6ef;border-radius:18px;padding:18px;box-shadow:0 12px 30px #33415512">
+      <div style="font-size:.76rem;font-weight:900;letter-spacing:.1em;color:#5b59d6">ACCESO DOCENTE</div>
+      <h2 style="margin:6px 0 4px">Resultados</h2>
+      <p style="margin:0;color:#64748b">Cada profesor accede con su propio PIN y solo ve los grupos y áreas que tiene asignados.</p>
+    </div>
+  </a>
+</section>
+
 </body>
 </html>
