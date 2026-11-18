@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnóstico · Espacio 6.º</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,sans-serif;background:#f4f7fb;color:#172033}
+main{max-width:1200px;margin:auto;padding:24px}
+.card{background:#fff;border:1px solid #dfe6ef;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 12px 30px #33415510}
+h1{font-size:2rem;margin:.2rem 0} h2{margin:.2rem 0 1rem}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+input{flex:1;min-width:220px;padding:12px;border:1px solid #ccd5e4;border-radius:10px;font:inherit}
+button{padding:12px 16px;border:0;border-radius:10px;background:#5147e5;color:#fff;font-weight:900;cursor:pointer}
+.good{color:#0f8a58}.bad{color:#c9364a}.muted{color:#68758a}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{padding:8px;border-bottom:1px solid #e7ebf1;text-align:left;vertical-align:top}
+th{background:#f8fafc}
+.pill{display:inline-block;padding:4px 7px;border-radius:999px;background:#eef2f7;font-size:.75rem;font-weight:800}
+pre{white-space:pre-wrap;word-break:break-word;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:12px;max-height:420px;overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{background:#f8fafc;border:1px solid #e7ebf1;border-radius:12px;padding:12px}.stat b{display:block;font-size:1.5rem}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body><main>
+<div class="card">
+  <div class="muted" style="font-weight:900;letter-spacing:.12em">ESPACIO 6.º · DIAGNÓSTICO</div>
+  <h1>Estado real del sistema</h1>
+  <p class="muted">Esta página no modifica nada. Solo lee D1 para localizar el fallo.</p>
+  <div class="row">
+    <input id="key" type="password" placeholder="Clave general de administrador">
+    <button onclick="run()">Analizar</button>
+  </div>
+  <div id="msg" style="margin-top:10px"></div>
+</div>
+
+<div id="out" class="hidden">
+  <div class="grid">
+    <div class="stat">Profesores<b id="nTeachers">0</b></div>
+    <div class="stat">Asignaciones<b id="nAssignments">0</b></div>
+    <div class="stat">Intentos<b id="nAttempts">0</b></div>
+    <div class="stat">Actividades<b id="nActivities">0</b></div>
+  </div>
+
+  <div class="card"><h2>Profesores y asignaciones</h2><div id="teachers"></div></div>
+  <div class="card"><h2>Intentos por grupo</h2><div id="attemptGroups"></div></div>
+  <div class="card"><h2>Actividades y área</h2><div id="activities"></div></div>
+  <div class="card"><h2>Corrección manual</h2><div id="manual"></div></div>
+  <div class="card"><h2>Últimos intentos</h2><div id="attempts"></div></div>
+  <div class="card"><h2>Diagnóstico completo</h2><button onclick="copyJson()">Copiar JSON</button><pre id="json"></pre></div>
+</div>
+
+<script>
+const WORKER="https://espacio-sexto-resultados.javigr77.workers.dev";
+let LAST=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function table(rows,cols){
+  if(!rows?.length)return '<div class="muted">Sin datos</div>';
+  return `<div style="overflow:auto"><table><thead><tr>${cols.map(c=>`<th>${esc(c[0])}</th>`).join("")}</tr></thead>
+  <tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${esc(r[c[1]])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+async function run(){
+  $("msg").textContent="Analizando…";
+  const key=$("key").value.trim();
+  try{
+    const r=await fetch(WORKER+"/api/admin/diagnostic",{headers:{"X-Teacher-Key":key}});
+    const d=await r.json();
+    if(!r.ok||!d.ok)throw new Error(d.error||"Error");
+    LAST=d;
+    localStorage.setItem("espacio6_admin_diag_key",key);
+    $("out").classList.remove("hidden");
+    $("nTeachers").textContent=d.teachers.rows.length;
+    $("nAssignments").textContent=d.assignments.rows.length;
+    $("nAttempts").textContent=d.attemptsCount.row?.total??0;
+    $("nActivities").textContent=d.activities.rows.length;
+
+    $("teachers").innerHTML=
+      table(d.teachers.rows,[["Nombre","name"],["ID","id"],["Rol","role"],["Activo","active"]])+
+      "<h3>Asignaciones</h3>"+
+      table(d.assignments.rows,[["Profesor","teacher_name"],["Grupo","group_name"],["Área","subject_name"],["Profesor ID","teacher_id"]])+
+      (d.duplicateTeachers.rows.length?'<h3 class="bad">Profesores duplicados</h3>'+table(d.duplicateTeachers.rows,[["Nombre normalizado","normalized_name"],["Copias","copies"],["IDs","ids"]]):"");
+
+    $("attemptGroups").innerHTML=table(d.attemptsByGroup.rows,[["Grupo","group_name"],["Intentos","attempts"]]);
+
+    $("activities").innerHTML=table(d.activities.rows,[["Actividad","title"],["Activity ID","activity_id"],["Área","subject_name"],["Subject ID","subject_id"],["Activa","active"]]);
+
+    const mg=d.manualGrades.ok?(d.manualGrades.row?.total??0):"ERROR: "+d.manualGrades.error;
+    const mr=d.manualReview.ok?JSON.stringify(d.manualReview.row):"ERROR: "+d.manualReview.error;
+    $("manual").innerHTML=`<p><b>manual_grades:</b> ${esc(mg)}</p><p><b>manual_review:</b> ${esc(mr)}</p>`;
+
+    $("attempts").innerHTML=table(d.recentAttempts.rows,[
+      ["Alumno","student_name"],["Código","student_code"],["Grupo","group_name"],
+      ["Actividad","activity_title"],["Activity ID","activity_id"],["Nota","score10"],["Fecha","created_at"]
+    ]);
+
+    $("json").textContent=JSON.stringify(d,null,2);
+    $("msg").innerHTML='<span class="good">✓ Diagnóstico cargado. No se ha modificado nada.</span>';
+  }catch(e){
+    $("msg").innerHTML='<span class="bad">Error: '+esc(e.message||e)+'</span>';
+  }
+}
+function copyJson(){
+  if(!LAST)return;
+  navigator.clipboard.writeText(JSON.stringify(LAST,null,2));
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  const k=localStorage.getItem("espacio6_admin_diag_key");
+  if(k)$("key").value=k;
+});
+</script>
+</main></body></html>
