@@ -239,7 +239,7 @@ async function api(path,opt={}){
 }
 async function enter(){
   KEY=$("key").value.trim(); $("loginMsg").textContent="Conectando...";
-  try{await loadState(true);ESPACIO6_SESSION.set(KEY);$("login").classList.add("hidden");$("app").classList.remove("hidden");}
+  try{await loadState(true);localStorage.setItem("espacio6_auth_key_v21",KEY);$("login").classList.add("hidden");$("app").classList.remove("hidden");}
   catch(e){$("loginMsg").textContent="No autorizado: "+e.message}
 }
 async function loadState(syncCatalog=false){
@@ -630,79 +630,17 @@ document.addEventListener("click",e=>{
 });
 
 </script>
-
-<script id="ESPACIO6_ENTER_LOGIN">
-document.addEventListener("DOMContentLoaded",function(){
-  const inputs=[...document.querySelectorAll('input[type="password"],input[id*="key" i],input[id*="clave" i],input[id*="pin" i]')];
-  inputs.forEach(inp=>inp.addEventListener("keydown",function(e){
-    if(e.key==="Enter"){
-      e.preventDefault();
-      enter();
-    }
-  }));
-});
-</script>
-
-
-<script id="ESPACIO6_SHARED_SESSION">
-(function(){
-  const STORAGE_KEY="espacio6_teacher_session_key";
-  window.ESPACIO6_SESSION={
-    get(){return localStorage.getItem(STORAGE_KEY)||"";},
-    set(v){if(v)localStorage.setItem(STORAGE_KEY,String(v));},
-    clear(){localStorage.removeItem(STORAGE_KEY);},
-    fill(){
-      const saved=this.get();
-      if(!saved)return false;
-      const candidates=[
-        document.querySelector('input[type="password"]'),
-        document.querySelector('#key'),
-        document.querySelector('#teacherKey'),
-        document.querySelector('#adminKey'),
-        document.querySelector('input[id*="clave" i]'),
-        document.querySelector('input[id*="key" i]')
-      ].filter(Boolean);
-      if(candidates.length){
-        candidates[0].value=saved;
-        return true;
-      }
-      return false;
-    }
-  };
-
-  window.ESPACIO6_logout=function(){
-    ESPACIO6_SESSION.clear();
-    location.reload();
-  };
-
-  document.addEventListener("DOMContentLoaded",()=>{
-    ESPACIO6_SESSION.fill();
-
-    // Botón de cierre de sesión común.
-    if(!document.getElementById("espacio6LogoutBtn")){
-      const btn=document.createElement("button");
-      btn.id="espacio6LogoutBtn";
-      btn.type="button";
-      btn.textContent="Cerrar sesión";
-      btn.style.cssText="position:fixed;right:14px;bottom:14px;z-index:9999;border:1px solid #dfe6ef;background:#fff;color:#334155;border-radius:10px;padding:9px 12px;font-weight:800;box-shadow:0 8px 24px #33415522;cursor:pointer";
-      btn.onclick=window.ESPACIO6_logout;
-      if(ESPACIO6_SESSION.get()) document.body.appendChild(btn);
-    }
-  });
-})();
-</script>
-
-
-<script id="ESPACIO6_AUTOLOGIN_GESTION">
+<script id="ESPACIO6_SESSION_V21">
 document.addEventListener("DOMContentLoaded",()=>{
-  const saved=window.ESPACIO6_SESSION?.get?.();
-  if(!saved)return;
-  const inp=document.querySelector('input[type="password"],#key,input[id*="key" i],input[id*="clave" i]');
-  if(inp) inp.value=saved;
-  setTimeout(()=>{
-    if(typeof enter==="function"){ try{enter();}catch(e){} }
-    else if(typeof login==="function"){ try{login();}catch(e){} }
-  },120);
+  const input=document.getElementById("key");
+  const saved=localStorage.getItem("espacio6_auth_key_v21")||"";
+  if(saved && input){
+    input.value=saved;
+    setTimeout(()=>enter(),50);
+  }
+  input?.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){e.preventDefault();enter();}
+  });
 });
 </script>
 
