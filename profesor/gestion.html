@@ -148,21 +148,33 @@ button{border:0;border-radius:11px;padding:10px 13px;font-weight:900;cursor:poin
 
   <div id="activities" class="panel">
     <div class="grid">
-      <div class="card section"><h2>Registrar actividad</h2>
-        <button class="light" onclick="syncActivities()">↻ Detectar actividades con resultados</button>
-        <br><br>
-        <label>ID de actividad</label><input id="actId" placeholder="laboratorio-potencias">
-        <label>Título</label><input id="actTitle" placeholder="Laboratorio de Potencias">
-        <label>Materia</label><select id="actSubject"></select>
-        <br><button class="primary" onclick="saveActivity()">Guardar actividad</button>
-        <div id="activitiesList" class="list"></div>
+      <div class="card section">
+        <div class="top">
+          <div>
+            <h2 style="margin:0">Actividades del espacio</h2>
+            <p class="muted" style="margin:.3rem 0 0">Se sincronizan con el catálogo real publicado en GitHub.</p>
+          </div>
+          <button class="light" onclick="syncCatalogActivities()">↻ Sincronizar catálogo</button>
+        </div>
+        <div id="activitiesList" class="list" style="margin-top:14px"></div>
       </div>
-      <div class="card section"><h2>Permisos de actividad</h2>
-        <label>Actividad</label><select id="accessActivity" onchange="renderAccess()"></select>
-        <h3>Grupos</h3><div id="accessGroups" class="checkbox-grid"></div>
-        <h3>Profesores</h3><div id="accessTeachers" class="checkbox-grid"></div>
-        <br><button class="primary" onclick="saveAccess()">Guardar permisos</button>
-        <p class="muted">Para que un profesor vea resultados, la actividad debe estar asignada al profesor y al grupo, y el profesor debe tener ese grupo en sus asignaciones.</p>
+
+      <div class="card section">
+        <h2>Asignar actividad</h2>
+        <label>Actividad</label>
+        <select id="accessActivity" onchange="renderAccess()"></select>
+
+        <label style="margin-top:12px">Área</label>
+        <select id="accessSubject" onchange="renderAccessPreview()"></select>
+
+        <h3>Clases</h3>
+        <div id="accessGroups" class="checkbox-grid" onchange="renderAccessPreview()"></div>
+
+        <h3>Profesorado responsable</h3>
+        <div id="accessTeachersAuto" class="list"></div>
+
+        <br><button class="primary" onclick="saveAccess()">Guardar asignación</button>
+        <p class="muted">El profesorado se calcula automáticamente a partir de Docencia: profesor + clase + área.</p>
       </div>
     </div>
   </div>
@@ -225,10 +237,13 @@ async function api(path,opt={}){
 }
 async function enter(){
   KEY=$("key").value.trim(); $("loginMsg").textContent="Conectando...";
-  try{await loadState();$("login").classList.add("hidden");$("app").classList.remove("hidden");}
+  try{await loadState(true);$("login").classList.add("hidden");$("app").classList.remove("hidden");}
   catch(e){$("loginMsg").textContent="No autorizado: "+e.message}
 }
-async function loadState(){
+async function loadState(syncCatalog=false){
+  if(syncCatalog){
+    try{await api("/api/admin/academic/sync-catalog",{method:"POST"});}catch(e){console.warn("No se pudo sincronizar catálogo",e)}
+  }
   const d=await api("/api/admin/academic/state");
   S=d; renderAll();
 }
@@ -238,13 +253,18 @@ function renderAll(){
   $("studentGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
   $("bulkGroup").innerHTML=S.groups.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)} · ${esc(x.year_label)}</option>`).join("");
   const subopts=S.subjects.filter(x=>x.active).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
-$("actSubject").innerHTML='<option value="">Sin materia</option>'+subopts;
-  $("accessActivity").innerHTML=S.activities.filter(x=>x.active).map(x=>`<option value="${esc(x.activity_id)}">${esc(x.title)}</option>`).join("");
+$("accessSubject").innerHTML='<option value="">Selecciona área...</option>'+subopts;
+  const previousActivity=$("accessActivity").value;
+  $("accessActivity").innerHTML=S.activities.filter(x=>x.active).map(x=>`<option value="${esc(x.activity_id)}">${esc(x.title)}${x.subject_name?" · "+esc(x.subject_name):""}</option>`).join("");
+  if(previousActivity && S.activities.some(x=>x.activity_id===previousActivity)) $("accessActivity").value=previousActivity;
 
   $("yearsList").innerHTML=S.years.map(x=>`<div class="item"><div><b>${esc(x.label)}</b><br><small>${x.active?"Activo":"Archivado"}</small></div></div>`).join("");
   $("groupsList").innerHTML=S.groups.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${esc(x.year_label)}</small></div></div>`).join("");
   $("teachersList").innerHTML=S.teachers.map(x=>`<div class="item"><div><b>${esc(x.name)}</b><br><small>${x.active?"Activo":"Desactivado"} · clave privada</small></div><button class="light" onclick='resetTeacher(${JSON.stringify(x.id)},${JSON.stringify(x.name)})'>Cambiar PIN</button></div>`).join("");
-  $("activitiesList").innerHTML=S.activities.map(x=>`<div class="item"><div><b>${esc(x.title)}</b><br><small>${esc(x.activity_id)}${x.subject_name?" · "+esc(x.subject_name):""}</small></div></div>`).join("");
+  $("activitiesList").innerHTML=S.activities.filter(x=>x.active).map(x=>{
+    const gs=S.activityGroups.filter(a=>a.activity_id===x.activity_id).map(a=>(S.groups.find(g=>g.id===a.group_id)||{}).name).filter(Boolean);
+    return `<div class="item"><div><b>${esc(x.title)}</b><br><small>${x.subject_name?esc(x.subject_name)+" · ":""}${gs.length?gs.map(esc).join(", "):"Sin clases asignadas"}${x.catalog_path?" · catálogo":""}</small></div><button class="light" onclick='selectActivity(${JSON.stringify(x.activity_id)})'>Configurar</button></div>`;
+  }).join("") || '<div class="muted">No hay actividades. Pulsa Sincronizar catálogo.</div>';
   renderStudents();
   renderTeachingManagement();
   renderAccess();
@@ -370,11 +390,63 @@ async function removeTeachingAssignment(id,teacherName,groupName,subjectName){
 
 function renderAccess(){
   const aid=$("accessActivity").value;
-  const gids=new Set(S.activityGroups.filter(x=>x.activity_id===aid).map(x=>x.group_id));
-  const tids=new Set(S.activityTeachers.filter(x=>x.activity_id===aid).map(x=>x.teacher_id));
-  $("accessGroups").innerHTML=S.groups.filter(x=>x.active).map(x=>`<label class="check"><input type="checkbox" name="ag" value="${x.id}" ${gids.has(x.id)?"checked":""}> ${esc(x.name)}</label>`).join("");
-  $("accessTeachers").innerHTML=S.teachers.filter(x=>x.active).map(x=>`<label class="check"><input type="checkbox" name="at" value="${x.id}" ${tids.has(x.id)?"checked":""}> ${esc(x.name)}</label>`).join("");
+  const act=S.activities.find(x=>x.activity_id===aid);
+  if(act && act.subject_id) $("accessSubject").value=act.subject_id;
+  else $("accessSubject").value="";
+
+  const gids=new Set(S.activityGroups.filter(x=>x.activity_id===aid).map(x=>String(x.group_id)));
+  $("accessGroups").innerHTML=S.groups.filter(x=>x.active).map(x=>`<label class="check"><input type="checkbox" name="ag" value="${x.id}" ${gids.has(String(x.id))?"checked":""}> ${esc(x.name)}</label>`).join("");
+  renderAccessPreview();
 }
+
+function renderAccessPreview(){
+  const subjectId=$("accessSubject").value;
+  const groupIds=[...document.querySelectorAll('input[name="ag"]:checked')].map(x=>String(x.value));
+  const rows=(S.assignments||[]).filter(a=>String(a.subject_id)===String(subjectId) && groupIds.includes(String(a.group_id)));
+  const teacherIds=[...new Set(rows.map(a=>String(a.teacher_id)))];
+  const teachers=teacherIds.map(id=>S.teachers.find(t=>String(t.id)===id)).filter(Boolean);
+  $("accessTeachersAuto").innerHTML=teachers.length
+    ? teachers.map(t=>{
+        const mine=rows.filter(a=>String(a.teacher_id)===String(t.id)).map(a=>a.group_name);
+        return `<div class="item"><div><b>${esc(t.name)}</b><br><small>${mine.map(esc).join(", ")}</small></div></div>`;
+      }).join("")
+    : '<div class="muted">No hay profesorado asignado a esta combinación de área y clases. Configúralo primero en Docencia.</div>';
+}
+
+function selectActivity(id){
+  $("accessActivity").value=id;
+  renderAccess();
+  $("accessActivity").scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+async function syncCatalogActivities(){
+  try{
+    const d=await api("/api/admin/academic/sync-catalog",{method:"POST"});
+    await loadState(false);
+    ok(`Catálogo sincronizado: ${d.synced||0} actividades.`);
+  }catch(e){bad(e)}
+}
+
+async function saveAccess(){
+  try{
+    const activityId=$("accessActivity").value;
+    const subjectId=$("accessSubject").value;
+    if(!activityId) throw new Error("Selecciona una actividad.");
+    if(!subjectId) throw new Error("Selecciona un área.");
+    const groupIds=[...document.querySelectorAll('input[name="ag"]:checked')].map(x=>x.value);
+    if(!groupIds.length) throw new Error("Selecciona al menos una clase.");
+
+    const d=await api("/api/admin/academic/activity-access",{
+      method:"POST",
+      body:JSON.stringify({activityId,subjectId,groupIds})
+    });
+    await loadState(false);
+    $("accessActivity").value=activityId;
+    renderAccess();
+    ok(`Actividad asignada. ${d.teacherIds?.length||0} profesor(es) responsable(s) asociados automáticamente.`);
+  }catch(e){bad(e)}
+}
+
 async function saveYear(){try{await api("/api/admin/academic/year",{method:"POST",body:JSON.stringify({label:$("yearLabel").value,active:$("yearActive").value==="1"})});await loadState();ok("Curso guardado.")}catch(e){bad(e)}}
 async function saveGroup(){try{await api("/api/admin/academic/group",{method:"POST",body:JSON.stringify({schoolYearId:$("groupYear").value,name:$("groupName").value,active:true})});$("groupName").value="";await loadState();ok("Grupo añadido.")}catch(e){bad(e)}}
 async function saveTeacher(){
@@ -473,7 +545,7 @@ function parseBulkText(text,defaultGroupId){
     let groupId=defaultGroupId;
 
     // Nombre;Código
-    if(parts[1] && /^6[AB][\s\-–—]/i.test(parts[1])){
+    if(parts[1] && /^\d+[A-Z][\s\-–—]/i.test(parts[1])){
       code=normalizeCode(parts[1]);
       if(parts[2]){
         const raw=parts[2];
@@ -490,11 +562,9 @@ function parseBulkText(text,defaultGroupId){
     if(!group){errors.push(`Línea ${idx+1}: grupo no reconocido`);return}
 
     if(code){
-      if(!/^6[AB]-[A-Z0-9]{4,8}$/.test(code)){errors.push(`Línea ${idx+1}: código no válido (${code})`);return}
+      if(!/^\d+[A-Z]-[A-Z0-9]{4,8}$/.test(code)){errors.push(`Línea ${idx+1}: código no válido (${code})`);return}
       if(seen.has(code)){errors.push(`Código duplicado: ${code}`);return}
       seen.add(code);
-      if(code.startsWith("6A-")&&group.name!=="6.º A"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
-      if(code.startsWith("6B-")&&group.name!=="6.º B"){errors.push(`Línea ${idx+1}: ${code} no corresponde a ${group.name}`);return}
     }
 
     rows.push({name,code,groupId,groupName:group.name});
