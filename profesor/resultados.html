@@ -273,6 +273,17 @@ function formatDate(v){
   return d.toLocaleString("es-ES",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"});
 }
 
+
+function isManualAnswerEvent(e){
+  if(!e || e.type==="audio") return false;
+  if(e.manual===true) return true;
+  const t=String(e.type||e.questionType||e.kind||"").toLowerCase();
+  if(["text","textarea","open","open_text","development","desarrollo","written","essay","free_text"].includes(t)) return true;
+  if(e.correct===null && typeof e.answer==="string" && e.answer.trim().length>0) return true;
+  if(e.correct===undefined && typeof e.answer==="string" && e.answer.trim().length>20 && e.expected===undefined) return true;
+  return false;
+}
+
 async function openDetail(x){
   modalTitle.textContent=nameFor(x.student_code,x);
   modalSub.textContent=(x.activity_title||x.activity_id||"") + " · " + (x.group_name||"");
@@ -290,7 +301,7 @@ async function openDetail(x){
     const result=dd.result||{};
     const ev=result.events||[];
     const grades=result.manual_grades||{};
-    const manualQuestions=ev.filter(e=>e.manual===true);
+    const manualQuestions=ev.filter(isManualAnswerEvent);
 
     const parts=[];
     if(result.manual_grading_available===false && manualQuestions.length){
@@ -303,19 +314,20 @@ async function openDetail(x){
         return;
       }
 
-      if(e.manual===true){
-        const qid=e.questionId||("manual_"+i);
+      if(isManualAnswerEvent(e)){
+        const qid=String(e.questionId||e.id||("manual_"+i));
         const g=grades[qid]||{};
+        const manualMax=Number(e.points||e.maxPoints||1);
         parts.push(`<div class="manual-review">
-          <b>✍️ ${escapeHtml(e.question||("Pregunta "+(i+1)))}</b>
+          <b>✍️ Pregunta de desarrollo · ${escapeHtml(e.question||("Pregunta "+(i+1)))}</b>
           <div style="margin-top:8px"><small>Respuesta del alumno</small></div>
           <div style="white-space:pre-wrap;background:#fff;border:1px solid #eadfca;border-radius:10px;padding:10px;margin-top:4px">${escapeHtml(typeof e.answer==="string"?e.answer:JSON.stringify(e.answer??""))}</div>
           <div class="manual-score">
             <label>Puntuación
               <select id="score_${escapeHtml(qid)}">
-                ${manualScoreOptions(Number(e.points||1),g.points_awarded)}
+                ${manualScoreOptions(manualMax,g.points_awarded)}
               </select>
-              / ${Number(e.points||1).toFixed(2).replace(".",",")}
+              / ${manualMax.toFixed(2).replace(".",",")}
             </label>
           </div>
           <label style="display:block;margin-top:8px">Comentario del profesor
@@ -323,7 +335,7 @@ async function openDetail(x){
           </label>
           ${result.manual_grading_available===false
             ? '<div class="note" style="margin-top:10px">Corrección manual temporalmente no disponible.</div>'
-            : `<button class="btn btn-primary" style="margin-top:10px" onclick='saveManualGrade(${JSON.stringify(x.id)},${JSON.stringify(qid)},${Number(e.points||1)})'>Guardar corrección</button>`}
+            : `<button class="btn btn-primary" style="margin-top:10px" onclick='saveManualGrade(${JSON.stringify(x.id)},${JSON.stringify(qid)},${manualMax})'>Guardar corrección</button>`}
         </div>`);
       }else{
         const ok=e.correct===true;
