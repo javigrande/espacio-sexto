@@ -3,6 +3,18 @@
     "descripcion": "",
     "materia": "CCNN",
     "tiempo": "15 min",
+    "fecha": "2026-11-18",
+    "titulo": "EVALUACION LOCOMOTOR",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "archivo": "materiales/evaluacion-locomotor-d1-pro-v2-espacio6/evaluacion.html",
+    "destacado": false,
+    "visible": true
+  },
+  {
+    "descripcion": "",
+    "materia": "CCNN",
+    "tiempo": "15 min",
     "fecha": "2026-11-17",
     "titulo": "MISION DIGESTIVA",
     "tipo": "Evaluación",
