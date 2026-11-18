@@ -70,19 +70,11 @@ tr:hover td{background:#fbfcff}
 .pending-pill{background:#fff3db;color:#9a6400}
 .final-pill{background:#e8f8f0;color:#11754b}
 
-.group-section{margin:18px 0;border:1px solid #dfe6ef;border-radius:18px;background:#fff;overflow:hidden}
-.group-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 18px;background:#f7f9fc;cursor:pointer}
-.group-head h2{margin:0;font-size:1.2rem}
-.group-body{padding:12px}
-.activity-section{border:1px solid #e5eaf1;border-radius:14px;margin:10px 0;overflow:hidden}
-.activity-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;background:#fbfcfe;cursor:pointer}
-.activity-head h3{margin:0;font-size:1rem}
-.activity-body{padding:10px}
-.activity-meta{color:#64748b;font-size:.82rem}
-.group-summary,.activity-summary{display:flex;gap:8px;flex-wrap:wrap}
-.summary-chip{background:#eef2f7;border-radius:999px;padding:5px 8px;font-size:.76rem;font-weight:800}
-.collapse-arrow{font-weight:900;color:#64748b}
-.group-empty{padding:16px;color:#64748b}
+.group-section{margin:16px 0;border:1px solid #dfe6ef;border-radius:18px;background:#fff;overflow:hidden}
+.group-head,.activity-head{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer}
+.group-head{padding:16px 18px;background:#f7f9fc}.activity-head{padding:12px 14px;background:#fbfcfe}
+.group-head h2,.activity-head h3{margin:0}.group-body{padding:10px 12px}.activity-section{border:1px solid #e5eaf1;border-radius:14px;margin:10px 0;overflow:hidden}.activity-body{padding:8px}
+.summary-chip{display:inline-block;background:#eef2f7;border-radius:999px;padding:4px 8px;margin:3px 3px 0 0;font-size:.75rem;font-weight:800}
 </style>
 </head>
 <body>
@@ -136,8 +128,8 @@ tr:hover td{background:#fbfcff}
   </div>
 
   <div class="card table-card">
-    <div class="table-wrap">
-      <div id="groupedResultsHost"></div><div id="legacyResultsTable" style="display:none"><table>
+    <div id="groupedHost"></div><div style="display:none"><div class="table-wrap">
+      <table>
         <thead>
           <tr>
             <th>Alumno</th><th>Grupo</th><th>Actividad</th><th>Nota</th>
@@ -145,11 +137,11 @@ tr:hover td{background:#fbfcff}
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
-      </table></div>
+      </table>
     </div>
     <div id="empty" class="empty hidden">No hay resultados con estos filtros.</div>
   </div>
-</section>
+</section></div>
 
 <div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()">
   <div class="modal-card">
@@ -191,7 +183,7 @@ async function connect(){
     if(!r.ok)throw new Error(d.error||"No autorizado");
     ALL=d.results||[];
     SESSION=d.user||null;
-    localStorage.setItem("espacio6_auth_key_v21",KEY);
+    localStorage.setItem("espacio6_results_key",KEY);
     loginView.classList.add("hidden");
     panelView.classList.remove("hidden");
     who.textContent=SESSION ? `Sesión: ${SESSION.name} · ${SESSION.role==="admin"?"Administrador":"Profesor"}` : "Resultados del alumnado";
@@ -246,129 +238,68 @@ function filtered(){
 }
 
 function render(){
-  const q=(search?.value||"").trim().toLowerCase();
-  const gf=groupFilter?.value||"";
-  const af=activityFilter?.value||"";
+  const rows=filtered();
 
-  const rows=ALL.filter(x=>{
-    const nm=nameFor(x.student_code,x).toLowerCase();
-    const activity=(x.activity_title||x.activity_id||"").toLowerCase();
-    if(q && !(nm.includes(q)||String(x.student_code||"").toLowerCase().includes(q)||activity.includes(q))) return false;
-    if(gf && String(x.group_name||"")!==String(gf)) return false;
-    if(af && String(x.activity_id||"")!==String(af)) return false;
-    return true;
-  });
+  const unique=new Set(rows.map(x=>x.student_code).filter(Boolean)).size;
+  const avg=rows.length?rows.reduce((s,x)=>s+Number(x.score10||0),0)/rows.length:0;
+  const acc=rows.length?rows.reduce((s,x)=>s+Number(x.accuracy||0),0)/rows.length:0;
+  sAttempts.textContent=rows.length;
+  sStudents.textContent=unique;
+  sAvg.textContent=avg.toFixed(1).replace(".",",");
+  sAcc.textContent=Math.round(acc)+"%";
+  sFinished.textContent=rows.filter(x=>x.finished).length;
 
-  count.textContent=rows.length;
-
+  const host=document.getElementById("groupedHost");
+  if(!host)return;
   if(!rows.length){
-    const host=document.getElementById("groupedResultsHost");
-    if(host) host.innerHTML='<div class="group-empty">No hay resultados con estos filtros.</div>';
+    host.innerHTML='<div style="padding:28px;text-align:center;color:#64748b">No hay resultados con estos filtros.</div>';
     return;
   }
 
-  const byGroup=new Map();
+  const groups=new Map();
   rows.forEach(x=>{
-    const g=x.group_name||"Sin grupo";
-    if(!byGroup.has(g))byGroup.set(g,[]);
-    byGroup.get(g).push(x);
+    const gn=x.group_name||"Sin grupo";
+    if(!groups.has(gn))groups.set(gn,new Map());
+    const acts=groups.get(gn);
+    const ak=x.activity_id||x.activity_title||"sin-actividad";
+    if(!acts.has(ak))acts.set(ak,[]);
+    acts.get(ak).push(x);
   });
 
-  const html=[...byGroup.entries()]
-    .sort((a,b)=>a[0].localeCompare(b[0],"es"))
-    .map(([groupName,groupRows],gi)=>{
-      const byActivity=new Map();
-      groupRows.forEach(x=>{
-        const key=x.activity_id||x.activity_title||"sin-actividad";
-        if(!byActivity.has(key))byActivity.set(key,[]);
-        byActivity.get(key).push(x);
-      });
-
-      const avg=groupRows.length
-        ? groupRows.reduce((s,x)=>s+Number(x.score10||0),0)/groupRows.length
-        : 0;
-
-      return `<div class="group-section">
-        <div class="group-head" onclick="toggleGroupedSection('group_${gi}')">
-          <div>
-            <h2>${escapeHtml(groupName)}</h2>
-            <div class="group-summary">
-              <span class="summary-chip">${groupRows.length} intentos</span>
-              <span class="summary-chip">${byActivity.size} actividades</span>
-              <span class="summary-chip">Media ${avg.toFixed(1).replace(".",",")}</span>
+  host.innerHTML=[...groups.entries()].sort((a,b)=>a[0].localeCompare(b[0],"es")).map(([gn,acts],gi)=>{
+    const groupRows=[...acts.values()].flat();
+    return `<section class="group-section">
+      <div class="group-head" onclick="document.getElementById('grp_${gi}').classList.toggle('hidden')">
+        <div><h2>${escapeHtml(gn)}</h2><span class="summary-chip">${groupRows.length} intentos</span><span class="summary-chip">${acts.size} actividades</span></div>
+        <b>⌄</b>
+      </div>
+      <div id="grp_${gi}" class="group-body">
+        ${[...acts.entries()].sort((a,b)=>(a[1][0]?.activity_title||"").localeCompare(b[1][0]?.activity_title||"","es")).map(([ak,ar],ai)=>{
+          const title=ar[0]?.activity_title||ak;
+          const pending=ar.filter(x=>x.manual_pending).length;
+          return `<div class="activity-section">
+            <div class="activity-head" onclick="document.getElementById('act_${gi}_${ai}').classList.toggle('hidden')">
+              <div><h3>${escapeHtml(title)}</h3><span class="summary-chip">${ar.length} intentos</span>${pending?`<span class="summary-chip">✍ ${pending} pendientes</span>`:""}</div>
+              <b>⌄</b>
             </div>
-          </div>
-          <span class="collapse-arrow">⌄</span>
-        </div>
-        <div id="group_${gi}" class="group-body">
-          ${[...byActivity.entries()]
-            .sort((a,b)=>{
-              const ta=(a[1][0]?.activity_title||a[0]||"");
-              const tb=(b[1][0]?.activity_title||b[0]||"");
-              return ta.localeCompare(tb,"es");
-            })
-            .map(([activityId,activityRows],ai)=>{
-              const title=activityRows[0]?.activity_title||activityId;
-              const aavg=activityRows.length
-                ? activityRows.reduce((s,x)=>s+Number(x.score10||0),0)/activityRows.length
-                : 0;
-              const pending=activityRows.filter(x=>x.manual_pending).length;
-              return `<div class="activity-section">
-                <div class="activity-head" onclick="toggleGroupedSection('act_${gi}_${ai}')">
-                  <div>
-                    <h3>${escapeHtml(title)}</h3>
-                    <div class="activity-summary">
-                      <span class="summary-chip">${activityRows.length} intentos</span>
-                      <span class="summary-chip">Media ${aavg.toFixed(1).replace(".",",")}</span>
-                      ${pending?`<span class="summary-chip">✍ ${pending} pendientes</span>`:""}
-                    </div>
-                  </div>
-                  <span class="collapse-arrow">⌄</span>
-                </div>
-                <div id="act_${gi}_${ai}" class="activity-body">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Alumno</th>
-                        <th>Código</th>
-                        <th>Nota</th>
-                        <th>Precisión</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${activityRows
-                        .sort((a,b)=>nameFor(a.student_code,a).localeCompare(nameFor(b.student_code,b),"es"))
-                        .map(x=>`<tr>
-                          <td><b>${escapeHtml(nameFor(x.student_code,x))}</b></td>
-                          <td>${escapeHtml(x.student_code||"")}</td>
-                          <td>${Number(x.score10||0).toFixed(1).replace(".",",")}</td>
-                          <td>${Math.round(Number(x.accuracy||0))}%</td>
-                          <td><span class="pill ${x.manual_pending?"pending-pill":"status"}">${x.manual_pending?"Pendiente de corregir":(x.finished?"Finalizado":"En curso")}</span></td>
-                          <td>${formatDate(x.finished_at||x.created_at||x.finishedAtIso||x.started_at)}</td>
-                          <td><button class="btn btn-primary" onclick='openDetail(${JSON.stringify(x)})'>Ver</button></td>
-                        </tr>`).join("")}
-                    </tbody>
-                  </table>
-                </div>
-              </div>`;
-            }).join("")}
-        </div>
-      </div>`;
-    }).join("");
-
-  const host=document.getElementById("groupedResultsHost");
-  if(host) host.innerHTML=html;
+            <div id="act_${gi}_${ai}" class="activity-body">
+              <table><thead><tr><th>Alumno</th><th>Nota</th><th>Precisión</th><th>Fecha</th><th>Estado</th><th></th></tr></thead>
+              <tbody>${ar.sort((a,b)=>nameFor(a.student_code,a).localeCompare(nameFor(b.student_code,b),"es")).map(x=>`
+                <tr>
+                  <td><div class="name">${escapeHtml(nameFor(x.student_code,x))}</div><div class="code">${escapeHtml(x.student_code||"")}</div></td>
+                  <td>${Number(x.score10||0).toFixed(1).replace(".",",")}</td>
+                  <td>${Math.round(Number(x.accuracy||0))}%</td>
+                  <td>${formatDate(x.finished_at||x.created_at)}</td>
+                  <td><span class="pill ${x.manual_pending?"pending-pill":"status"}">${x.manual_pending?"Pendiente de corregir":(x.finished?"Finalizado":"En curso")}</span></td>
+                  <td><button class="detail-btn" onclick='openDetail(${JSON.stringify(x).replace(/'/g,"&#39;")})'>Ver</button></td>
+                </tr>`).join("")}</tbody></table>
+            </div>
+          </div>`;
+        }).join("")}
+      </div>
+    </section>`;
+  }).join("");
 }
-
-function toggleGroupedSection(id){
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.classList.toggle("hidden");
-}
-
 
 function clearFilters(){
   search.value="";groupFilter.value="";activityFilter.value="";render();
@@ -560,22 +491,93 @@ function escapeHtml(v){
   return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
 </script>
-<script id="ESPACIO6_SESSION_V21">
-document.addEventListener("DOMContentLoaded",()=>{
-  const input=document.getElementById("teacherKey");
-  const saved=localStorage.getItem("espacio6_auth_key_v21")||"";
-  if(saved && input){
-    input.value=saved;
-    setTimeout(()=>connect(),50);
-  }
-  input?.addEventListener("keydown",e=>{
-    if(e.key==="Enter"){e.preventDefault();connect();}
-  });
+
+<script id="ESPACIO6_ENTER_LOGIN">
+document.addEventListener("DOMContentLoaded",function(){
+  const inputs=[...document.querySelectorAll('input[type="password"],input[id*="key" i],input[id*="clave" i],input[id*="pin" i]')];
+  inputs.forEach(inp=>inp.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){
+      e.preventDefault();
+      connect();
+    }
+  }));
 });
-function logoutEspacio6(){
-  localStorage.removeItem("espacio6_auth_key_v21");
-  location.reload();
-}
+</script>
+
+
+<script id="ESPACIO6_SHARED_SESSION">
+(function(){
+  const STORAGE_KEY="espacio6_teacher_session_key";
+  window.ESPACIO6_SESSION={
+    get(){return localStorage.getItem(STORAGE_KEY)||"";},
+    set(v){if(v)localStorage.setItem(STORAGE_KEY,String(v));},
+    clear(){localStorage.removeItem(STORAGE_KEY);},
+    fill(){
+      const saved=this.get();
+      if(!saved)return false;
+      const candidates=[
+        document.querySelector('input[type="password"]'),
+        document.querySelector('#key'),
+        document.querySelector('#teacherKey'),
+        document.querySelector('#adminKey'),
+        document.querySelector('input[id*="clave" i]'),
+        document.querySelector('input[id*="key" i]')
+      ].filter(Boolean);
+      if(candidates.length){
+        candidates[0].value=saved;
+        return true;
+      }
+      return false;
+    }
+  };
+
+  window.ESPACIO6_logout=function(){
+    ESPACIO6_SESSION.clear();
+    location.reload();
+  };
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    ESPACIO6_SESSION.fill();
+
+    // Botón de cierre de sesión común.
+    if(!document.getElementById("espacio6LogoutBtn")){
+      const btn=document.createElement("button");
+      btn.id="espacio6LogoutBtn";
+      btn.type="button";
+      btn.textContent="Cerrar sesión";
+      btn.style.cssText="position:fixed;right:14px;bottom:14px;z-index:9999;border:1px solid #dfe6ef;background:#fff;color:#334155;border-radius:10px;padding:9px 12px;font-weight:800;box-shadow:0 8px 24px #33415522;cursor:pointer";
+      btn.onclick=window.ESPACIO6_logout;
+      if(ESPACIO6_SESSION.get()) document.body.appendChild(btn);
+    }
+  });
+})();
+</script>
+
+
+<script id="ESPACIO6_AUTOLOGIN_RESULTS">
+document.addEventListener("DOMContentLoaded",()=>{
+  const saved=window.ESPACIO6_SESSION?.get?.();
+  if(!saved)return;
+  const inp=document.querySelector('input[type="password"],#key,input[id*="key" i],input[id*="clave" i]');
+  if(inp) inp.value=saved;
+  setTimeout(()=>{
+    if(typeof connect==="function"){
+      try{connect();}catch(e){}
+    }
+  },120);
+});
+</script>
+
+
+<script id="ESPACIO6_RESULTS_AUTOLOGIN_V22">
+document.addEventListener("DOMContentLoaded",()=>{
+  const saved=localStorage.getItem("espacio6_results_key");
+  if(saved){
+    const inp=document.getElementById("teacherKey");
+    if(inp) inp.value=saved;
+    setTimeout(()=>{ if(typeof connect==="function") connect(); },120);
+  }
+});
 </script>
 
 </body>
