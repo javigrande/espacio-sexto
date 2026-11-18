@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Probar actividades · Espacio 6.º</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,sans-serif;background:#f4f7fb;color:#172033}
+main{max-width:1100px;margin:auto;padding:24px}
+.card{background:#fff;border:1px solid #dfe6ef;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 12px 30px #33415510}
+h1{margin:.2rem 0} .muted{color:#64748b}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+input{flex:1;min-width:240px;padding:12px;border:1px solid #ccd5e4;border-radius:10px;font:inherit}
+button{border:0;border-radius:10px;padding:10px 13px;font-weight:850;cursor:pointer}
+.primary{background:#4f46e5;color:#fff}.light{background:#fff;border:1px solid #dfe6ef;color:#334155}
+.hidden{display:none!important}
+.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.list{display:grid;gap:10px}
+.item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px;border:1px solid #e4e9f0;border-radius:14px;background:#fff}
+.item small{color:#64748b}
+.badge{display:inline-block;padding:4px 7px;border-radius:999px;font-size:.75rem;font-weight:900}
+.visible{background:#e8f8f0;color:#11754b}.hiddenBadge{background:#eef1f5;color:#596273}
+@media(max-width:700px){.item{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body><main>
+<section id="login" class="card">
+  <div class="muted" style="font-weight:900;letter-spacing:.1em">ACCESO DOCENTE</div>
+  <h1>Probar actividades</h1>
+  <p class="muted">Puedes abrir cualquier actividad, incluso si está oculta para el alumnado. No puedes publicarla, borrarla ni cambiar su visibilidad desde aquí.</p>
+  <div class="row">
+    <input id="pin" type="password" placeholder="PIN docente">
+    <button class="primary" onclick="enter()">Entrar</button>
+  </div>
+  <div id="msg" class="muted" style="margin-top:8px"></div>
+</section>
+
+<section id="app" class="hidden">
+  <div class="card toolbar">
+    <div>
+      <div class="muted" style="font-weight:900;letter-spacing:.1em">ESPACIO 6.º</div>
+      <h1 style="margin:.2rem 0">Probar actividades</h1>
+      <div id="who" class="muted"></div>
+    </div>
+    <button class="light" onclick="logout()">Cerrar sesión</button>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <input id="search" placeholder="Buscar actividad..." oninput="render()">
+      <div id="count" class="muted"></div>
+    </div>
+    <div id="list" class="list" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<script>
+const WORKER="https://espacio-sexto-resultados.javigr77.workers.dev";
+let KEY="",CAT=[];
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+async function enter(){
+  KEY=$("pin").value.trim();
+  if(!KEY){$("msg").textContent="Introduce tu PIN.";return}
+  $("msg").textContent="Comprobando…";
+  try{
+    const r=await fetch(WORKER+"/api/session",{headers:{"X-Teacher-Key":KEY}});
+    const d=await r.json();
+    if(!r.ok||!d.ok) throw new Error(d.error||"No autorizado");
+    localStorage.setItem("espacio6_results_key",KEY);
+    $("who").textContent=d.user?.name||"Profesor";
+    await loadCatalog();
+    $("login").classList.add("hidden");
+    $("app").classList.remove("hidden");
+  }catch(e){
+    $("msg").textContent="PIN no válido.";
+  }
+}
+
+async function loadCatalog(){
+  const r=await fetch("../catalogo.json?ts="+Date.now(),{cache:"no-store"});
+  if(!r.ok) throw new Error("No se pudo cargar el catálogo.");
+  CAT=await r.json();
+  render();
+}
+
+function render(){
+  const q=$("search").value.trim().toLowerCase();
+  const rows=(CAT||[]).filter(x=>{
+    const t=String(x.titulo||x.title||"").toLowerCase();
+    const m=String(x.materia||x.subject||"").toLowerCase();
+    return !q || t.includes(q) || m.includes(q);
+  });
+  $("count").textContent=rows.length+" actividades";
+  $("list").innerHTML=rows.map((x,i)=>{
+    const visible=x.visible!==false && x.oculto!==true;
+    return `<div class="item">
+      <div>
+        <b>${esc(x.titulo||x.title||"Actividad")}</b><br>
+        <small>${esc(x.materia||x.subject||"Sin área")}</small>
+        <div style="margin-top:6px">
+          <span class="badge ${visible?"visible":"hiddenBadge"}">${visible?"👁 Visible":"🙈 Oculta"}</span>
+        </div>
+      </div>
+      <button class="primary" onclick='openActivity(${JSON.stringify(String(x.archivo||""))})'>↗ Probar</button>
+    </div>`;
+  }).join("") || '<div class="muted">No hay actividades.</div>';
+}
+
+function openActivity(path){
+  if(!path)return;
+  let href=path;
+  if(!/^https?:\/\//i.test(href)) href="../"+href.replace(/^\/+/,"");
+  window.open(href,"_blank","noopener,noreferrer");
+}
+
+function logout(){
+  localStorage.removeItem("espacio6_results_key");
+  location.reload();
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  const saved=localStorage.getItem("espacio6_results_key");
+  if(saved){
+    $("pin").value=saved;
+    setTimeout(enter,120);
+  }
+  $("pin").addEventListener("keydown",e=>{
+    if(e.key==="Enter"){e.preventDefault();enter()}
+  });
+});
+</script>
+</main></body>
+</html>
