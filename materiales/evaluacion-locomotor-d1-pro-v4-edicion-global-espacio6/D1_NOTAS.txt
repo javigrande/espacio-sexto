@@ -1,0 +1,24 @@
+REQUISITOS D1
+La actividad NO contiene una lista local de alumnos.
+Necesita:
+POST https://espacio-sexto-resultados.javigr77.workers.dev/api/student/validate
+Body: {"studentCode":"...","group":"6.º B"}
+Respuesta OK: {"ok":true,"studentCode":"...","group":"6.º B"}
+
+Y guarda el intento en:
+POST /api/attempts
+
+IMPORTANTE PARA LAS 3 RESPUESTAS DE DESARROLLO:
+Se envían dentro de payload.events con:
+manualReview: true
+rubric: criterio de corrección
+answer: texto completo del alumno
+
+La nota provisional enviada en score10 es de 0 a 7, porque quedan 3 puntos de desarrollo pendientes.
+Payload adicional:
+requiresManualReview: true
+manualPending: 3
+manualPendingPoints: 3
+autoScoreMax: 7
+
+V2: Las 3 preguntas abiertas son de nivel sencillo-medio. Aleatoriedad reforzada en opciones, relaciones, clasificación y secuencias.

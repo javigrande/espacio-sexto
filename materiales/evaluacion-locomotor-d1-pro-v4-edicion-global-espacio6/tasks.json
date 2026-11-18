@@ -1,0 +1,186 @@
+[
+  {
+    "n": 1,
+    "type": "sort",
+    "title": "Arquitectos del esqueleto",
+    "prompt": "Clasifica cada ejemplo según la forma del hueso.",
+    "targets": [
+      "Largos",
+      "Cortos",
+      "Planos"
+    ],
+    "items": [
+      [
+        "tibia",
+        "Largos"
+      ],
+      [
+        "peroné",
+        "Largos"
+      ],
+      [
+        "vértebra",
+        "Cortos"
+      ],
+      [
+        "huesos del cráneo",
+        "Planos"
+      ],
+      [
+        "escápula",
+        "Planos"
+      ]
+    ],
+    "points": 1
+  },
+  {
+    "n": 2,
+    "type": "match",
+    "title": "Simetría corporal",
+    "prompt": "Relaciona cada hueso de la extremidad superior con su equivalente funcional aproximado en la extremidad inferior.",
+    "pairs": [
+      [
+        "Húmero",
+        "Fémur"
+      ],
+      [
+        "Radio",
+        "Tibia"
+      ],
+      [
+        "Cúbito",
+        "Peroné"
+      ]
+    ],
+    "points": 1
+  },
+  {
+    "n": 3,
+    "type": "sort",
+    "title": "Código de articulaciones",
+    "prompt": "Clasifica las articulaciones según el movimiento que permiten.",
+    "targets": [
+      "Móviles",
+      "Semimóviles",
+      "Fijas"
+    ],
+    "items": [
+      [
+        "rodilla",
+        "Móviles"
+      ],
+      [
+        "hombro",
+        "Móviles"
+      ],
+      [
+        "entre vértebras",
+        "Semimóviles"
+      ],
+      [
+        "suturas del cráneo",
+        "Fijas"
+      ]
+    ],
+    "points": 1
+  },
+  {
+    "n": 4,
+    "type": "match",
+    "title": "Conexiones del movimiento",
+    "prompt": "Relaciona cada estructura con su función principal.",
+    "pairs": [
+      [
+        "Tendón",
+        "Une el músculo al hueso"
+      ],
+      [
+        "Ligamento",
+        "Une y estabiliza huesos en una articulación"
+      ],
+      [
+        "Músculo",
+        "Se contrae y produce movimiento"
+      ],
+      [
+        "Cartílago",
+        "Tejido flexible presente en zonas del esqueleto"
+      ]
+    ],
+    "points": 1
+  },
+  {
+    "n": 5,
+    "type": "choice",
+    "title": "Tejidos musculares",
+    "prompt": "¿Qué opción describe correctamente los tres tipos de tejido muscular que aparecen en el tema?",
+    "options": [
+      "Estriado: voluntario; liso: involuntario; cardíaco: forma el corazón",
+      "Estriado: involuntario; liso: voluntario; cardíaco: forma los tendones",
+      "Estriado: solo en el corazón; liso: solo en brazos; cardíaco: voluntario",
+      "Los tres tipos se contraen siempre de forma voluntaria"
+    ],
+    "correct": 0,
+    "points": 1
+  },
+  {
+    "n": 6,
+    "type": "sequence",
+    "title": "Movimiento antagonista",
+    "prompt": "Ordena lo que ocurre al DOBLAR el codo.",
+    "items": [
+      "El bíceps se contrae",
+      "El bíceps tira del antebrazo",
+      "El tríceps se relaja",
+      "El antebrazo se eleva y el codo se dobla"
+    ],
+    "points": 1
+  },
+  {
+    "n": 7,
+    "type": "multi",
+    "title": "Prevención y lesiones",
+    "prompt": "Selecciona todas las afirmaciones correctas.",
+    "options": [
+      "La tendinitis es la inflamación de un tendón y puede producir dolor al moverlo",
+      "Los estiramientos y la práctica deportiva adecuada ayudan a prevenir lesiones",
+      "Los ligamentos unen músculos con huesos",
+      "Un desgarro fibrilar afecta a fibras musculares",
+      "El tendón de Aquiles une músculos de la pantorrilla con huesos del pie"
+    ],
+    "correct": [
+      0,
+      1,
+      3,
+      4
+    ],
+    "points": 1
+  },
+  {
+    "n": 8,
+    "type": "open",
+    "title": "Desarrollo 1 · Definición",
+    "prompt": "Define con tus palabras qué es un tendón y explica qué une.",
+    "rubric": "1 punto: indica que es una estructura resistente que une el músculo al hueso. Se valora una explicación clara y correcta.",
+    "minChars": 70,
+    "points": 1
+  },
+  {
+    "n": 9,
+    "type": "open",
+    "title": "Desarrollo 2 · Diferencia básica",
+    "prompt": "Explica una diferencia entre un tendón y un ligamento.",
+    "rubric": "1 punto: diferencia correctamente que el tendón une músculo y hueso, mientras que el ligamento une o estabiliza huesos en una articulación.",
+    "minChars": 80,
+    "points": 1
+  },
+  {
+    "n": 10,
+    "type": "open",
+    "title": "Desarrollo 3 · Prevención",
+    "prompt": "Escribe dos medidas sencillas que ayuden a prevenir lesiones de músculos, tendones o ligamentos.",
+    "rubric": "1 punto: aporta dos medidas adecuadas, por ejemplo estiramientos, calentamiento, actividad física adecuada o evitar sobreesfuerzos.",
+    "minChars": 70,
+    "points": 1
+  }
+]
