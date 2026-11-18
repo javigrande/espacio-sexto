@@ -375,27 +375,59 @@ function formatAnswer(v){
 async function saveManualGrade(attemptId,questionId,maxPoints){
   const scoreEl=document.getElementById("score_"+questionId);
   const commentEl=document.getElementById("comment_"+questionId);
-  if(!scoreEl||scoreEl.value===""){alert("Selecciona una puntuación.");return}
+
+  if(!scoreEl || scoreEl.value===""){
+    alert("Selecciona una puntuación.");
+    return;
+  }
+
+  const pointsAwarded=Number(scoreEl.value);
+  const comment=commentEl?.value||"";
+
   try{
     const resp=await fetch(WORKER_URL+"/api/manual-grade",{
       method:"POST",
-      headers:{"X-Teacher-Key":KEY,"Content-Type":"application/json"},
+      headers:{
+        "X-Teacher-Key":KEY,
+        "Content-Type":"application/json"
+      },
       body:JSON.stringify({
-        attemptId,questionId,
-        pointsAwarded:Number(scoreEl.value),
+        attemptId,
+        questionId,
+        pointsAwarded,
         maxPoints:Number(maxPoints),
-        comment:commentEl?.value||""
+        comment
       })
     });
+
     const d=await resp.json();
-    if(!resp.ok)throw new Error(d.error||"No se pudo guardar");
-    alert(d.summary?.complete
+    if(!resp.ok || !d.ok || !d.saved){
+      throw new Error(d.error||"No se pudo guardar la corrección.");
+    }
+
+    // Verificación inmediata de lo realmente guardado.
+    if(!d.grade || String(d.grade.question_id)!==String(questionId)){
+      throw new Error("El servidor no confirmó la corrección guardada.");
+    }
+
+    const msg=d.summary?.complete
       ? "Corrección guardada. Nota final: "+Number(d.summary.final_score||0).toFixed(2).replace(".",",")+" / 10"
-      : "Corrección guardada correctamente.");
+      : "Corrección guardada correctamente.";
+
+    alert(msg);
+
+    // Recargar resultados y volver a abrir el mismo intento,
+    // para comprobar visualmente que la nota/comentario persisten.
     await loadResults();
-    const row=ALL.find(z=>String(z.id)===String(attemptId));
-    if(row) openDetail(row);
-  }catch(e){alert("Error: "+(e.message||e))}
+    let row=ALL.find(z=>String(z.id)===String(attemptId));
+    if(!row){
+      row={id:attemptId,student_code:"",activity_title:"",group_name:""};
+    }
+    await openDetail(row);
+
+  }catch(e){
+    alert("Error al guardar: "+(e.message||e));
+  }
 }
 
 function closeModal(){modal.classList.add("hidden")}
