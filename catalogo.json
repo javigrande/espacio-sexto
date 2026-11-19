@@ -8,7 +8,8 @@
     "tipo": "Evaluación",
     "icono": "🎯",
     "archivo": "materiales/el-aparato-locomotor-evaluacion-v5-entrega-flexible-espacio6/evaluacion.html",
-    "destacado": true
+    "destacado": true,
+    "visible": false
   },
   {
     "descripcion": "",
