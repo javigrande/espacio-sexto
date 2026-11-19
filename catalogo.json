@@ -4,6 +4,17 @@
     "materia": "CCNN",
     "tiempo": "15 min",
     "fecha": "2026-11-19",
+    "titulo": "EL APARATO LOCOMOTOR: EVALUACIÓN",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "archivo": "materiales/el-aparato-locomotor-evaluacion-v4-navegable-espacio6/evaluacion.html",
+    "destacado": true
+  },
+  {
+    "descripcion": "",
+    "materia": "CCNN",
+    "tiempo": "15 min",
+    "fecha": "2026-11-19",
     "titulo": "EVALUACION APARATO LOCOMOTOR",
     "tipo": "Evaluación",
     "icono": "🎯",

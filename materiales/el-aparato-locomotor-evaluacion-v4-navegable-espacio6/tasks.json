@@ -1,0 +1,303 @@
+[
+  {
+    "n": 1,
+    "type": "match",
+    "title": "Conecta estructuras y funciones",
+    "prompt": "Relaciona cada estructura con su descripción correcta.",
+    "pairs": [
+      [
+        "Tendón",
+        "Une el músculo al hueso y transmite el movimiento"
+      ],
+      [
+        "Ligamento",
+        "Une y estabiliza huesos en una articulación"
+      ],
+      [
+        "Cartílago",
+        "Tejido flexible presente, entre otras zonas, en los extremos de huesos largos"
+      ],
+      [
+        "Articulación",
+        "Unión entre dos huesos"
+      ]
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 2,
+    "type": "sequence",
+    "title": "Movimiento del codo",
+    "prompt": "Ordena lo que ocurre al doblar el codo.",
+    "items": [
+      "El bíceps se contrae",
+      "El tríceps se relaja",
+      "El bíceps tira del antebrazo mediante sus tendones",
+      "El antebrazo se eleva y el codo se dobla"
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 3,
+    "type": "choice",
+    "title": "Tendones y ligamentos",
+    "prompt": "¿Qué afirmación compara correctamente tendones y ligamentos?",
+    "options": [
+      "Los tendones unen músculo y hueso; los ligamentos unen y estabilizan huesos en articulaciones",
+      "Los tendones unen huesos entre sí; los ligamentos unen músculo y hueso",
+      "Los tendones y ligamentos son músculos que se contraen voluntariamente",
+      "Los ligamentos producen el movimiento y los tendones forman los huesos"
+    ],
+    "correct": 0,
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 4,
+    "type": "multi",
+    "title": "Prevención y lesiones",
+    "prompt": "Selecciona TODAS las afirmaciones correctas.",
+    "options": [
+      "Los estiramientos ayudan a mantener la elasticidad necesaria para el movimiento",
+      "La práctica deportiva regular y adecuada a la edad ayuda a prevenir lesiones",
+      "La tendinitis es la inflamación de un tendón",
+      "Los desgarros fibrilares son roturas de fibras musculares",
+      "Los ligamentos son muy elásticos y nunca se desgarran"
+    ],
+    "correct": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 5,
+    "type": "fill",
+    "title": "Completa conceptos clave",
+    "prompt": "Completa los huecos con las palabras correctas.",
+    "sentence": "El sistema locomotor está formado por el sistema ________ y el sistema ________. El esqueleto humano está formado por unos ________ huesos.",
+    "answers": [
+      "esquelético",
+      "muscular",
+      "206"
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 6,
+    "type": "dropdown",
+    "title": "Clasifica con precisión",
+    "prompt": "Elige la opción correcta en cada desplegable.",
+    "rows": [
+      {
+        "text": "La rodilla es una articulación",
+        "options": [
+          "móvil",
+          "semimóvil",
+          "fija"
+        ],
+        "answer": "móvil"
+      },
+      {
+        "text": "Las uniones entre vértebras son articulaciones",
+        "options": [
+          "móviles",
+          "semimóviles",
+          "fijas"
+        ],
+        "answer": "semimóviles"
+      },
+      {
+        "text": "Las suturas del cráneo son articulaciones",
+        "options": [
+          "móviles",
+          "semimóviles",
+          "fijas"
+        ],
+        "answer": "fijas"
+      },
+      {
+        "text": "El tejido muscular del bíceps es",
+        "options": [
+          "estriado",
+          "liso",
+          "cardíaco"
+        ],
+        "answer": "estriado"
+      },
+      {
+        "text": "El tejido muscular del corazón es",
+        "options": [
+          "estriado",
+          "liso",
+          "cardíaco"
+        ],
+        "answer": "cardíaco"
+      }
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 7,
+    "type": "drag",
+    "title": "Clasifica los huesos",
+    "prompt": "Arrastra o toca cada elemento y colócalo según la forma del hueso.",
+    "targets": [
+      "Largos",
+      "Cortos",
+      "Planos"
+    ],
+    "items": [
+      [
+        "Tibia",
+        "Largos"
+      ],
+      [
+        "Peroné",
+        "Largos"
+      ],
+      [
+        "Vértebra",
+        "Cortos"
+      ],
+      [
+        "Huesos del cráneo",
+        "Planos"
+      ],
+      [
+        "Escápula",
+        "Planos"
+      ]
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 8,
+    "type": "imagechoice",
+    "title": "Identificación de huesos · 1",
+    "prompt": "Observa el punto marcado. ¿Qué hueso se está señalando? Fíjate en el punto rojo exacto y en el detalle ampliado.",
+    "image": "assets/esqueleto.png",
+    "hotspot": {
+      "x": 55,
+      "y": 29
+    },
+    "options": [
+      "Esternón",
+      "Húmero",
+      "Radio",
+      "Vértebra"
+    ],
+    "correct": 0,
+    "points": 0.6363636363636364,
+    "callout": {
+      "x": 82,
+      "y": 18
+    }
+  },
+  {
+    "n": 9,
+    "type": "imagechoice",
+    "title": "Identificación de huesos · 2",
+    "prompt": "Observa el punto marcado. ¿Qué hueso se está señalando? Fíjate en el punto rojo exacto y en el detalle ampliado.",
+    "image": "assets/esqueleto.png",
+    "hotspot": {
+      "x": 36,
+      "y": 69
+    },
+    "options": [
+      "Fémur",
+      "Tibia",
+      "Peroné",
+      "Rótula"
+    ],
+    "correct": 0,
+    "points": 0.6363636363636364,
+    "callout": {
+      "x": 17,
+      "y": 58
+    }
+  },
+  {
+    "n": 10,
+    "type": "imagechoice",
+    "title": "Identificación de músculos · 1",
+    "prompt": "Observa el punto marcado. ¿Qué músculo se está señalando? Fíjate en el punto rojo exacto y en el detalle ampliado.",
+    "image": "assets/musculos.png",
+    "hotspot": {
+      "x": 73,
+      "y": 30
+    },
+    "options": [
+      "Bíceps",
+      "Deltoides",
+      "Pectoral",
+      "Trapecio"
+    ],
+    "correct": 0,
+    "points": 0.6363636363636364,
+    "callout": {
+      "x": 86,
+      "y": 18
+    }
+  },
+  {
+    "n": 11,
+    "type": "imagechoice",
+    "title": "Identificación de músculos · 2",
+    "prompt": "Observa el punto marcado. ¿Qué músculo se está señalando? Fíjate en el punto rojo exacto y en el detalle ampliado.",
+    "image": "assets/musculos.png",
+    "hotspot": {
+      "x": 47,
+      "y": 67
+    },
+    "options": [
+      "Cuádriceps",
+      "Gemelo",
+      "Abdominal",
+      "Pectoral"
+    ],
+    "correct": 0,
+    "points": 0.6363636363636364,
+    "callout": {
+      "x": 18,
+      "y": 82
+    }
+  },
+  {
+    "n": 12,
+    "type": "open",
+    "title": "Desarrollo 1 · Definición",
+    "prompt": "Define con tus palabras qué es un tendón y explica su función.",
+    "rubric": "0,75 puntos: define el tendón como una estructura resistente situada en los extremos del músculo y explica que une músculo y hueso y ayuda a transmitir el movimiento.",
+    "minChars": 70,
+    "points": 0.75
+  },
+  {
+    "n": 13,
+    "type": "open",
+    "title": "Desarrollo 2 · Definición y función",
+    "prompt": "Explica qué es un ligamento y cuál es su función en una articulación.",
+    "rubric": "0,75 puntos: indica que une huesos y que ayuda a estabilizar las articulaciones.",
+    "minChars": 65,
+    "points": 0.75
+  },
+  {
+    "n": 14,
+    "type": "open",
+    "title": "Desarrollo 3 · Proceso",
+    "prompt": "Explica de forma sencilla qué ocurre con el bíceps y el tríceps cuando doblamos el codo.",
+    "rubric": "0,75 puntos: señala que el bíceps se contrae y el tríceps se relaja, permitiendo elevar el antebrazo.",
+    "minChars": 75,
+    "points": 0.75
+  },
+  {
+    "n": 15,
+    "type": "open",
+    "title": "Desarrollo 4 · Prevención",
+    "prompt": "Escribe qué es la tendinitis y menciona una medida que ayude a prevenir lesiones del aparato locomotor.",
+    "rubric": "0,75 puntos: explica que la tendinitis es la inflamación de un tendón y aporta una medida adecuada como estirar o practicar actividad física regular y apropiada para la edad.",
+    "minChars": 80,
+    "points": 0.75
+  }
+]
