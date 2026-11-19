@@ -8,7 +8,8 @@
     "tipo": "Evaluación",
     "icono": "🎯",
     "archivo": "materiales/el-aparato-locomotor-evaluacion-v4-navegable-espacio6/evaluacion.html",
-    "destacado": true
+    "destacado": true,
+    "visible": false
   },
   {
     "descripcion": "",
