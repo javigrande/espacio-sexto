@@ -323,6 +323,8 @@ function isManualAnswerEvent(e){
   return false;
 }
 
+let CURRENT_MANUAL_CORRECTION=null;
+
 async function openDetail(x){
   modalTitle.textContent=nameFor(x.student_code,x);
   modalSub.textContent=(x.activity_title||x.activity_id||"") + " · " + (x.group_name||"");
@@ -342,6 +344,12 @@ async function openDetail(x){
     const grades=result.manual_grades||{};
     const manualQuestions=ev.filter(isManualAnswerEvent);
 
+    CURRENT_MANUAL_CORRECTION={
+      attemptId:String(x.id),
+      row:x,
+      questions:[]
+    };
+
     const parts=[];
     if(result.manual_grading_available===false && manualQuestions.length){
       parts.push(`<div class="manual-review"><b>⚠ Respuestas recuperadas</b><br><small>Puedes leer las respuestas del alumno. La tabla de corrección manual aún no está disponible en D1; podrás puntuar cuando se aplique el esquema V17.</small></div>`);
@@ -357,6 +365,12 @@ async function openDetail(x){
         const qid=String(e.questionId||e.id||("manual_"+i));
         const g=grades[qid]||{};
         const manualMax=Number(e.points||e.maxPoints||1);
+
+        CURRENT_MANUAL_CORRECTION.questions.push({
+          questionId:qid,
+          maxPoints:manualMax
+        });
+
         parts.push(`<div class="manual-review">
           <b>✍️ Pregunta de desarrollo · ${escapeHtml(e.question||("Pregunta "+(i+1)))}</b>
           <div style="margin-top:8px"><small>Respuesta del alumno</small></div>
@@ -374,7 +388,7 @@ async function openDetail(x){
           </label>
           ${result.manual_grading_available===false
             ? '<div class="note" style="margin-top:10px">Corrección manual temporalmente no disponible.</div>'
-            : `<button class="btn btn-primary" style="margin-top:10px" onclick='saveManualGrade(${JSON.stringify(x.id)},${JSON.stringify(qid)},${manualMax})'>Guardar corrección</button>`}
+            : ''}
         </div>`);
       }else{
         const ok=e.correct===true;
@@ -392,6 +406,13 @@ async function openDetail(x){
         <small>Parte automática: ${Number(summary.auto_score||0).toFixed(2).replace(".",",")} · Parte manual: ${Number(summary.manual_score||0).toFixed(2).replace(".",",")} / ${Number(summary.manual_max||0).toFixed(2).replace(".",",")}</small>
         ${summary.complete?`<div style="margin-top:6px;font-weight:900">Nota final: ${Number(summary.final_score||0).toFixed(2).replace(".",",")} / 10</div>`:""}
       </div>`);
+
+      if(result.manual_grading_available!==false){
+        parts.push(`<div class="manual-review" style="text-align:center;padding:18px">
+          <button class="btn btn-primary" style="min-width:240px;font-size:1rem;padding:12px 18px" onclick="saveManualCorrection(this)">💾 Guardar corrección</button>
+          <div id="manualSaveStatus" class="note" style="margin-top:8px">Se guardarán juntas todas las preguntas de desarrollo.</div>
+        </div>`);
+      }
     }
 
     eventList.innerHTML=parts.join("");
@@ -411,61 +432,85 @@ function formatAnswer(v){
   if(v===null||v===undefined)return "—";
   return String(v);
 }
-async function saveManualGrade(attemptId,questionId,maxPoints){
-  const scoreEl=document.getElementById("score_"+questionId);
-  const commentEl=document.getElementById("comment_"+questionId);
-
-  if(!scoreEl || scoreEl.value===""){
-    alert("Selecciona una puntuación.");
+async function saveManualCorrection(button){
+  const ctx=CURRENT_MANUAL_CORRECTION;
+  if(!ctx || !ctx.questions?.length){
+    alert("No hay preguntas de desarrollo para guardar.");
     return;
   }
 
-  const pointsAwarded=Number(scoreEl.value);
-  const comment=commentEl?.value||"";
+  const items=[];
+  let missing=0;
+
+  for(const q of ctx.questions){
+    const scoreEl=document.getElementById("score_"+q.questionId);
+    const commentEl=document.getElementById("comment_"+q.questionId);
+
+    if(!scoreEl || scoreEl.value===""){
+      missing++;
+      continue;
+    }
+
+    items.push({
+      questionId:q.questionId,
+      maxPoints:Number(q.maxPoints),
+      pointsAwarded:Number(scoreEl.value),
+      comment:commentEl?.value||""
+    });
+  }
+
+  if(missing){
+    alert("Falta puntuar "+missing+" pregunta"+(missing===1?"":"s")+" de desarrollo.");
+    return;
+  }
+
+  const status=document.getElementById("manualSaveStatus");
+  if(button) button.disabled=true;
+  if(status) status.textContent="Guardando corrección…";
 
   try{
-    const resp=await fetch(WORKER_URL+"/api/manual-grade",{
-      method:"POST",
-      headers:{
-        "X-Teacher-Key":KEY,
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        attemptId,
-        questionId,
-        pointsAwarded,
-        maxPoints:Number(maxPoints),
-        comment
-      })
-    });
+    let lastSummary=null;
 
-    const d=await resp.json();
-    if(!resp.ok || !d.ok || !d.saved){
-      throw new Error(d.error||"No se pudo guardar la corrección.");
+    for(const item of items){
+      const resp=await fetch(WORKER_URL+"/api/manual-grade",{
+        method:"POST",
+        headers:{
+          "X-Teacher-Key":KEY,
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          attemptId:ctx.attemptId,
+          questionId:item.questionId,
+          pointsAwarded:item.pointsAwarded,
+          maxPoints:item.maxPoints,
+          comment:item.comment
+        })
+      });
+
+      const d=await resp.json();
+      if(!resp.ok || !d.ok || !d.saved){
+        throw new Error(d.error||("No se pudo guardar "+item.questionId));
+      }
+      lastSummary=d.summary||lastSummary;
     }
 
-    // Verificación inmediata de lo realmente guardado.
-    if(!d.grade || String(d.grade.question_id)!==String(questionId)){
-      throw new Error("El servidor no confirmó la corrección guardada.");
-    }
+    if(status) status.textContent="✓ Corrección guardada correctamente.";
 
-    const msg=d.summary?.complete
-      ? "Corrección guardada. Nota final: "+Number(d.summary.final_score||0).toFixed(2).replace(".",",")+" / 10"
+    const msg=lastSummary?.complete
+      ? "Corrección guardada. Nota final: "+Number(lastSummary.final_score||0).toFixed(2).replace(".",",")+" / 10"
       : "Corrección guardada correctamente.";
-
     alert(msg);
 
-    // Recargar resultados y volver a abrir el mismo intento,
-    // para comprobar visualmente que la nota/comentario persisten.
     await loadResults();
-    let row=ALL.find(z=>String(z.id)===String(attemptId));
-    if(!row){
-      row={id:attemptId,student_code:"",activity_title:"",group_name:""};
-    }
+    let row=ALL.find(z=>String(z.id)===String(ctx.attemptId));
+    if(!row) row=ctx.row||{id:ctx.attemptId};
     await openDetail(row);
 
   }catch(e){
+    if(status) status.textContent="Error al guardar la corrección.";
     alert("Error al guardar: "+(e.message||e));
+  }finally{
+    if(button) button.disabled=false;
   }
 }
 
