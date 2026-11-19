@@ -9,7 +9,11 @@ let T=[],idx=0,studentCode="",group="",started="",answers={},sent=false;
 
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function norm(s){return String(s||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
-function sameSet(a,b){return JSON.stringify([...a].sort((x,y)=>x-y))===JSON.stringify([...b].sort((x,y)=>x-y))}
+function sameSet(a,b){
+ const aa=[...new Set((a||[]).map(Number))].sort((x,y)=>x-y);
+ const bb=[...new Set((b||[]).map(Number))].sort((x,y)=>x-y);
+ return aa.length===bb.length && aa.every((v,i)=>v===bb[i]);
+}
 
 async function init(){
  T=await fetch("tasks.json").then(r=>r.json());
@@ -346,7 +350,12 @@ function buildEventsAndScore(){
    let answer=null,expected=null,ok=null;
 
    if(t.type==="choice"||t.type==="imagechoice"){answer=s.selected;expected=t.correct;ok=answer===expected}
-   if(t.type==="multi"){answer=s.selected||[];expected=t.correct;ok=sameSet(answer,expected)}
+   if(t.type==="multi"){
+   answer=s.selected||[];
+   expected=t.correct;
+   // En la pregunta 4 el orden de selección no influye: solo importa el conjunto de opciones marcadas.
+   ok=sameSet(answer,expected)
+}
    if(t.type==="match"){answer=s.pairs||[];expected=t.pairs.map((_,j)=>({li:j,ri:j}));ok=answer.length===t.pairs.length&&answer.every(p=>p.li===p.ri)&&new Set(answer.map(p=>p.li)).size===t.pairs.length}
    if(t.type==="sequence"){answer=s.order||[];expected=t.items;ok=JSON.stringify(answer)===JSON.stringify(expected)}
    if(t.type==="fill"){answer=s.values||[];expected=t.answers;ok=t.answers.every((a,j)=>norm(answer[j])===norm(a))}
