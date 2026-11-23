@@ -1,0 +1,11 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Comprensión oral · Superperros</title><link rel="stylesheet" href="styles.css"></head><body><div class="wrap">
+<header class="hero"><h1>Comprensión oral · Superperros</h1><p>6.º de Primaria · Evaluación</p></header>
+<section id="identity" class="card identity hidden"><h2>Identificación</h2><div class="row"><input id="studentCode" placeholder="Código personal"><select id="group"><option value="">Selecciona grupo</option><option>6.º A</option><option>6.º B</option><option>6.º C</option></select></div><div id="identityMsg" class="status"></div><br><button id="startBtn" class="btn" onclick="startEvaluation()">Comenzar evaluación</button></section>
+<section id="evaluation" class="hidden">
+<div class="card audioBox"><div><b>🎧 Audio de evaluación</b><div id="listenHelp" class="status">Puedes escucharlo un máximo de 2 veces.</div></div><audio id="evalAudio" controls preload="metadata" src="Super Perros.mp3"></audio><div id="listenCount" class="listenBadge">Escuchas: 0/2</div></div>
+<div id="tabs" class="progress"></div>
+<div class="card question"><div id="qnum" class="status"></div><h2 id="qtext"></h2><div id="answers" class="answers"></div><div class="nav"><button id="prevBtn" class="btn secondary" onclick="prev()">← Anterior</button><span id="answered" class="status"></span><button id="nextBtn" class="btn blue" onclick="next()">Siguiente →</button></div></div>
+</section>
+<section id="review" class="card hidden"><h2>Revisión final</h2><p id="reviewMsg" class="warn"></p><div id="reviewGrid" class="reviewGrid"></div><div class="sendBar"><button class="btn secondary" onclick="back()">← Volver a preguntas</button> <button id="sendBtn" class="btn sendBtn" onclick="submitResults()">Enviar resultados</button></div></section>
+<section id="result" class="card result hidden"><h2>Evaluación enviada</h2><strong id="score"></strong><p id="resultMeta"></p><p>El resultado ha quedado registrado.</p></section>
+</div><script src="app.js"></script></body></html>

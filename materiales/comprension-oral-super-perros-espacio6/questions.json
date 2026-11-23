@@ -1,0 +1,167 @@
+[
+  {
+    "n": 1,
+    "q": "¿Cómo se llama la empresa que dirige Yolanda?",
+    "options": [
+      "Superperros",
+      "Mundo Canino",
+      "Amigos Peludos",
+      "La Casa del Perro"
+    ],
+    "correct": 0
+  },
+  {
+    "n": 2,
+    "q": "¿Cuál es la función de Yolanda en Superperros?",
+    "options": [
+      "Es clienta habitual",
+      "Dirige la empresa",
+      "Trabaja únicamente en la tienda",
+      "Presenta un programa de radio"
+    ],
+    "correct": 1
+  },
+  {
+    "n": 3,
+    "q": "¿A qué animales están dirigidos principalmente los servicios de Superperros?",
+    "options": [
+      "A todo tipo de mascotas",
+      "A animales de granja",
+      "A perros",
+      "A perros y gatos por igual"
+    ],
+    "correct": 2
+  },
+  {
+    "n": 4,
+    "q": "¿Qué servicio permite dejar al perro atendido durante parte del día?",
+    "options": [
+      "La peluquería",
+      "La tienda de accesorios",
+      "Las charlas informativas",
+      "La guardería canina"
+    ],
+    "correct": 3
+  },
+  {
+    "n": 5,
+    "q": "¿Qué ofrece Superperros para ayudar a los dueños a conocer mejor las necesidades de sus animales?",
+    "options": [
+      "Asesoramiento y charlas informativas",
+      "Solo venta de libros",
+      "Cursos de primeros auxilios humanos",
+      "Excursiones turísticas"
+    ],
+    "correct": 0
+  },
+  {
+    "n": 6,
+    "q": "¿Qué servicio está relacionado directamente con el arreglo y cuidado externo del perro?",
+    "options": [
+      "La residencia de vacaciones",
+      "La peluquería y los tratamientos",
+      "La venta de alimentos",
+      "La guardería nocturna"
+    ],
+    "correct": 1
+  },
+  {
+    "n": 7,
+    "q": "¿Qué opción sería más adecuada si una familia se marcha unos días y no puede llevarse a su perro?",
+    "options": [
+      "Comprar un juguete",
+      "Asistir a una charla",
+      "Usar la residencia de vacaciones",
+      "Dejarlo solo en casa"
+    ],
+    "correct": 2
+  },
+  {
+    "n": 8,
+    "q": "Además de prestar servicios, ¿qué tipo de productos se pueden adquirir en Superperros?",
+    "options": [
+      "Medicamentos para personas",
+      "Ropa deportiva infantil",
+      "Material escolar",
+      "Alimentos y accesorios para perros"
+    ],
+    "correct": 3
+  },
+  {
+    "n": 9,
+    "q": "¿Por qué puede perjudicar a un perro pasar demasiado tiempo solo?",
+    "options": [
+      "Porque puede hacer menos ejercicio del que necesita",
+      "Porque siempre pierde el apetito",
+      "Porque deja de reconocer a su dueño",
+      "Porque necesariamente enferma de los oídos"
+    ],
+    "correct": 0
+  },
+  {
+    "n": 10,
+    "q": "¿Qué problema físico puede aparecer si el perro no realiza suficiente ejercicio?",
+    "options": [
+      "Pérdida total del olfato",
+      "Sobrepeso",
+      "Problemas de visión",
+      "Caída inmediata del pelo"
+    ],
+    "correct": 1
+  },
+  {
+    "n": 11,
+    "q": "¿Qué otra dificultad física se menciona junto al sobrepeso?",
+    "options": [
+      "Problemas dentales",
+      "Problemas respiratorios",
+      "Problemas de movilidad",
+      "Problemas de audición"
+    ],
+    "correct": 2
+  },
+  {
+    "n": 12,
+    "q": "¿Cuál de estas combinaciones recoge consecuencias emocionales mencionadas en el audio?",
+    "options": [
+      "Euforia, hambre y sueño",
+      "Curiosidad, alegría y sorpresa",
+      "Vergüenza, enfado y miedo",
+      "Aburrimiento, ansiedad y depresión"
+    ],
+    "correct": 3
+  },
+  {
+    "n": 13,
+    "q": "¿Qué idea resume mejor la variedad de servicios de Superperros?",
+    "options": [
+      "Busca atender distintas necesidades de cuidado y bienestar de los perros",
+      "Se dedica principalmente a vender comida",
+      "Su actividad principal es organizar competiciones",
+      "Solo atiende animales cuando están enfermos"
+    ],
+    "correct": 0
+  },
+  {
+    "n": 14,
+    "q": "¿Cuál de estos grupos contiene únicamente servicios que se mencionan en el audio?",
+    "options": [
+      "Veterinario, adiestramiento policial y transporte",
+      "Guardería, peluquería y residencia de vacaciones",
+      "Cría, adopción y concursos de belleza",
+      "Excursiones, fotografía y entrenamiento deportivo"
+    ],
+    "correct": 1
+  },
+  {
+    "n": 15,
+    "q": "¿Cuál es la idea principal que se desprende de la explicación sobre dejar a los perros solos?",
+    "options": [
+      "Los perros pueden permanecer solos sin límite si tienen comida",
+      "Lo más importante es comprar muchos accesorios",
+      "Los perros necesitan atención, actividad y compañía para su bienestar",
+      "Todos los perros necesitan vivir en una residencia"
+    ],
+    "correct": 2
+  }
+]

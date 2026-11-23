@@ -1,6 +1,17 @@
 [
   {
     "descripcion": "",
+    "materia": "Lengua",
+    "tiempo": "15 min",
+    "fecha": "2026-11-23",
+    "titulo": "COMPRENSION ORAL SUPER PERROS",
+    "tipo": "Evaluación",
+    "icono": "🎯",
+    "archivo": "materiales/comprension-oral-super-perros-espacio6/evaluacion.html",
+    "destacado": false
+  },
+  {
+    "descripcion": "",
     "materia": "Matemáticas",
     "tiempo": "15 min",
     "fecha": "2026-11-19",
