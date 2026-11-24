@@ -8,7 +8,8 @@
     "tipo": "Evaluación",
     "icono": "🎯",
     "archivo": "materiales/el-aparato-locomotor-evaluacion-b-nuevas-imagenes-espacio6/evaluacion.html",
-    "destacado": false
+    "destacado": false,
+    "visible": false
   },
   {
     "descripcion": "",
