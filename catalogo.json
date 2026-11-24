@@ -4,6 +4,17 @@
     "materia": "Matemáticas",
     "tiempo": "15 min",
     "fecha": "2026-11-24",
+    "titulo": "25N EL GRAN RETO TV",
+    "tipo": "Repaso",
+    "icono": "🧪",
+    "archivo": "materiales/25n-el-gran-reto-tv-v3-letra-por-estrofas-espacio6/index.html",
+    "destacado": false
+  },
+  {
+    "descripcion": "",
+    "materia": "Matemáticas",
+    "tiempo": "15 min",
+    "fecha": "2026-11-24",
     "titulo": "EL APARATO LOCOMOTOR EVALUACION",
     "tipo": "Evaluación",
     "icono": "🎯",
