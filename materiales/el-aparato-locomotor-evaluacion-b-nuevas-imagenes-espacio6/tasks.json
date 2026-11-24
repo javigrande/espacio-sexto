@@ -1,0 +1,255 @@
+[
+  {
+    "n": 1,
+    "type": "match",
+    "title": "Tipos de tejido muscular",
+    "prompt": "Relaciona cada tipo de tejido muscular con la característica que le corresponde.",
+    "pairs": [
+      [
+        "Tejido estriado",
+        "Su contracción es voluntaria"
+      ],
+      [
+        "Tejido liso",
+        "Su contracción es involuntaria"
+      ],
+      [
+        "Tejido cardíaco",
+        "Forma el corazón"
+      ],
+      [
+        "Músculo estriado",
+        "Permite realizar movimientos voluntarios del cuerpo"
+      ]
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 2,
+    "type": "sequence",
+    "title": "De la contracción al movimiento",
+    "prompt": "Ordena el proceso desde que un músculo se contrae hasta que se produce el movimiento.",
+    "items": [
+      "El músculo se contrae",
+      "El músculo se hace más corto y aumenta su grosor",
+      "Los tendones acercan los huesos a los que están unidos",
+      "Se produce el movimiento"
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 3,
+    "type": "choice",
+    "title": "El cráneo al nacer",
+    "prompt": "¿Por qué es importante que, al nacer, los huesos del cráneo no estén unidos completamente?",
+    "options": [
+      "Porque así pueden deformarse durante el parto",
+      "Porque así el bebé puede moverlos voluntariamente",
+      "Porque el cráneo todavía no protege el cerebro",
+      "Porque los huesos del cráneo son cartílagos permanentes"
+    ],
+    "correct": 0,
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 4,
+    "type": "multi",
+    "title": "El sistema esquelético",
+    "prompt": "Selecciona TODAS las afirmaciones correctas sobre el sistema esquelético.",
+    "options": [
+      "Está formado por los huesos y las articulaciones",
+      "Actúa como una especie de armadura que protege órganos internos",
+      "El esqueleto humano está formado por unos 206 huesos",
+      "Todas sus articulaciones permiten movimientos amplios",
+      "Está formado únicamente por músculos y tendones"
+    ],
+    "correct": [
+      0,
+      1,
+      2
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 5,
+    "type": "fill",
+    "title": "Tejidos de los huesos",
+    "prompt": "Completa los huecos con las palabras adecuadas.",
+    "sentence": "Los huesos están formados por tejido ________, compacto y duro, y tejido ________, más grueso y flexible.",
+    "answers": [
+      "óseo",
+      "cartilaginoso"
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 6,
+    "type": "dropdown",
+    "title": "Tipos de articulaciones",
+    "prompt": "Elige en cada caso el tipo de articulación correcto.",
+    "rows": [
+      {
+        "text": "La rodilla es una articulación",
+        "options": [
+          "móvil",
+          "semimóvil",
+          "fija"
+        ],
+        "answer": "móvil"
+      },
+      {
+        "text": "Las articulaciones entre vértebras son",
+        "options": [
+          "móviles",
+          "semimóviles",
+          "fijas"
+        ],
+        "answer": "semimóviles"
+      },
+      {
+        "text": "Las suturas del cráneo son articulaciones",
+        "options": [
+          "móviles",
+          "semimóviles",
+          "fijas"
+        ],
+        "answer": "fijas"
+      }
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 7,
+    "type": "drag",
+    "title": "Clasifica los huesos según su forma",
+    "prompt": "Arrastra cada ejemplo a su grupo: huesos largos, cortos o planos.",
+    "targets": [
+      "Largos",
+      "Cortos",
+      "Planos"
+    ],
+    "items": [
+      [
+        "Tibia",
+        "Largos"
+      ],
+      [
+        "Peroné",
+        "Largos"
+      ],
+      [
+        "Vértebra",
+        "Cortos"
+      ],
+      [
+        "Huesos del cráneo",
+        "Planos"
+      ],
+      [
+        "Escápula",
+        "Planos"
+      ]
+    ],
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 8,
+    "type": "imagechoice",
+    "title": "Identificación de huesos · 1",
+    "prompt": "Observa la imagen y señala qué hueso está marcado.",
+    "image": "assets/clavicula.png",
+    "options": [
+      "Clavícula",
+      "Esternón",
+      "Húmero",
+      "Escápula"
+    ],
+    "correct": 0,
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 9,
+    "type": "imagechoice",
+    "title": "Identificación de huesos · 2",
+    "prompt": "Observa la imagen y señala qué hueso está marcado.",
+    "image": "assets/tibia.png",
+    "options": [
+      "Peroné",
+      "Fémur",
+      "Tibia",
+      "Rótula"
+    ],
+    "correct": 2,
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 10,
+    "type": "imagechoice",
+    "title": "Identificación de músculos · 1",
+    "prompt": "Observa la imagen y señala qué músculo está marcado.",
+    "image": "assets/gemelo.png",
+    "options": [
+      "Cuádriceps",
+      "Gemelo",
+      "Bíceps",
+      "Pectoral"
+    ],
+    "correct": 1,
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 11,
+    "type": "imagechoice",
+    "title": "Identificación de músculos · 2",
+    "prompt": "Observa la imagen y señala qué músculo está marcado.",
+    "image": "assets/triceps.png",
+    "options": [
+      "Deltoides",
+      "Bíceps",
+      "Tríceps",
+      "Trapecio"
+    ],
+    "correct": 2,
+    "points": 0.6363636363636364
+  },
+  {
+    "n": 12,
+    "type": "open",
+    "title": "Desarrollo 1 · El aparato locomotor",
+    "prompt": "Explica brevemente qué es el aparato locomotor y qué dos sistemas lo forman.",
+    "rubric": "0,75 puntos: explica que es el encargado del movimiento del cuerpo y señala que está formado por el sistema esquelético y el sistema muscular.",
+    "idealAnswer": "El aparato locomotor permite el movimiento del cuerpo y está formado por el sistema esquelético y el sistema muscular.",
+    "minChars": 65,
+    "points": 0.75
+  },
+  {
+    "n": 13,
+    "type": "open",
+    "title": "Desarrollo 2 · Tendones y ligamentos",
+    "prompt": "Explica una diferencia importante entre un tendón y un ligamento.",
+    "rubric": "0,75 puntos: indica que el tendón une el músculo al hueso, mientras que el ligamento une huesos y ayuda a estabilizar las articulaciones.",
+    "idealAnswer": "Los tendones unen los músculos a los huesos. Los ligamentos unen huesos entre sí y ayudan a estabilizar las articulaciones.",
+    "minChars": 65,
+    "points": 0.75
+  },
+  {
+    "n": 14,
+    "type": "open",
+    "title": "Desarrollo 3 · Prevención",
+    "prompt": "Explica por qué los estiramientos y la práctica deportiva regular ayudan a prevenir lesiones.",
+    "rubric": "0,75 puntos: relaciona los estiramientos con mantener la elasticidad y la práctica regular con un funcionamiento adecuado del aparato locomotor.",
+    "idealAnswer": "Los estiramientos ayudan a mantener la elasticidad de músculos, tendones y ligamentos, y la actividad física regular y adecuada ayuda a que funcionen correctamente.",
+    "minChars": 80,
+    "points": 0.75
+  },
+  {
+    "n": 15,
+    "type": "open",
+    "title": "Desarrollo 4 · Tendinitis",
+    "prompt": "Explica qué es la tendinitis y menciona una situación que pueda favorecer su aparición.",
+    "rubric": "0,75 puntos: define la tendinitis como inflamación de un tendón y menciona como causa posible una actividad o movimiento repetido o un esfuerzo inadecuado.",
+    "idealAnswer": "La tendinitis es la inflamación de un tendón. Puede aparecer por repetir muchas veces un movimiento o realizar un esfuerzo de forma inadecuada.",
+    "minChars": 75,
+    "points": 0.75
+  }
+]
