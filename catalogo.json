@@ -8,7 +8,8 @@
     "tipo": "Repaso",
     "icono": "🧪",
     "archivo": "materiales/25n-el-gran-reto-tv-v3-letra-por-estrofas-espacio6/index.html",
-    "destacado": false
+    "destacado": false,
+    "visible": false
   },
   {
     "descripcion": "",
