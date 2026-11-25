@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>25N · El Gran Reto TV</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="tv-shell">
+  <header class="topbar">
+    <div class="channel">DELlBES <b>TV</b></div>
+    <div class="show-title">25N · EL GRAN RETO</div>
+    <button class="iconbtn" onclick="toggleFullscreen()" title="Pantalla completa">⛶</button>
+  </header>
+
+  <div class="scoreboard" id="scoreboard"></div>
+
+  <main id="screen">
+    <section class="screen active" id="home">
+      <div class="spotlight s1"></div><div class="spotlight s2"></div>
+      <div class="hero-logo">
+        <div class="kicker">ESPECIAL 25N</div>
+        <h1>EL GRAN <span>RETO</span></h1>
+        <p>Un concurso de aula sobre respeto, igualdad, libertad y convivencia</p>
+      </div>
+      <div class="home-actions">
+        <button class="mega primary" onclick="openSetup()">🎬 EMPEZAR PROGRAMA</button>
+        <button class="mega ghost" onclick="openHow()">ℹ️ CÓMO SE JUEGA</button>
+      </div>
+      <div class="ticker"><span>EN DIRECTO · PIZARRA INTERACTIVA · EQUIPOS · MÚSICA · ROSCO FINAL · 25N</span></div>
+    </section>
+
+    <section class="screen" id="setup">
+      <div class="panel setup-panel">
+        <div class="round-label">PREPRODUCCIÓN</div>
+        <h2>Forma los equipos</h2>
+        <p>Elige de 2 a 4 equipos. Puedes cambiar sus nombres.</p>
+        <div class="team-count">
+          <button onclick="setTeamCount(2)">2 equipos</button>
+          <button onclick="setTeamCount(3)">3 equipos</button>
+          <button onclick="setTeamCount(4)">4 equipos</button>
+        </div>
+        <div id="teamInputs" class="team-inputs"></div>
+        <button class="mega primary" onclick="startShow()">ENTRAR EN PLATÓ →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="rounds">
+      <div class="round-menu">
+        <div class="round-label">ESCALERA DEL PROGRAMA</div>
+        <h2>Elige la ronda</h2>
+        <div class="round-cards">
+          <button class="round-card music" onclick="startMusicRound()">
+            <span class="round-num">R1</span><b>LA CANCIÓN INCOMPLETA</b><small>Escucha · proyecta · resuelve en equipo</small>
+          </button>
+          <button class="round-card duel" onclick="startWarmup()">
+            <span class="round-num">R2</span><b>DUELO DE VALORES</b><small>6 preguntas · 10 puntos</small>
+          </button>
+          <button class="round-card final" onclick="startRosco()">
+            <span class="round-num">R3</span><b>EL GRAN ROSCO</b><small>G → Z · 20 puntos por acierto</small>
+          </button>
+        </div>
+        <button class="btn secondary" onclick="showWinner()">🏆 IR A LA FINAL</button>
+      </div>
+    </section>
+
+    <section class="screen" id="musicRound">
+<div class="round-stage">
+  <div class="round-head">
+    <div><div class="round-label">RONDA 1</div><h2>🎵 La letra misteriosa</h2></div>
+    <div class="live-pill">EN DIRECTO</div>
+  </div>
+
+  <div class="music-instructions">
+    <b>1.ª escucha:</b> solo escuchamos. <b>2.ª escucha:</b> completamos la letra por estrofas.
+    Puedes avanzar y retroceder sin perder las respuestas.
+  </div>
+
+  <div class="music-grid interactive-music">
+    <div class="video-card">
+      <iframe id="ytframe" title="Déjala que baile"
+        src="https://www.youtube.com/embed/yda62tNSLsQ?rel=0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+      <a class="btn external" href="https://www.youtube.com/watch?v=yda62tNSLsQ" target="_blank" rel="noopener">Abrir vídeo ↗</a>
+
+      <div class="listen-counter">
+        <span>ESCUCHAS</span>
+        <div>
+          <button class="listenBtn" id="listen1" onclick="markListen(1)">1.ª ✓</button>
+          <button class="listenBtn" id="listen2" onclick="markListen(2)">2.ª ✓</button>
+        </div>
+      </div>
+
+      <div id="musicTurnBadge" class="music-turn-badge"></div><div class="team-picker big-picker hidden" id="musicTeamPicker"></div>
+      <div class="stanza-map" id="stanzaMap"></div>
+    </div>
+
+    <div class="lyrics-game">
+      <div class="lyrics-top">
+        <div>
+          <span class="mini-label" id="stanzaLabel">ESTROFA 1 DE 6</span>
+          <h3 id="stanzaTitle">Primera estrofa</h3>
+        </div>
+        <div class="lyrics-score"><b id="lyricsDone">0</b><span id="lyricsTotal">/ 0</span></div>
+      </div>
+
+      <div id="lyricsPanel" class="lyrics-panel stanza-panel"></div>
+
+      <div class="wordbank-wrap">
+        <div class="wordbank-title">BANCO DE PALABRAS DE ESTA ESTROFA</div>
+        <div id="wordBank" class="word-bank"></div>
+      </div>
+
+      <div class="stanza-nav">
+        <button class="btn secondary" id="prevStanza" onclick="changeStanza(-1)">← Estrofa anterior</button>
+        <button class="btn primary" id="nextStanza" onclick="changeStanza(1)">Siguiente estrofa →</button>
+      </div>
+
+      <div class="lyrics-actions">
+        <button class="btn secondary" onclick="resetLyrics()">↻ Reiniciar canción</button>
+        <button class="btn primary" id="checkLyricsBtn" onclick="checkLyrics()">✓ REVISAR Y COMPROBAR</button>
+      </div>
+      <div id="lyricsFeedback" class="feedback-tv"></div>
+    </div>
+  </div>
+
+  <div class="stage-nav">
+    <button class="btn secondary" onclick="showRounds()">← Rondas</button>
+    <button class="btn primary" onclick="startWarmup()">Siguiente ronda →</button>
+  </div>
+</div>
+</section>
+
+<section class="screen" id="warmup">
+      <div class="round-stage">
+        <div class="round-head">
+          <div><div class="round-label">RONDA 2</div><h2>⚡ Duelo de valores</h2></div>
+          <div class="timerbox"><span>TIEMPO</span><b id="duelTimer">20</b></div>
+        </div>
+        <div class="active-team-banner">Juega: <b id="duelTeam"></b></div>
+        <div class="question-tv">
+          <div class="letter-badge" id="duelLetter">A</div>
+          <h3 id="duelDefinition"></h3>
+          <div id="duelOptions" class="tv-options"></div>
+        </div>
+        <div id="duelFeedback" class="feedback-tv"></div>
+        <div class="stage-nav">
+          <button class="btn secondary" onclick="showRounds()">← Rondas</button>
+          <button class="btn primary" id="duelNext" onclick="nextWarmup()" disabled>Siguiente →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="rosco">
+      <div class="round-stage rosco-stage">
+        <div class="round-head">
+          <div><div class="round-label">RONDA 3 · GRAN FINAL</div><h2>⭕ El Gran Rosco</h2></div>
+          <div><div class="turn-rule">CAMBIA EQUIPO TRAS ACIERTO · FALLO · PASAPALABRA</div><div class="timerbox rosco-time"><span>TIEMPO</span><b id="roscoTimer">120</b></div></div>
+        </div>
+        <div class="rosco-layout">
+          <div class="wheel-wrap">
+            <div id="letterWheel" class="letter-wheel"></div>
+            <div class="wheel-center"><small>JUEGA</small><b id="roscoTeam"></b><span id="roscoHits">0 aciertos</span></div>
+          </div>
+          <div class="rosco-question">
+            <div class="current-letter" id="roscoLetter">G</div>
+            <h3 id="roscoDefinition"></h3>
+            <input id="roscoAnswer" autocomplete="off" placeholder="Escribe o di la respuesta..." onkeydown="if(event.key==='Enter')checkRosco()">
+            <div class="rosco-actions">
+              <button class="btn success" onclick="checkRosco()">✓ COMPROBAR</button>
+              <button class="btn pass" onclick="passRosco()">PASAPALABRA</button>
+              <button class="btn danger" onclick="markRoscoWrong()">✕ FALLO</button>
+            </div>
+            <div id="roscoFeedback" class="feedback-tv"></div>
+          </div>
+        </div>
+        <div class="stage-nav"><button class="btn secondary" onclick="showRounds()">← Rondas</button><button class="btn primary" onclick="finishRosco()">Terminar rosco →</button></div>
+      </div>
+    </section>
+
+    <section class="screen" id="winner">
+      <div class="winner-stage">
+        <div class="confetti" id="confetti"></div>
+        <div class="round-label">FINAL DEL PROGRAMA</div>
+        <h2>🏆 EQUIPO GANADOR</h2>
+        <div id="winnerName" class="winner-name"></div>
+        <div id="finalScores" class="final-scores"></div>
+        <div class="winner-actions">
+          <button class="mega primary" onclick="showRounds()">← VOLVER A RONDAS</button>
+          <button class="mega ghost" onclick="resetGame()">NUEVO PROGRAMA</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="how">
+      <div class="panel how-panel">
+        <div class="round-label">INSTRUCCIONES</div>
+        <h2>Cómo funciona el programa</h2>
+        <div class="how-grid">
+          <div><b>🎵 Ronda 1</b><p>La clase escucha la canción y completa la actividad proyectada. El docente suma puntos manualmente.</p></div>
+          <div><b>⚡ Ronda 2</b><p>Seis preguntas con opciones. Los equipos se turnan automáticamente.</p></div>
+          <div><b>⭕ Ronda 3</b><p>Rosco final. Acierto = 20 puntos. Fallo = letra roja. Pasapalabra = vuelve al final.</p></div>
+          <div><b>🎛️ Control</b><p>El marcador se guarda automáticamente en el navegador. Pantalla completa recomendada.</p></div>
+        </div>
+        <button class="mega primary" onclick="go('home')">VOLVER</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="controlbar">
+    <button onclick="showRounds()">☰ Rondas</button>
+    <button onclick="openScoreControl()">🎛️ Marcador</button>
+    <button onclick="toggleSound()">🔊 <span id="soundLabel">Sonido ON</span></button>
+    <button onclick="resetGame()">↻ Reiniciar</button>
+  </footer>
+</div>
+
+<div class="modal hidden" id="scoreModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeScoreControl()">×</button>
+    <h2>Control de marcador</h2>
+    <div id="scoreControl"></div>
+  </div>
+</div>
+
+<div class="modal hidden" id="zoomModal" onclick="if(event.target===this)toggleWorksheetZoom()">
+  <div class="worksheet-zoom"><button class="modal-close" onclick="toggleWorksheetZoom()">×</button><img src="assets/actividad_cancion.png" alt=""></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
