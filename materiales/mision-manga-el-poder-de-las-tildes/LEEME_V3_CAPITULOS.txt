@@ -1,0 +1,15 @@
+MISIÓN MANGA: EL PODER DE LAS TILDES · V3 CAPÍTULOS ILUSTRADOS
+
+Cinco ilustraciones originales nuevas integradas en las tarjetas del mapa y las preguntas de cada capítulo:
+1. Dojo del Acento → assets/cap_dojo.webp
+2. Portal de las Palabras → assets/cap_portal.webp
+3. Viñetas en Acción → assets/cap_vinetas.webp
+4. Arena de los Dos Poderes → assets/cap_arena.webp
+5. Jefe final → assets/cap_fortaleza.webp
+
+La portada, instrucciones, transición y final de la V2 se mantienen.
+Las 25 preguntas, respuestas, explicaciones, puntuación, vidas, combo, progreso local y lógica JS original se conservan sin cambios. Solo se han actualizado las cinco referencias «image» de questions.js y estilos de presentación.
+
+INSTALACIÓN
+Descomprime el ZIP en la carpeta de actividad de GitHub Pages, sustituyendo los archivos antiguos. El juego no precisa Worker.
+Si aparecen imágenes anteriores, fuerza la recarga (Ctrl+F5).

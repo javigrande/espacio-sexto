@@ -3,7 +3,7 @@ window.MISSIONS=[
     "id": "dojo",
     "name": "DOJO DEL ACENTO",
     "subtitle": "Reconoce las palabras con poder",
-    "image": "dojo",
+    "image": "cap_dojo",
     "type": "choice",
     "questions": [
       {
@@ -62,7 +62,7 @@ window.MISSIONS=[
     "id": "portal",
     "name": "PORTAL DE LAS PALABRAS",
     "subtitle": "Elige la forma que abre cada puerta",
-    "image": "objetivo",
+    "image": "cap_portal",
     "type": "gap",
     "questions": [
       {
@@ -116,7 +116,7 @@ window.MISSIONS=[
     "id": "vignettes",
     "name": "VIÑETAS EN ACCIÓN",
     "subtitle": "Repara diálogos de los protagonistas",
-    "image": "combate",
+    "image": "cap_vinetas",
     "type": "repair",
     "questions": [
       {
@@ -155,7 +155,7 @@ window.MISSIONS=[
     "id": "arena",
     "name": "ARENA DE LOS DOS PODERES",
     "subtitle": "Distingue interrogativos de relativos",
-    "image": "arena",
+    "image": "cap_arena",
     "type": "choice",
     "questions": [
       {
@@ -214,7 +214,7 @@ window.MISSIONS=[
     "id": "boss",
     "name": "JEFE FINAL: EL SEÑOR SIN TILDE",
     "subtitle": "Cinco ataques para recuperar las tildes",
-    "image": "portada",
+    "image": "cap_fortaleza",
     "type": "boss",
     "questions": [
       {
